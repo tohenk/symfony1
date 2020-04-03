@@ -74,6 +74,10 @@ class sfEventDispatcher
   {
     foreach ($this->getListeners($event->getName()) as $listener)
     {
+      if (!is_callable($listener))
+      {
+        continue;
+      }
       call_user_func($listener, $event);
     }
 
