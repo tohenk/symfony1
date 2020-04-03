@@ -255,11 +255,37 @@ class sfRoute implements Serializable
       // add a query string if needed
       if ($extra = array_diff_key($params, $this->variables, $defaults))
       {
-        $url .= '?'.http_build_query($extra);
+        $url .= '?'.$this->buildQueryString($extra);
       }
     }
 
     return $url;
+  }
+
+  protected function buildQueryString($params, $keys = null)
+  {
+    $result = '';
+    foreach ($params as $key => $value)
+    {
+      if (is_array($value))
+      {
+        $param = $this->buildQueryString($value, $key);
+      }
+      else
+      {
+        if (null !== $keys)
+        {
+          $key = sprintf('%s[%s]', $keys, is_integer($key) ? '' : $key);
+        }
+        $param = urlencode($key).'='.urlencode($value);
+      }
+      if ($param)
+      {
+        $result .= ($result ? '&' : '').$param;
+      }
+    }
+
+    return $result;
   }
 
   static private function generateCompareVarsByStrlen($a, $b)
