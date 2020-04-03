@@ -187,17 +187,20 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
     }
 
     // post validator
-    try
+    if (!count($errorSchema))
     {
-      $clean = $this->postClean($clean);
-    }
-    catch (sfValidatorErrorSchema $e)
-    {
-      $errorSchema->addErrors($e);
-    }
-    catch (sfValidatorError $e)
-    {
-      $errorSchema->addError($e);
+      try
+      {
+        $clean = $this->postClean($clean);
+      }
+      catch (sfValidatorErrorSchema $e)
+      {
+        $errorSchema->addErrors($e);
+      }
+      catch (sfValidatorError $e)
+      {
+        $errorSchema->addError($e);
+      }
     }
 
     if (count($errorSchema))
