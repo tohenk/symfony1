@@ -47,7 +47,7 @@ abstract class sfWebController extends sfController
         return $parameters;
       }
 
-      if ($parameters == '#')
+      if ($parameters[0] == '#')
       {
         return $parameters;
       }
@@ -142,18 +142,8 @@ abstract class sfWebController extends sfController
     // split the query string
     if ($queryString)
     {
-      $matched = preg_match_all('/
-        ([^&=]+)            # key
-        =                   # =
-        (.*?)               # value
-        (?:
-          (?=&[^&=]+=) | $  # followed by another key= or the end of the string
-        )
-      /x', $queryString, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
-      foreach ($matches as $match)
-      {
-        $params[urldecode($match[1][0])] = urldecode($match[2][0]);
-      }
+      parse_str($queryString, $params);
+      $matched = count($params);
 
       // check that all string is matched
       if (!$matched)
