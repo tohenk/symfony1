@@ -27,7 +27,9 @@ class sfAutoload
 
   protected
     $overriden = array(),
-    $classes   = array();
+    $classes   = array(),
+    $app       = null,
+    $caches    = array();
 
   protected function __construct()
   {
@@ -167,10 +169,52 @@ class sfAutoload
    */
   public function autoload($class)
   {
-    // load the list of autoload classes
-    if (!$this->classes)
+    // this allow to reload classes when the application has been switched
+    $force = false;
+    $app = null;
+    $autoload_stamp = sfConfig::get('sf_cache_dir').'/autoload.tmp';
+    if (!($reload = !$this->classes))
     {
-      self::reloadClasses();
+      if (sfProjectConfiguration::hasActive() && sfProjectConfiguration::getActive()->getApplication() != $this->app)
+      {
+        $app = sfProjectConfiguration::getActive()->getApplication();
+      }
+      if ($this->app != $app)
+      {
+        if (!isset($this->caches[$app]))
+        {
+          $this->app = $app;
+          $reload = true;
+          $stamps = array();
+          if (file_exists($autoload_stamp))
+          {
+            $stamps = unserialize(file_get_contents($autoload_stamp));
+            $force = !in_array($app, $stamps);
+          }
+          else
+          {
+            $force = true;
+          }
+          if (!in_array($app, $stamps))
+          {
+            $stamps[] = $app;
+            file_put_contents($autoload_stamp, serialize($stamps));
+          }
+        }
+        else
+        {
+          $this->classes = $this->caches[$app];
+        }
+      }
+    }
+    // load the list of autoload classes
+    if ($reload)
+    {
+      self::reloadClasses($force);
+      if ($app)
+      {
+        $this->caches[$app] = $this->classes;
+      }
     }
 
     return self::loadClass($class);
