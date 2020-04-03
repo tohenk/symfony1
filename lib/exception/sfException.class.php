@@ -90,7 +90,7 @@ class sfException extends Exception
     if (!sfConfig::get('sf_test'))
     {
       // log all exceptions in php log
-      error_log($exception->getMessage());
+      error_log(self::getExceptionMessage($exception));
 
       // clean current output buffer
       while (ob_get_level())
@@ -144,6 +144,7 @@ class sfException extends Exception
     $format = 'html';
     $code   = '500';
     $text   = 'Internal Server Error';
+    $message = self::getExceptionMessage($exception);
 
     $response = null;
     if (class_exists('sfContext', false) && sfContext::hasInstance() && is_object($request = sfContext::getInstance()->getRequest()) && is_object($response = sfContext::getInstance()->getResponse()))
@@ -156,7 +157,7 @@ class sfException extends Exception
       if (sfConfig::get('sf_logging_enabled'))
       {
         $priority = $exception instanceof sfError404Exception ? sfLogger::ERR : sfLogger::CRIT;
-        $dispatcher->notify(new sfEvent($exception, 'application.log', array($exception->getMessage(), 'priority' => $priority)));
+        $dispatcher->notify(new sfEvent($exception, 'application.log', array($message, 'priority' => $priority)));
       }
 
       $event = $dispatcher->notifyUntil(new sfEvent($exception, 'application.throw_exception'));
@@ -187,7 +188,7 @@ class sfException extends Exception
       $format = $request->getRequestFormat();
       if (!$format)
       {
-        $format = 'html';
+        $format = $request->isXmlHttpRequest() ? 'json' : 'html';
       }
 
       if ($mimeType = $request->getMimeType($format))
@@ -221,7 +222,6 @@ class sfException extends Exception
       $format = 'txt';
     }
 
-    $message = null === $exception->getMessage() ? 'n/a' : $exception->getMessage();
     $name    = get_class($exception);
     $traces  = self::getTraces($exception, $format);
 
@@ -263,6 +263,35 @@ class sfException extends Exception
       return;
     }
 
+  }
+
+  /**
+   * Get exception message and its nested previous message.
+   *
+   * @param Exception $exception
+   * @param string $wrapper
+   * @return string
+   */
+  static protected function getExceptionMessage(Exception $exception, $wrapper = '%s: [%s]')
+  {
+    $message = null;
+    while (null !== $exception)
+    {
+      if ($msg = $exception->getMessage())
+      {
+        if (null == $message)
+        {
+          $message = $msg;
+        }
+        else
+        {
+          $message = sprintf($wrapper, $message, $msg);
+        }
+      }
+      $exception = $exception->getPrevious();
+    }
+
+    return null == $message ? 'n/a' : $message;
   }
 
   /**
