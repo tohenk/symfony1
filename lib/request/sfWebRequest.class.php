@@ -37,7 +37,8 @@ class sfWebRequest extends sfRequest
     $requestParameters      = null,
     $formats                = array(),
     $format                 = null,
-    $fixedFileArray         = false;
+    $fixedFileArray         = false,
+    $magicQuoteGPC          = false;
 
   /**
    * Initializes this sfRequest.
@@ -74,15 +75,13 @@ class sfWebRequest extends sfRequest
     ), $options);
     parent::initialize($dispatcher, $parameters, $attributes, $options);
 
-    // GET parameters
     if (version_compare(PHP_VERSION, '5.4.0-dev', '<') && get_magic_quotes_gpc())
     {
-      $this->getParameters = sfToolkit::stripslashesDeep($_GET);
+      $this->magicQuoteGPC = true;
     }
-    else
-    {
-      $this->getParameters = $_GET;
-    }
+
+    // GET parameters
+    $this->getParameters = $this->magicQuoteGPC ? sfToolkit::stripslashesDeep($_GET) : $_GET;
     $this->parameterHolder->add($this->getParameters);
 
     $postParameters = $_POST;
@@ -155,15 +154,7 @@ class sfWebRequest extends sfRequest
       $this->setMethod(self::GET);
     }
 
-    if (version_compare(PHP_VERSION, '5.4.0-dev', '<') && get_magic_quotes_gpc())
-    {
-      $this->postParameters = sfToolkit::stripslashesDeep($postParameters);
-    }
-    else
-    {
-      $this->postParameters = $postParameters;
-    }
-
+    $this->postParameters = $this->magicQuoteGPC ? sfToolkit::stripslashesDeep($postParameters) : $postParameters;
     $this->parameterHolder->add($this->postParameters);
 
     if ($formats = $this->getOption('formats'))
@@ -615,14 +606,7 @@ class sfWebRequest extends sfRequest
 
     if (isset($_COOKIE[$name]))
     {
-      if (version_compare(PHP_VERSION, '5.4.0-dev', '<') && get_magic_quotes_gpc())
-      {
-        $retval = sfToolkit::stripslashesDeep($_COOKIE[$name]);
-      }
-      else
-      {
-        $retval = $_COOKIE[$name];
-      }
+      $retval = $this->magicQuoteGPC ? sfToolkit::stripslashesDeep($_COOKIE[$name]) : $_COOKIE[$name];
     }
 
     return $retval;
