@@ -86,18 +86,18 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
       switch ($factory)
       {
         case 'controller':
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_controller', '%s');\n   \$this->factories['controller'] = new \$class(\$this);", $class);
+          $instances[] = sprintf("\$class = sfConfig::get('sf_factory_controller', '%s');\n\$this->factories['controller'] = new \$class(\$this);", $class);
           break;
 
         case 'request':
           $parameters['no_script_name'] = sfConfig::get('sf_no_script_name');
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_request', '%s');\n   \$this->factories['request'] = new \$class(\$this->dispatcher, array(), array(), sfConfig::get('sf_factory_request_parameters', %s), sfConfig::get('sf_factory_request_attributes', array()));", $class, var_export($parameters, true));
+          $instances[] = sprintf("\$class = sfConfig::get('sf_factory_request', '%s');\n\$this->factories['request'] = new \$class(\$this->dispatcher, array(), array(), sfConfig::get('sf_factory_request_parameters', %s), sfConfig::get('sf_factory_request_attributes', array()));", $class, var_export($parameters, true));
           break;
 
         case 'response':
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_response', '%s');\n  \$this->factories['response'] = new \$class(\$this->dispatcher, sfConfig::get('sf_factory_response_parameters', array_merge(array('http_protocol' => isset(\$_SERVER['SERVER_PROTOCOL']) ? \$_SERVER['SERVER_PROTOCOL'] : null), %s)));", $class, var_export($parameters, true));
+          $instances[] = sprintf("\$class = sfConfig::get('sf_factory_response', '%s');\n\$this->factories['response'] = new \$class(\$this->dispatcher, sfConfig::get('sf_factory_response_parameters', array_merge(array('http_protocol' => isset(\$_SERVER['SERVER_PROTOCOL']) ? \$_SERVER['SERVER_PROTOCOL'] : null), %s)));", $class, var_export($parameters, true));
           // TODO: this is a bit ugly, as it only works for sfWebRequest & sfWebResponse combination. see #3397
-          $instances[] = sprintf("  if (\$this->factories['request'] instanceof sfWebRequest \n      && \$this->factories['response'] instanceof sfWebResponse \n      && 'HEAD' == \$this->factories['request']->getMethod())\n  {  \n    \$this->factories['response']->setHeaderOnly(true);\n  }\n");
+          $instances[] = sprintf("if (\$this->factories['request'] instanceof sfWebRequest \n    && \$this->factories['response'] instanceof sfWebResponse \n    && 'HEAD' == \$this->factories['request']->getMethod())\n{\n  \$this->factories['response']->setHeaderOnly(true);\n}\n");
           break;
 
         case 'storage':
@@ -113,43 +113,43 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
             $defaultParameters[] = sprintf("'gc_maxlifetime' => %d,", $config['user']['param']['timeout']);
           }
 
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_storage', '%s');\n  \$this->factories['storage'] = new \$class(array_merge(array(\n%s\n), sfConfig::get('sf_factory_storage_parameters', %s)));", $class, implode("\n", $defaultParameters), var_export($parameters, true));
+          $instances[] = sprintf("if (self::\$storage)\n{\n  \$this->factories['storage'] = self::\$storage;\n}\nelse\n{\n  \$class = sfConfig::get('sf_factory_storage', '%s');\n  \$this->factories['storage'] = new \$class(array_merge(array(\n%s\n), sfConfig::get('sf_factory_storage_parameters', %s)));\n  self::\$storage = \$this->factories['storage'];\n}", $class, implode("\n", $defaultParameters), var_export($parameters, true));
           break;
 
         case 'user':
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_user', '%s');\n  \$this->factories['user'] = new \$class(\$this->dispatcher, \$this->factories['storage'], array_merge(array('auto_shutdown' => false, 'culture' => \$this->factories['request']->getParameter('sf_culture')), sfConfig::get('sf_factory_user_parameters', %s)));", $class, var_export($parameters, true));
+          $instances[] = sprintf("\$class = sfConfig::get('sf_factory_user', '%s');\n\$this->factories['user'] = new \$class(\$this->dispatcher, \$this->factories['storage'], array_merge(array('auto_shutdown' => false, 'culture' => \$this->factories['request']->getParameter('sf_culture')), sfConfig::get('sf_factory_user_parameters', %s)));", $class, var_export($parameters, true));
           break;
 
         case 'view_cache':
-          $instances[] = sprintf("\n  if (sfConfig::get('sf_cache'))\n  {\n".
-                             "    \$class = sfConfig::get('sf_factory_view_cache', '%s');\n".
-                             "    \$cache = new \$class(sfConfig::get('sf_factory_view_cache_parameters', %s));\n".
-                             "    \$this->factories['viewCacheManager'] = new %s(\$this, \$cache, %s);\n".
-                             "  }\n".
-                             "  else\n".
-                             "  {\n".
-                             "    \$this->factories['viewCacheManager'] = null;\n".
-                             "  }\n",
+          $instances[] = sprintf("\nif (sfConfig::get('sf_cache'))\n{\n".
+                             "  \$class = sfConfig::get('sf_factory_view_cache', '%s');\n".
+                             "  \$cache = new \$class(sfConfig::get('sf_factory_view_cache_parameters', %s));\n".
+                             "  \$this->factories['viewCacheManager'] = new %s(\$this, \$cache, %s);\n".
+                             "}\n".
+                             "else\n".
+                             "{\n".
+                             "  \$this->factories['viewCacheManager'] = null;\n".
+                             "}\n",
                              $class, var_export($parameters, true), $config['view_cache_manager']['class'], var_export($config['view_cache_manager']['param'], true));
           break;
 
         case 'i18n':
           if (isset($parameters['cache']))
           {
-            $cache = sprintf("    \$cache = new %s(%s);\n", $parameters['cache']['class'], var_export($parameters['cache']['param'], true));
+            $cache = sprintf("\$cache = new %s(%s);\n", $parameters['cache']['class'], var_export($parameters['cache']['param'], true));
             unset($parameters['cache']);
           }
           else
           {
-            $cache = "    \$cache = null;\n";
+            $cache = "\$cache = null;\n";
           }
 
-          $instances[] = sprintf("\n  if (sfConfig::get('sf_i18n'))\n  {\n".
-                     "    \$class = sfConfig::get('sf_factory_i18n', '%s');\n".
-                     "%s".
-                     "    \$this->factories['i18n'] = new \$class(\$this->configuration, \$cache, %s);\n".
-                     "    sfWidgetFormSchemaFormatter::setTranslationCallable(array(\$this->factories['i18n'], '__'));\n".
-                     "  }\n"
+          $instances[] = sprintf("\nif (sfConfig::get('sf_i18n'))\n{\n".
+                     "  \$class = sfConfig::get('sf_factory_i18n', '%s');\n".
+                     "  %s".
+                     "  \$this->factories['i18n'] = new \$class(\$this->configuration, \$cache, %s);\n".
+                     "  sfWidgetFormSchemaFormatter::setTranslationCallable(array(\$this->factories['i18n'], '__'));\n".
+                     "}\n"
                      , $class, $cache, var_export($parameters, true)
                      );
           break;
@@ -157,16 +157,16 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
         case 'routing':
           if (isset($parameters['cache']))
           {
-            $cache = sprintf("    \$cache = new %s(%s);\n", $parameters['cache']['class'], var_export($parameters['cache']['param'], true));
+            $cache = sprintf("\$cache = new %s(%s);\n", $parameters['cache']['class'], var_export($parameters['cache']['param'], true));
             unset($parameters['cache']);
           }
           else
           {
-            $cache = "    \$cache = null;\n";
+            $cache = "\$cache = null;\n";
           }
 
-          $instances[] = sprintf("  \$class = sfConfig::get('sf_factory_routing', '%s');\n".
-                           "  %s\n".
+          $instances[] = sprintf("\$class = sfConfig::get('sf_factory_routing', '%s');\n".
+                           "%s\n".
                            "\$this->factories['routing'] = new \$class(\$this->dispatcher, \$cache, array_merge(array('auto_shutdown' => false, 'context' => \$this->factories['request']->getRequestContext()), sfConfig::get('sf_factory_routing_parameters', %s)));\n".
                            "if (\$parameters = \$this->factories['routing']->parse(\$this->factories['request']->getPathInfo()))\n".
                            "{\n".
@@ -214,8 +214,8 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
           }
 
           $instances[] = sprintf(
-                         "  \$class = sfConfig::get('sf_factory_logger', '%s');\n  \$this->factories['logger'] = new \$class(\$this->dispatcher, array_merge(array('auto_shutdown' => false), sfConfig::get('sf_factory_logger_parameters', %s)));\n".
-                         "  %s"
+                         "\$class = sfConfig::get('sf_factory_logger', '%s');\n  \$this->factories['logger'] = new \$class(\$this->dispatcher, array_merge(array('auto_shutdown' => false), sfConfig::get('sf_factory_logger_parameters', %s)));\n".
+                         "%s"
                          , $class, var_export($parameters, true), $loggers);
           break;
 

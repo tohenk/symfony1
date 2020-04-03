@@ -33,7 +33,8 @@ class sfContext implements ArrayAccess
 
   protected static
     $instances = array(),
-    $current   = 'default';
+    $current   = 'default',
+    $storage   = null;
 
   /**
    * Creates a new context instance.
