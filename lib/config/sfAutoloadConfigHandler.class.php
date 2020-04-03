@@ -126,9 +126,15 @@ class sfAutoloadConfigHandler extends sfYamlConfigHandler
   static public function parseFile($path, $file, $prefix)
   {
     $mapping = array();
-    preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface|trait)\s+(\w+)~mi', file_get_contents($file), $classes);
-    foreach ($classes[1] as $class)
+    preg_match_all('~^(namespace\s+.*;.*)*(?:abstract\s+|final\s+)?(?:class|interface|trait)\s+(\w+)~msi', file_get_contents($file), $classes);
+    for ($i = 0; $i < count($classes[2]); $i++)
     {
+      // ignore namespaced class
+      if (strlen($classes[1][$i]))
+      {
+        continue;
+      }
+      $class = $classes[2][$i];
       $localPrefix = '';
       if ($prefix)
       {
