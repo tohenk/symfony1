@@ -110,8 +110,6 @@ abstract class sfCache
    * @param string $pattern The cache key pattern
    *
    * @return Boolean true if no problem
-   *
-   * @see patternToRegexp
    */
   abstract public function removePattern($pattern);
 

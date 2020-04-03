@@ -197,7 +197,6 @@ class sfCultureInfo
    * "<language>_(country/region/variant)".
    *
    * @param string $culture a culture name, e.g. "en_AU".
-   * @return return new sfCultureInfo.
    */
   public function __construct($culture = 'en')
   {

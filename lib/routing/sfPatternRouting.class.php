@@ -226,7 +226,7 @@ class sfPatternRouting extends sfRouting
   /**
    * Adds a new route at the beginning of the current list of routes.
    *
-   * @see connect
+   * @see connect()
    *
    * @param string $name
    * @param sfRoute $route
@@ -244,7 +244,7 @@ class sfPatternRouting extends sfRouting
    *
    * Alias for the connect method.
    *
-   * @see connect
+   * @see connect()
    *
    * @param string $name
    * @param sfRoute $route
@@ -258,7 +258,7 @@ class sfPatternRouting extends sfRouting
   /**
    * Adds a new route before a given one in the current list of routes.
    *
-   * @see connect
+   * @see connect()
    *
    * @param string $pivot
    * @param string $name

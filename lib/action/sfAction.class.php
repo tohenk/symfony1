@@ -218,7 +218,7 @@ abstract class sfAction extends sfComponent
    *
    * @throws sfStopException
    *
-   * @see redirect
+   * @see sfAction::redirect()
    */
   public function redirectIf($condition, $url, $statusCode = 302)
   {
@@ -241,7 +241,7 @@ abstract class sfAction extends sfComponent
    *
    * @throws sfStopException
    *
-   * @see redirect
+   * @see sfAction::redirect()
    */
   public function redirectUnless($condition, $url, $statusCode = 302)
   {
@@ -323,7 +323,7 @@ abstract class sfAction extends sfComponent
    *
    * @return string sfView::NONE
    *
-   * @see    getPartial
+   * @see    sfAction::getPartial()
    */
   public function renderPartial($templateName, $vars = null)
   {
@@ -367,7 +367,7 @@ abstract class sfAction extends sfComponent
    *
    * @return string  sfView::NONE
    *
-   * @see    getComponent
+   * @see    sfAction::getComponent()
    */
   public function renderComponent($moduleName, $componentName, $vars = null)
   {

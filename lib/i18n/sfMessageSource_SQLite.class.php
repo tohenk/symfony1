@@ -96,7 +96,7 @@ class sfMessageSource_SQLite extends sfMessageSource_Database
   /**
    * Constructor.
    * Creates a new message source using SQLite.
-   * @see MessageSource::factory();
+   * @see sfMessageSource::factory();
    * @param string $source SQLite datasource, in PEAR's DB DSN format.
    */
   function __construct($source)

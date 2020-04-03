@@ -29,7 +29,7 @@ class sfMessageSource_Aggregate extends sfMessageSource
    *
    * @param array $messageSources An array of message sources.
    *
-   * @see   MessageSource::factory();
+   * @see   sfMessageSource::factory();
    */
   function __construct($messageSources)
   {

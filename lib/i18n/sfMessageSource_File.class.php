@@ -40,7 +40,7 @@ abstract class sfMessageSource_File extends sfMessageSource
    * Constructor.
    *
    * @param string $source the directory where the messages are stored.
-   * @see MessageSource::factory();
+   * @see sfMessageSource::factory();
    */
   function __construct($source)
   {

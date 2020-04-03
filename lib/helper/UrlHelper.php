@@ -169,7 +169,7 @@ function url_for()
  * @param  string $internal_uri  'module/action' or '@rule' of the action
  * @param  array  $options       additional HTML compliant <a> tag parameters
  * @return string XHTML compliant <a href> tag
- * @see    url_for
+ * @see    url_for()
  */
 function link_to()
 {
@@ -238,7 +238,7 @@ function form_tag_for(sfForm $form, $routePrefix, $attributes = array())
  *
  * @return string XHTML compliant <a href> tag or name
  *
- * @see    link_to
+ * @see    link_to()
  */
 function link_to_if()
 {
@@ -299,7 +299,7 @@ function link_to_if()
  *
  * @return string XHTML compliant <a href> tag or name
  *
- * @see    link_to
+ * @see    link_to()
  */
 function link_to_unless()
 {
@@ -313,7 +313,7 @@ function link_to_unless()
  *
  * @param   string  $path     The route to append
  * @param   bool    $absolute If true, an absolute path is returned (optional)
- * @return  The web URL root
+ * @return  string The web URL root
  */
 function public_path($path, $absolute = false)
 {
@@ -365,7 +365,8 @@ function public_path($path, $absolute = false)
  * @param  string $internal_uri  'module/action' or '@rule' of the action
  * @param  array  $options       additional HTML compliant <input> tag parameters
  * @return string XHTML compliant <input> tag
- * @see    url_for, link_to
+ * @see    url_for()
+ * @see    link_to()
  */
 function button_to($name, $internal_uri, $options = array())
 {
@@ -484,7 +485,7 @@ function form_tag($url_for_options = '', $options = array())
  * @param  array  $options        additional HTML compliant <a> tag parameters
  * @param  array  $default_value
  * @return string XHTML compliant <a href> tag
- * @see    link_to
+ * @see    link_to()
  */
 function mail_to($email, $name = '', $options = array(), $default_value = array())
 {

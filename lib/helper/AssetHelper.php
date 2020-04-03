@@ -71,7 +71,7 @@ function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = array(
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the JavaScript file
- * @see    javascript_include_tag
+ * @see    javascript_include_tag()
  */
 function javascript_path($source, $absolute = false)
 {
@@ -94,7 +94,7 @@ function javascript_path($source, $absolute = false)
  * @param array additional HTML compliant <link> tag parameters
  *
  * @return string XHTML compliant <script> tag(s)
- * @see    javascript_path
+ * @see    javascript_path()
  */
 function javascript_include_tag()
 {
@@ -159,7 +159,7 @@ function javascript_include_tag()
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the stylesheet file
- * @see    stylesheet_tag
+ * @see    stylesheet_tag()
  */
 function stylesheet_path($source, $absolute = false)
 {
@@ -192,7 +192,7 @@ function stylesheet_path($source, $absolute = false)
  * @param array  additional HTML compliant <link> tag parameters
  *
  * @return string XHTML compliant <link> tag(s)
- * @see    stylesheet_path
+ * @see    stylesheet_path()
  */
 function stylesheet_tag()
 {
@@ -225,7 +225,7 @@ function stylesheet_tag()
       unset($sourceOptions['raw_name']);
     }
 
-    $options = array_merge(array('rel' => 'stylesheet', 'type' => 'text/css', 'media' => 'screen', 'href' => $source), $sourceOptions);
+    $options = array_merge(array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $source), $sourceOptions);
     $tag = tag('link', $options);
 
     if (null !== $condition)
@@ -294,7 +294,7 @@ function decorate_with($layout)
  * @param bool   $absolute return absolute path ?
  *
  * @return string file path to the image file
- * @see    image_tag
+ * @see    image_tag()
  */
 function image_path($source, $absolute = false)
 {
@@ -321,7 +321,7 @@ function image_path($source, $absolute = false)
  * @param array  $options additional HTML compliant <img> tag parameters
  *
  * @return string XHTML compliant <img> tag
- * @see    image_path
+ * @see    image_path()
  */
 function image_tag($source, $options = array())
 {
@@ -430,7 +430,7 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
  * <b>Note:</b> Modify the view.yml or use sfWebResponse::addMeta() to change, add or remove metas.
  *
  * @return string XHTML compliant <meta> tag(s)
- * @see    include_http_metas
+ * @see    include_http_metas()
  * @see    sfWebResponse::addMeta()
  */
 function include_metas()
@@ -456,7 +456,7 @@ function include_metas()
  * <b>Note:</b> Modify the view.yml or use sfWebResponse::addHttpMeta() to change, add or remove HTTP metas.
  *
  * @return string XHTML compliant <meta> tag(s)
- * @see    include_metas
+ * @see    include_metas()
  * @see    sfWebResponse::addHttpMeta()
  */
 function include_http_metas()
@@ -577,7 +577,7 @@ function clear_stylesheets()
  * @param array  $options  An array of options
  *
  * @return string XHTML compliant <script> tag(s)
- * @see    javascript_include_tag
+ * @see    javascript_include_tag()
  */
 function dynamic_javascript_include_tag($uri, $absolute = false, $options = array())
 {

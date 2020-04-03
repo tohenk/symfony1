@@ -105,7 +105,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
 
   /**
    * A resource link to the database
-   * @var db
+   * @var resource
    */
   protected $db;
 
@@ -114,7 +114,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
    * Creates a new message source using MySQL.
    *
    * @param string $source  MySQL datasource, in PEAR's DB DSN format.
-   * @see MessageSource::factory();
+   * @see sfMessageSource::factory();
    */
   function __construct($source)
   {
@@ -203,7 +203,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
   /**
    * Gets the database connection.
    *
-   * @return db database connection.
+   * @return resource database connection.
    */
   public function connection()
   {

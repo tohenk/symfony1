@@ -31,7 +31,9 @@
  * @param  string slot name
  * @param  array variables to be made accessible to the component
  *
- * @see    get_component_slot, include_partial, include_component
+ * @see    get_component_slot()
+ * @see    include_partial()
+ * @see    include_component()
  */
 function include_component_slot($name, $vars = array())
 {
@@ -51,7 +53,9 @@ function include_component_slot($name, $vars = array())
  * @param  array  $vars  variables to be made accessible to the component
  *
  * @return string result of the component execution
- * @see    get_component_slot, include_partial, include_component
+ * @see    get_component_slot()
+ * @see    include_partial()
+ * @see    include_component()
  */
 function get_component_slot($name, $vars = array())
 {
@@ -108,7 +112,9 @@ function has_component_slot($name)
  * @param  string $componentName  component name
  * @param  array  $vars           variables to be made accessible to the component
  *
- * @see    get_component, include_partial, include_component_slot
+ * @see    get_component()
+ * @see    include_partial()
+ * @see    include_component_slot()
  */
 function include_component($moduleName, $componentName, $vars = array())
 {
@@ -129,7 +135,7 @@ function include_component($moduleName, $componentName, $vars = array())
  * @param  array  $vars           variables to be made accessible to the component
  *
  * @return string result of the component execution
- * @see    include_component
+ * @see    include_component()
  */
 function get_component($moduleName, $componentName, $vars = array())
 {
@@ -175,7 +181,8 @@ function get_component($moduleName, $componentName, $vars = array())
  * @param  string $templateName  partial name
  * @param  array  $vars          variables to be made accessible to the partial
  *
- * @see    get_partial, include_component
+ * @see    get_partial()
+ * @see    include_component()
  */
 function include_partial($templateName, $vars = array())
 {
@@ -195,7 +202,7 @@ function include_partial($templateName, $vars = array())
  * @param  array  $vars          variables to be made accessible to the partial
  *
  * @return string result of the partial execution
- * @see    include_partial
+ * @see    include_partial()
  */
 function get_partial($templateName, $vars = array())
 {
@@ -226,7 +233,7 @@ function get_partial($templateName, $vars = array())
  * @param  string $name   slot name
  * @param  string $value  The slot content
  *
- * @see    end_slot
+ * @see    end_slot()
  */
 function slot($name, $value = null)
 {
@@ -263,7 +270,7 @@ function slot($name, $value = null)
 /**
  * Stops the content capture and save the content in the slot.
  *
- * @see    slot
+ * @see    slot()
  */
 function end_slot()
 {
@@ -288,7 +295,8 @@ function end_slot()
  * @param  string $name  slot name
  *
  * @return bool true, if the slot exists
- * @see    get_slot, include_slot
+ * @see    get_slot()
+ * @see    include_slot()
  */
 function has_slot($name)
 {
@@ -306,7 +314,8 @@ function has_slot($name)
  * @param  string $name     slot name
  * @param  string $default  default content to return if slot is unexistent
  *
- * @see    has_slot, get_slot
+ * @see    has_slot()
+ * @see    get_slot()
  */
 function include_slot($name, $default = '')
 {
@@ -325,7 +334,8 @@ function include_slot($name, $default = '')
  * @param  string $default  default content to return if slot is unexistent
  *
  * @return string content of the slot
- * @see    has_slot, include_slot
+ * @see    has_slot()
+ * @see    include_slot()
  */
 function get_slot($name, $default = '')
 {

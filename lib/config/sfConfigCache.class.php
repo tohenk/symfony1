@@ -144,7 +144,7 @@ class sfConfigCache
    *
    * @throws <b>sfConfigurationException</b> If a requested configuration file does not exist
    *
-   * @see sfConfiguration::getConfigPaths()
+   * @see sfProjectConfiguration::getConfigPaths()
    */
   public function checkConfig($configPath, $optional = false)
   {
@@ -369,7 +369,7 @@ class sfConfigCache
    * Registers a configuration handler.
    *
    * @param string $handler The handler to use when parsing a configuration file
-   * @param class  $class   A configuration handler class
+   * @param string $class   A configuration handler class
    * @param string $params  An array of options for the handler class initialization
    */
   public function registerConfigHandler($handler, $class, $params = array())
