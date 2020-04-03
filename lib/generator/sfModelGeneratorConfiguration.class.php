@@ -40,6 +40,8 @@ abstract class sfModelGeneratorConfiguration
 
   abstract public function getFilterDisplay();
 
+  abstract public function getFilterTitle();
+
   abstract public function getFormDisplay();
 
   abstract public function getNewDisplay();
@@ -93,6 +95,7 @@ abstract class sfModelGeneratorConfiguration
       ),
       'filter' => array(
         'fields'  => array(),
+        'title'   => $this->getFilterTitle(),
       ),
       'form'   => array(
         'fields'  => array(),
@@ -184,6 +187,7 @@ abstract class sfModelGeneratorConfiguration
     $this->parseVariables('edit', 'title');
     $this->parseVariables('list', 'title');
     $this->parseVariables('new', 'title');
+    $this->parseVariables('filter', 'title');
 
     // action credentials
     $this->configuration['credentials'] = array(

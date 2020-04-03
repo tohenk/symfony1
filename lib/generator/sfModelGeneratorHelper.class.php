@@ -12,53 +12,63 @@ abstract class sfModelGeneratorHelper
 {
   abstract public function getUrlForAction($action);
 
-  public function linkToNew($params)
+  public function formatLabel($params = array(), $catalogue = 'sf_admin')
   {
-    return '<li class="sf_admin_action_new">'.link_to(__($params['label'], array(), 'sf_admin'), '@'.$this->getUrlForAction('new')).'</li>';
+    return __($params['label'], array(), $catalogue);
   }
 
-  public function linkToEdit($object, $params)
+  public function generateActionClass($action)
   {
-    return '<li class="sf_admin_action_edit">'.link_to(__($params['label'], array(), 'sf_admin'), $this->getUrlForAction('edit'), $object).'</li>';
+    return sprintf('sf_admin_action_%s', $action);
   }
-  
+
+  public function linkToNew($params, $attributes = array())
+  {
+    return sprintf('<li class="%s">', $this->generateActionClass('new')).link_to($this->formatLabel($params), '@'.$this->getUrlForAction('new'), $attributes).'</li>';
+  }
+
+  public function linkToEdit($object, $params, $attributes = array())
+  {
+    return sprintf('<li class="%s">', $this->generateActionClass('edit')).link_to($this->formatLabel($params), $this->getUrlForAction('edit'), $object, $attributes).'</li>';
+  }
+
   /**
-   * @param Persistent|mixed $object
+   * @param mixed $object
    * @param array $params
    * @return string
    */
-  public function linkToDelete($object, $params)
+  public function linkToDelete($object, $params, $attributes = array())
   {
     if ($object->isNew())
     {
       return '';
     }
 
-    return '<li class="sf_admin_action_delete">'.link_to(__($params['label'], array(), 'sf_admin'), $this->getUrlForAction('delete'), $object, array('method' => 'delete', 'confirm' => !empty($params['confirm']) ? __($params['confirm'], array(), 'sf_admin') : $params['confirm'])).'</li>';
+    return sprintf('<li class="%s">', $this->generateActionClass('delete')).link_to($this->formatLabel($params), $this->getUrlForAction('delete'), $object, array_merge(array('method' => 'delete', 'confirm' => !empty($params['confirm']) ? __($params['confirm'], array(), 'sf_admin') : $params['confirm']), $attributes)).'</li>';
   }
 
-  public function linkToList($params)
+  public function linkToList($params, $attributes = array())
   {
-    return '<li class="sf_admin_action_list">'.link_to(__($params['label'], array(), 'sf_admin'), '@'.$this->getUrlForAction('list')).'</li>';
+    return sprintf('<li class="%s">', $this->generateActionClass('list')).link_to($this->formatLabel($params), '@'.$this->getUrlForAction('list'), $attributes).'</li>';
   }
 
-  public function linkToSave($object, $params)
+  public function linkToSave($object, $params, $attributes = array())
   {
-    return '<li class="sf_admin_action_save"><input type="submit" value="'.__($params['label'], array(), 'sf_admin').'" /></li>';
+    return sprintf('<li class="%s">', $this->generateActionClass('save')).content_tag('button', $this->formatLabel($params), array_merge(array('type' => 'submit'), $attributes)).'</li>';
   }
-  
+
   /**
-   * @param Persistent|mixed $object
+   * @param mixed $object
    * @param array $params
    * @return string
    */
-  public function linkToSaveAndAdd($object, $params)
+  public function linkToSaveAndAdd($object, $params, $attributes = array())
   {
     if (!$object->isNew())
     {
       return '';
     }
 
-    return '<li class="sf_admin_action_save_and_add"><input type="submit" value="'.__($params['label'], array(), 'sf_admin').'" name="_save_and_add" /></li>';
+    return sprintf('<li class="%s">', $this->generateActionClass('save_and_add')).content_tag('button', $this->formatLabel($params), array_merge(array('type' => 'submit'), $attributes)).'</li>';
   }
 }

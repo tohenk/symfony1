@@ -124,13 +124,23 @@ abstract class sfModelGenerator extends sfGenerator
   }
 
   /**
+   * Gets the i18n method callable to use for user strings.
+   *
+   * @return string The i18n method
+   */
+  public function getI18NMethod()
+  {
+    return isset($this->params['i18n_method']) ? $this->params['i18n_method'] : sfConfig::get('sf_model_generator_i18n_method', '__');
+  }
+
+  /**
    * Gets the i18n catalogue to use for user strings.
    *
    * @return string The i18n catalogue
    */
-  public function getI18nCatalogue()
+  public function getI18NCatalogue()
   {
-    return isset($this->params['i18n_catalogue']) ? $this->params['i18n_catalogue'] : 'messages';
+    return isset($this->params['i18n_catalogue']) ? $this->params['i18n_catalogue'] : sfConfig::get('sf_model_generator_i18n_catalogue', 'messages');
   }
 
   /**
@@ -218,7 +228,7 @@ abstract class sfModelGenerator extends sfGenerator
 
     $url_params = $pk_link ? '?'.$this->getPrimaryKeyUrlParams() : '\'';
 
-    return '[?php echo link_to(__(\''.$params['label'].'\', array(), \''.$this->getI18nCatalogue().'\'), \''.$this->getModuleName().'/'.$action.$url_params.', '.$this->asPhp($params['params']).') ?]';
+    return '[?php echo link_to(__(\''.$params['label'].'\', array(), \''.$this->getI18NCatalogue().'\'), \''.$this->getModuleName().'/'.$action.$url_params.', '.$this->asPhp($params['params']).') ?]';
   }
 
   /**
@@ -271,9 +281,21 @@ EOF;
     {
       return sprintf("get_partial('%s/%s', array('type' => 'list', '%s' => \$%s))", $this->getModuleName(), $field->getName(), $this->getSingularName(), $this->getSingularName());
     }
+    else if ('Number' == $field->getType())
+    {
+      $html = sprintf("get_partial('%s/list_field_number', array('value' => %s))", $this->getModuleName(), $html);
+    }
     else if ('Date' == $field->getType())
     {
-      $html = sprintf("false !== strtotime($html) ? format_date(%s, \"%s\") : '&nbsp;'", $html, $field->getConfig('date_format', 'f'));
+      $html = sprintf("get_partial('%s/list_field_datetime', array('value' => %s, 'format' => '%s'))", $this->getModuleName(), $html, $field->getConfig('date_format', 'D'));
+    }
+    else if ('Time' == $field->getType())
+    {
+      $html = sprintf("get_partial('%s/list_field_datetime', array('value' => %s, 'format' => '%s'))", $this->getModuleName(), $html, $field->getConfig('date_format', 't'));
+    }
+    else if ('DateTime' == $field->getType())
+    {
+      $html = sprintf("get_partial('%s/list_field_datetime', array('value' => %s, 'format' => '%s'))", $this->getModuleName(), $html, $field->getConfig('date_format', 'f'));
     }
     else if ('Boolean' == $field->getType())
     {
@@ -292,10 +314,12 @@ EOF;
    * Wraps a content for I18N.
    *
    * @param string $key The configuration key name
+   * @param boolean $object Is object available for translation source
+   * @param string $var When object is not available used as source for translation
    *
    * @return string HTML code
    */
-  public function getI18NString($key)
+  public function getI18NString($key, $object = true, $var = null)
   {
     $value = $this->configuration->getValue($key, '', true);
 
@@ -313,10 +337,10 @@ EOF;
     $vars = array();
     foreach ($this->configuration->getContextConfiguration($context, $fields) as $field)
     {
-      $vars[] = '\'%%'.$field->getName().'%%\' => '.$this->renderField($field);
+      $vars[] = '\'%%'.$field->getName().'%%\' => '.($object ? $this->renderField($field) : sprintf('%s->getI18NVar(\'%s\')', ($var ? $var : '$this->helper'), $field->getName()));
     }
 
-    return sprintf("__('%s', array(%s), '%s')", $value, implode(', ', $vars), $this->getI18nCatalogue());
+    return sprintf("%s('%s', array(%s), '%s')", $this->getI18NMethod(), $value, implode(', ', $vars), $this->getI18NCatalogue());
   }
 
   /**
