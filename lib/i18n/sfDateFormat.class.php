@@ -118,8 +118,20 @@ class sfDateFormat
       return null;
     }
 
-    // if the type is not a php timestamp
-    $isString = (string) $time !== (string) (int) $time;
+    if ($time instanceof sfOutputEscaper)
+    {
+      $time = $time->getRawValue();
+    }
+    if ($time instanceof DateTime)
+    {
+      $time = $time->getTimestamp();
+      $isString = false;
+    }
+    else
+    {
+      // if the type is not a php timestamp
+      $isString = (string) $time !== (string) (int) $time;
+    }
 
     if ($isString)
     {
@@ -282,7 +294,7 @@ class sfDateFormat
    *
    * @param mixed $pattern a pattern.
    * @return string a pattern.
-   * @see DateTimeFormatInfo::formatDateTime()
+   * @see sfDateTimeFormatInfo::formatDateTime()
    */
   public function getPattern($pattern)
   {

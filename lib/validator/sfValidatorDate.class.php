@@ -89,6 +89,11 @@ class sfValidatorDate extends sfValidatorBase
       $cleanTime = (integer) $value;
       $clean     = date('YmdHis', $cleanTime);
     }
+    else if ($value instanceof DateTime)
+    {
+      $date = $value;
+      $clean = $value->format('YmdHis');
+    }
     // convert string to date number format
     else
     {
@@ -110,7 +115,7 @@ class sfValidatorDate extends sfValidatorBase
       // convert timestamp to date number format
       if (is_numeric($max))
       {
-        $maxError = date($this->getOption('date_format_range_error'), $max);
+        $maxError = date($this->getDateFormatRangeError(), $max);
         $max      = date('YmdHis', $max);
       }
       // convert string to date number
@@ -118,7 +123,7 @@ class sfValidatorDate extends sfValidatorBase
       {
         $dateMax  = new DateTime($max);
         $max      = $dateMax->format('YmdHis');
-        $maxError = $dateMax->format($this->getOption('date_format_range_error'));
+        $maxError = $dateMax->format($this->getDateFormatRangeError());
       }
 
       if ($clean > $max)
@@ -133,7 +138,7 @@ class sfValidatorDate extends sfValidatorBase
       // convert timestamp to date number
       if (is_numeric($min))
       {
-        $minError = date($this->getOption('date_format_range_error'), $min);
+        $minError = date($this->getDateFormatRangeError(), $min);
         $min      = date('YmdHis', $min);
       }
       // convert string to date number
@@ -141,7 +146,7 @@ class sfValidatorDate extends sfValidatorBase
       {
         $dateMin  = new DateTime($min);
         $min      = $dateMin->format('YmdHis');
-        $minError = $dateMin->format($this->getOption('date_format_range_error'));
+        $minError = $dateMin->format($this->getDateFormatRangeError());
       }
 
       if ($clean < $min)
@@ -158,6 +163,17 @@ class sfValidatorDate extends sfValidatorBase
     $format = $this->getOption('with_time') ? $this->getOption('datetime_output') : $this->getOption('date_output');
 
     return isset($date) ? $date->format($format) : date($format, $cleanTime);
+  }
+
+  function getDateFormatRangeError()
+  {
+    $format = $this->getOption('date_format_range_error');
+    if (!$this->getOption('with_time'))
+    {
+      $format = substr($format, 0, strpos($format, ' '));
+    }
+
+    return $format;
   }
 
   /**
