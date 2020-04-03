@@ -386,12 +386,24 @@ abstract class sfWidget
   public function attributesToHtml($attributes)
   {
     $attributes = array_merge($this->attributes, $attributes);
+    $extras = array();
     foreach ($attributes as $key => &$value)
     {
-      $value = $this->attributesToHtmlCallback($key, $value);
+      if (in_array($key, array('checked', 'disabled', 'readonly', 'required')))
+      {
+        if ($key == $value)
+        {
+          $extras[] = ' '.$key;
+        }
+        $value = '';
+      }
+      else
+      {
+        $value = $this->attributesToHtmlCallback($key, $value);
+      }
     }
 
-    return implode('', $attributes);
+    return implode('', $attributes + $extras);
   }
 
   /**
