@@ -272,7 +272,7 @@ class sfException extends Exception
    * @param string $wrapper
    * @return string
    */
-  static protected function getExceptionMessage(Exception $exception, $wrapper = '%s: [%s]')
+  static public function getExceptionMessage(Exception $exception, $wrapper = '%s: [%s]')
   {
     $message = null;
     while (null !== $exception)
