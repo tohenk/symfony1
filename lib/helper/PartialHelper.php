@@ -118,7 +118,16 @@ function has_component_slot($name)
  */
 function include_component($moduleName, $componentName, $vars = array())
 {
-  echo get_component($moduleName, $componentName, $vars);
+  if (function_exists('_content_wrapper'))
+  {
+    $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+    $trace = array_shift($traces);
+    echo _content_wrapper(get_component($moduleName, $componentName, $vars), $trace);
+  }
+  else
+  {
+    echo get_component($moduleName, $componentName, $vars);
+  }
 }
 
 /**
@@ -186,7 +195,16 @@ function get_component($moduleName, $componentName, $vars = array())
  */
 function include_partial($templateName, $vars = array())
 {
-  echo get_partial($templateName, $vars);
+  if (function_exists('_content_wrapper'))
+  {
+    $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+    $trace = array_shift($traces);
+    echo _content_wrapper(get_partial($templateName, $vars), $trace);
+  }
+  else
+  {
+    echo get_partial($templateName, $vars);
+  }
 }
 
 /**
