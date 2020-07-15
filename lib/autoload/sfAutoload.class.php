@@ -171,14 +171,10 @@ class sfAutoload
   {
     // this allow to reload classes when the application has been switched
     $force = false;
-    $app = null;
+    $app = sfConfig::get('sf_app');
     $autoload_stamp = sfConfig::get('sf_cache_dir').'/autoload.tmp';
     if (!($reload = !$this->classes))
     {
-      if (sfProjectConfiguration::hasActive() && sfProjectConfiguration::getActive()->getApplication() != $this->app)
-      {
-        $app = sfProjectConfiguration::getActive()->getApplication();
-      }
       if ($this->app != $app)
       {
         if (!isset($this->caches[$app]))
@@ -211,10 +207,7 @@ class sfAutoload
     if ($reload)
     {
       self::reloadClasses($force);
-      if ($app)
-      {
-        $this->caches[$app] = $this->classes;
-      }
+      $this->caches[$app] = $this->classes;
     }
 
     return self::loadClass($class);
