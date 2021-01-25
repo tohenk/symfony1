@@ -49,7 +49,7 @@ class sfPDODatabase extends sfDatabase
     }
     catch (PDOException $e)
     {
-      throw new sfDatabaseException($e->getMessage());
+      throw new sfDatabaseException(sfException::getExceptionMessage($e));
     }
 
     // lets generate exceptions instead of silent failures

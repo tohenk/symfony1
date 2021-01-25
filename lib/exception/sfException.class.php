@@ -291,7 +291,7 @@ class sfException extends Exception
       $exception = $exception->getPrevious();
     }
 
-    return null == $message ? 'n/a' : $message;
+    return null === $message ? 'n/a' : $message;
   }
 
   /**

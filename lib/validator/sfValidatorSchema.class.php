@@ -166,7 +166,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
       {
         $class = get_class($e);
 
-        throw new $class($e->getMessage().' of "'.$name.'" field');
+        throw new $class(sfException::getExceptionMessage($e).' of "'.$name.'" field');
       }
     }
 

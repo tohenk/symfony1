@@ -294,8 +294,8 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   protected function updateMessage()
   {
     $this->message = implode(' ', array_merge(
-      array_map(function($e) { /** @var $e sfValidatorError */ return $e->getMessage(); }, $this->globalErrors),
-      array_map(function($n, $e) { /** @var $e sfValidatorError */ return $n.' ['.$e->getMessage().']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
+      array_map(function($e) { /** @var $e sfValidatorError */ return sfException::getExceptionMessage($e); }, $this->globalErrors),
+      array_map(function($n, $e) { /** @var $e sfValidatorError */ return $n.' ['.sfException::getExceptionMessage($e).']'; }, array_keys($this->namedErrors), array_values($this->namedErrors))
     ));
   }
 

@@ -401,7 +401,7 @@ abstract class sfCommandApplication
     $title = sprintf('  [%s]  ', get_class($e));
     $len = $this->strlen($title);
     $lines = array();
-    foreach (explode("\n", $e->getMessage()) as $line)
+    foreach (explode("\n", sfException::getExceptionMessage($e)) as $line)
     {
       $lines[] = sprintf('  %s  ', $line);
       $len = max($this->strlen($line) + 4, $len);

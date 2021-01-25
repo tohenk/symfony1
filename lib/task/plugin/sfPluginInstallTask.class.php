@@ -106,7 +106,7 @@ EOF;
       }
       catch (Exception $e)
       {
-        throw new sfCommandException(sprintf('%s (use --force-license to force installation)', $e->getMessage()));
+        throw new sfCommandException(sprintf('%s (use --force-license to force installation)', sfException::getExceptionMessage($e)));
       }
 
       if (false !== $license)

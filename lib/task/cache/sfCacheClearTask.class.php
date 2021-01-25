@@ -237,7 +237,7 @@ EOF;
       }
       catch (Exception $e)
       {
-        $this->logSection('error', $e->getMessage(), 255, 'ERROR');
+        $this->logSection('error', sfException::getExceptionMessage($e), 255, 'ERROR');
       }
     }
   }
