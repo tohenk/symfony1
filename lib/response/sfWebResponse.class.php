@@ -426,6 +426,10 @@ class sfWebResponse extends sfResponse
   static public function getDate($timestamp, $type = 'rfc1123')
   {
     $type = strtolower($type);
+    if ($timestamp instanceof DateTime)
+    {
+      $timestamp = $timestamp->getTimestamp();
+    }
 
     if ($type == 'rfc1123')
     {
