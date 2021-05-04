@@ -92,7 +92,7 @@ class sfValidatorDate extends sfValidatorBase
     else if ($value instanceof DateTime)
     {
       $date = $value;
-      $clean = $value->format('YmdHis');
+      $clean = $this->getDateComparable($date);
     }
     // convert string to date number format
     else
@@ -101,7 +101,7 @@ class sfValidatorDate extends sfValidatorBase
       {
         $date = new DateTime($value);
         $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        $clean = $date->format('YmdHis');
+        $clean = $this->getDateComparable($date);
       }
       catch (Exception $e)
       {
@@ -116,13 +116,13 @@ class sfValidatorDate extends sfValidatorBase
       if (is_numeric($max))
       {
         $maxError = date($this->getDateFormatRangeError(), $max);
-        $max      = date('YmdHis', $max);
+        $max      = $this->getDateComparable($max);
       }
       // convert string to date number
       else
       {
         $dateMax  = new DateTime($max);
-        $max      = $dateMax->format('YmdHis');
+        $max      = $this->getDateComparable($dateMax);
         $maxError = $dateMax->format($this->getDateFormatRangeError());
       }
 
@@ -139,13 +139,13 @@ class sfValidatorDate extends sfValidatorBase
       if (is_numeric($min))
       {
         $minError = date($this->getDateFormatRangeError(), $min);
-        $min      = date('YmdHis', $min);
+        $min      = $this->getDateComparable($min);
       }
       // convert string to date number
       else
       {
         $dateMin  = new DateTime($min);
-        $min      = $dateMin->format('YmdHis');
+        $min      = $this->getDateComparable($dateMin);
         $minError = $dateMin->format($this->getDateFormatRangeError());
       }
 
@@ -163,6 +163,13 @@ class sfValidatorDate extends sfValidatorBase
     $format = $this->getOption('with_time') ? $this->getOption('datetime_output') : $this->getOption('date_output');
 
     return isset($date) ? $date->format($format) : date($format, $cleanTime);
+  }
+
+  protected function getDateComparable($date)
+  {
+    $format = $this->getOption('with_time') ? 'YmdHis' : 'Ymd';
+
+    return $date instanceof DateTime ? $date->format($format) : date($format, $date);
   }
 
   function getDateFormatRangeError()
