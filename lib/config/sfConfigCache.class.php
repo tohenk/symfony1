@@ -49,7 +49,7 @@ class sfConfigCache
      *
      * @throws sfConfigurationException If a requested configuration file does not exist
      *
-     * @see sfConfiguration::getConfigPaths()
+     * @see sfProjectConfiguration::getConfigPaths()
      */
     public function checkConfig($configPath, $optional = false)
     {
@@ -93,7 +93,7 @@ class sfConfigCache
         }
 
         if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
-            // @var $timer sfTimer
+            /* @var $timer sfTimer */
             $timer->addTime();
         }
 

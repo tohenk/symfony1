@@ -220,7 +220,7 @@ abstract class sfWidgetForm extends sfWidget
 
         // check to see if we have an array variable for a field name
         if (false !== strpos($name, '[')) {
-            $name = str_replace(['[]', '][', '[', ']'], [null !== $value && !is_array($value) ? '_'.$value : '', '_', '_', ''], $name);
+            $name = str_replace(['[]', '][', '[', ']'], [null !== $value && !is_array($value) ? '_'.($value instanceof DateTime ? $value->format('Y-m-d H:i:s') : $value) : '', '_', '_', ''], $name);
         }
 
         if (false !== strpos($this->getOption('id_format'), '%s')) {

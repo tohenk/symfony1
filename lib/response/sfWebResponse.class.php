@@ -358,7 +358,7 @@ class sfWebResponse extends sfResponse
         foreach ($this->cookies as $cookie) {
             $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
             $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
-            setrawcookie($cookie['name'], $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
+            setrawcookie($cookie['name'], (string) $cookie['value'], $expire, $cookie['path'], $domain, $cookie['secure'], $cookie['httpOnly']);
 
             if ($this->options['logging']) {
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Send cookie "%s": "%s"', $cookie['name'], $cookie['value'])]));
@@ -403,6 +403,9 @@ class sfWebResponse extends sfResponse
     public static function getDate($timestamp, $type = 'rfc1123')
     {
         $type = strtolower($type);
+        if ($timestamp instanceof DateTime) {
+            $timestamp = $timestamp->getTimestamp();
+        }
 
         if ('rfc1123' == $type) {
             return substr(gmdate('r', $timestamp), 0, -5).'GMT';

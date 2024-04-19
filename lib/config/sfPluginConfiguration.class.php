@@ -39,7 +39,6 @@ abstract class sfPluginConfiguration
 
         if (!$this->configuration instanceof sfApplicationConfiguration) {
             $this->initializeAutoload();
-            $this->initialize();
         }
     }
 

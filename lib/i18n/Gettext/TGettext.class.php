@@ -179,19 +179,19 @@ class TGettext
      *
      * Returns meta info and strings as an array of a structure like that:
      * <code>
-     *   array(
-     *       'meta' => array(
+     *   [
+     *       'meta' => [
      *           'Content-Type'      => 'text/plain; charset=iso-8859-1',
      *           'Last-Translator'   => 'Michael Wallner <mike@iworks.at>',
      *           'PO-Revision-Date'  => '2004-07-21 17:03+0200',
      *           'Language-Team'     => 'German <mail@example.com>',
-     *       ),
-     *       'strings' => array(
+     *       ],
+     *       'strings' => [
      *           'All rights reserved'   => 'Alle Rechte vorbehalten',
      *           'Welcome'               => 'Willkommen',
      *           // ...
-     *       )
-     *   )
+     *       ]
+     *   ]
      * </code>
      *
      * @see     fromArray()
@@ -208,19 +208,19 @@ class TGettext
      *
      * Assigns meta info and strings from an array of a structure like that:
      * <code>
-     *   array(
-     *       'meta' => array(
+     *   [
+     *       'meta' => [
      *           'Content-Type'      => 'text/plain; charset=iso-8859-1',
      *           'Last-Translator'   => 'Michael Wallner <mike@iworks.at>',
      *           'PO-Revision-Date'  => date('Y-m-d H:iO'),
      *           'Language-Team'     => 'German <mail@example.com>',
      *       ),
-     *       'strings' => array(
+     *       'strings' => [
      *           'All rights reserved'   => 'Alle Rechte vorbehalten',
      *           'Welcome'               => 'Willkommen',
      *           // ...
-     *       )
-     *   )
+     *       ]
+     *   ]
      * </code>
      *
      * @see     toArray()
