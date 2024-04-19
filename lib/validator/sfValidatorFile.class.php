@@ -95,7 +95,7 @@ class sfValidatorFile extends sfValidatorBase
     protected function doClean($value)
     {
         if (!is_array($value) || !isset($value['tmp_name'])) {
-            throw new sfValidatorError($this, 'invalid', ['value' => (string) $value]);
+            throw new sfValidatorError($this, 'invalid', ['value' => is_string($value) ? $value : var_export($value, true)]);
         }
 
         if (!isset($value['name'])) {
@@ -233,24 +233,26 @@ class sfValidatorFile extends sfValidatorBase
      */
     protected function guessFromFileBinary($file)
     {
-        ob_start();
-        // need to use --mime instead of -i. see #6641
-        $cmd = 'file -b --mime -- %s 2>/dev/null';
-        $file = (0 === strpos($file, '-') ? './' : '').$file;
-        passthru(sprintf($cmd, escapeshellarg($file)), $return);
-        if ($return > 0) {
-            ob_end_clean();
+        if (is_readable($file)) {
+            ob_start();
+            // need to use --mime instead of -i. see #6641
+            $cmd = 'file -b --mime -- %s 2>/dev/null';
+            $file = (0 === strpos($file, '-') ? './' : '').$file;
+            passthru(sprintf($cmd, escapeshellarg($file)), $return);
+            if ($return > 0) {
+                ob_end_clean();
 
-            return null;
+                return null;
+            }
+            $type = trim(ob_get_clean());
+
+            if (!preg_match('#^([a-z0-9\-]+/[a-z0-9\-.]+)#i', $type, $match)) {
+                // it's not a type, but an error message
+                return null;
+            }
+
+            return $match[1];
         }
-        $type = trim(ob_get_clean());
-
-        if (!preg_match('#^([a-z0-9\-]+/[a-z0-9\-.]+)#i', $type, $match)) {
-            // it's not a type, but an error message
-            return null;
-        }
-
-        return $match[1];
     }
 
     protected function getMimeTypesFromCategory($category)
@@ -279,7 +281,7 @@ class sfValidatorFile extends sfValidatorBase
     /**
      * Returns the maximum size of an uploaded file as configured in php.ini.
      *
-     * @return type The maximum size of an uploaded file in bytes
+     * @return int The maximum size of an uploaded file in bytes
      */
     protected function getMaxFilesize()
     {

@@ -42,11 +42,21 @@ try {
 // database in memory
 $cache = new sfSQLiteCache(['database' => ':memory:']);
 
-sfCacheDriverTests::launch($t, $cache);
+try {
+    sfCacheDriverTests::launch($t, $cache);
+} catch (Exception $e) {
+    $t->fail($e->getMessage());
+}
 
 // database on disk
-$database = tempnam('/tmp/cachedir', 'tmp');
-unlink($database);
+$database = sys_get_temp_dir().DIRECTORY_SEPARATOR.'sf-sqlite-cache.db';
 $cache = new sfSQLiteCache(['database' => $database]);
-sfCacheDriverTests::launch($t, $cache);
+
+try {
+    sfCacheDriverTests::launch($t, $cache);
+} catch (Exception $e) {
+    $t->fail($e->getMessage());
+}
+
+$cache->getBackend()->close();
 unlink($database);

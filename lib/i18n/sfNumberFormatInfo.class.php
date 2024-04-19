@@ -351,7 +351,7 @@ class sfNumberFormatInfo
      * The negative pattern is composed of a prefix, and postfix.
      * This function returns <b>array(prefix, postfix)</b>.
      *
-     * @return arary negative pattern
+     * @return array negative pattern
      */
     public function getNegativePattern()
     {
@@ -366,7 +366,7 @@ class sfNumberFormatInfo
      * The negative pattern is composed of a prefix, and postfix in the form
      * <b>array(prefix, postfix)</b>.
      *
-     * @param arary $pattern negative pattern
+     * @param array $pattern negative pattern
      */
     public function setNegativePattern($pattern)
     {
@@ -379,7 +379,7 @@ class sfNumberFormatInfo
      * The positive pattern is composed of a prefix, and postfix.
      * This function returns <b>array(prefix, postfix)</b>.
      *
-     * @return arary positive pattern
+     * @return array positive pattern
      */
     public function getPositivePattern()
     {
@@ -394,7 +394,7 @@ class sfNumberFormatInfo
      * The positive pattern is composed of a prefix, and postfix in the form
      * <b>array(prefix, postfix)</b>.
      *
-     * @param arary $pattern positive pattern
+     * @param array $pattern positive pattern
      */
     public function setPositivePattern($pattern)
     {
@@ -674,7 +674,7 @@ class sfNumberFormatInfo
      *
      * @param string $pattern pattern
      *
-     * @return array of prefix and postfix, array(prefix,postfix)
+     * @return array of prefix and postfix, [prefix, postfix]
      */
     protected function getPrePostfix($pattern)
     {

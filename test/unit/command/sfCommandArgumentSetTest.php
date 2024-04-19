@@ -122,7 +122,7 @@ $argumentSet->addArguments([
     new sfCommandArgument('foo1', sfCommandArgument::OPTIONAL),
     new sfCommandArgument('foo2', sfCommandArgument::OPTIONAL, '', 'default'),
     new sfCommandArgument('foo3', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY),
-    //  new sfCommandArgument('foo4', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, '', array(1, 2)),
+    //  new sfCommandArgument('foo4', sfCommandArgument::OPTIONAL | sfCommandArgument::IS_ARRAY, '', [1, 2]),
 ]);
 $t->is($argumentSet->getDefaults(), ['foo1' => null, 'foo2' => 'default', 'foo3' => []], '->getDefaults() return the default values for each argument');
 

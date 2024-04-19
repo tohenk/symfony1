@@ -56,7 +56,7 @@ class sfServiceContainerDumperPhp extends sfServiceContainerDumper
     protected function addServiceInclude($id, $definition)
     {
         if (null !== $definition->getFile()) {
-            return sprintf("    require_once %s;\n\n", $this->dumpValue($definition->getFile()));
+            return sprintf("        require_once %s;\n\n", $this->dumpValue(str_replace(DIRECTORY_SEPARATOR, '/', $definition->getFile())));
         }
     }
 
@@ -70,7 +70,9 @@ class sfServiceContainerDumperPhp extends sfServiceContainerDumper
     {
         if ($definition->isShared()) {
             return <<<EOF
-    if (isset(\$this->shared['{$id}'])) return \$this->shared['{$id}'];
+        if (isset(\$this->shared['{$id}'])) {
+            return \$this->shared['{$id}'];
+        }
 
 
 EOF;
@@ -88,16 +90,16 @@ EOF;
         if ($definition->isShared()) {
             return <<<EOF
 
-    return \$this->shared['{$id}'] = \$instance;
-  }
+        return \$this->shared['{$id}'] = \$instance;
+    }
 
 EOF;
         }
 
         return <<<'EOF'
 
-    return $instance;
-  }
+        return $instance;
+    }
 
 EOF;
     }
@@ -118,14 +120,14 @@ EOF;
         }
 
         if (null !== $definition->getConstructor()) {
-            return sprintf("    \$instance = call_user_func(array(%s, '%s')%s);\n", $class, $definition->getConstructor(), $arguments ? ', '.implode(', ', $arguments) : '');
+            return sprintf("        \$instance = call_user_func([%s, '%s']%s);\n", $class, $definition->getConstructor(), $arguments ? ', '.implode(', ', $arguments) : '');
         }
 
         if ($class != "'".$definition->getClass()."'") {
-            return sprintf("    \$class = %s;\n    \$instance = new \$class(%s);\n", $class, implode(', ', $arguments));
+            return sprintf("        \$class = %s;\n        \$instance = new \$class(%s);\n", $class, implode(', ', $arguments));
         }
 
-        return sprintf("    \$instance = new %s(%s);\n", $definition->getClass(), implode(', ', $arguments));
+        return sprintf("        \$instance = new %s(%s);\n", $definition->getClass(), implode(', ', $arguments));
     }
 
     /**
@@ -143,7 +145,7 @@ EOF;
                 $arguments[] = $this->dumpValue($value);
             }
 
-            $calls .= sprintf("    \$instance->%s(%s);\n", $call[0], implode(', ', $arguments));
+            $calls .= sprintf("        \$instance->%s(%s);\n", $call[0], implode(', ', $arguments));
         }
 
         return $calls;
@@ -163,13 +165,13 @@ EOF;
 
         if (is_array($callable)) {
             if (is_object($callable[0]) && $callable[0] instanceof sfServiceReference) {
-                return sprintf("    %s->%s(\$instance);\n", $this->getServiceCall((string) $callable[0]), $callable[1]);
+                return sprintf("        %s->%s(\$instance);\n", $this->getServiceCall((string) $callable[0]), $callable[1]);
             }
 
-            return sprintf("    call_user_func(array(%s, '%s'), \$instance);\n", $this->dumpValue($callable[0]), $callable[1]);
+            return sprintf("        call_user_func([%s, '%s'], \$instance);\n", $this->dumpValue($callable[0]), $callable[1]);
         }
 
-        return sprintf("    %s(\$instance);\n", $callable);
+        return sprintf("        %s(\$instance);\n", $callable);
     }
 
     protected function addService($id, $definition)
@@ -178,8 +180,8 @@ EOF;
 
         $code = <<<EOF
 
-  protected function get{$name}Service()
-  {
+    protected function get{$name}Service()
+    {
 
 EOF;
 
@@ -200,10 +202,10 @@ EOF;
 
         return <<<EOF
 
-  protected function get{$name}Service()
-  {
-    return {$this->getServiceCall($id)};
-  }
+    protected function get{$name}Service()
+    {
+        return {$this->getServiceCall($id)};
+    }
 
 EOF;
     }
@@ -227,7 +229,7 @@ EOF;
         return <<<EOF
 class {$class} extends {$baseClass}
 {
-  protected \$shared = array();
+    protected \$shared = [];
 
 EOF;
     }
@@ -240,10 +242,10 @@ EOF;
 
         return <<<'EOF'
 
-  public function __construct()
-  {
-    parent::__construct($this->getDefaultParameters());
-  }
+    public function __construct()
+    {
+        parent::__construct($this->getDefaultParameters());
+    }
 
 EOF;
     }
@@ -258,20 +260,21 @@ EOF;
 
         return <<<EOF
 
-  protected function getDefaultParameters()
-  {
-    return {$parameters};
-  }
+    protected function getDefaultParameters()
+    {
+        return {$parameters};
+    }
 
 EOF;
     }
 
-    protected function exportParameters($parameters, $indent = 6)
+    protected function exportParameters($parameters, $indent = 2, $sz = 4)
     {
         $php = [];
+        $pad = str_repeat(' ', $sz);
         foreach ($parameters as $key => $value) {
             if (is_array($value)) {
-                $value = $this->exportParameters($value, $indent + 2);
+                $value = $this->exportParameters($value, $indent + 1, $sz);
             } elseif ($value instanceof sfServiceReference) {
                 $value = sprintf("new sfServiceReference('%s')", $value);
             } elseif ($value instanceof sfServiceParameter) {
@@ -280,10 +283,10 @@ EOF;
                 $value = var_export($value, true);
             }
 
-            $php[] = sprintf('%s%s => %s,', str_repeat(' ', $indent), var_export($key, true), $value);
+            $php[] = sprintf('%s%s => %s,', str_repeat($pad, $indent + 1), var_export($key, true), $value);
         }
 
-        return sprintf("array(\n%s\n%s)", implode("\n", $php), str_repeat(' ', $indent - 2));
+        return sprintf("array(\n%s\n%s)", implode("\n", $php), str_repeat($pad, $indent));
     }
 
     protected function endClass()

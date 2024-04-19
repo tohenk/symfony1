@@ -122,6 +122,12 @@ class sfProjectConfiguration
 
             $this->pluginConfigurations[$plugin] = $configuration;
         }
+        // initialize plugins
+        if (!$this instanceof sfApplicationConfiguration) {
+            foreach ($this->pluginConfigurations as $configuration) {
+                $configuration->initialize();
+            }
+        }
 
         $this->pluginsLoaded = true;
     }

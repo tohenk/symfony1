@@ -16,6 +16,14 @@ ini_set('allow_url_fopen', 'on');
 
 $_test_dir = realpath(__DIR__.'/..');
 
+foreach ([$_test_dir.'/../vendor/autoload.php', $_test_dir.'/../../../autoload.php'] as $autoload) {
+    if (is_readable($autoload)) {
+        require_once $autoload;
+
+        break;
+    }
+}
+
 require_once $_test_dir.'/../lib/vendor/lime/lime.php';
 
 require_once $_test_dir.'/../lib/config/sfConfig.class.php';
@@ -62,4 +70,9 @@ function sf_unit_test_shutdown()
 function fix_linebreaks($content)
 {
     return str_replace(["\r\n", "\n", "\r"], "\n", $content);
+}
+
+function normalize_path($path)
+{
+    return str_replace(DIRECTORY_SEPARATOR, '/', $path);
 }

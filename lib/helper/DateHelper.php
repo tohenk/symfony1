@@ -59,6 +59,9 @@ function format_datetime($date, $format = 'F', $culture = null, $charset = null)
 
 function distance_of_time_in_words($from_time, $to_time = null, $include_seconds = false)
 {
+    if ($from_time instanceof DateTime) {
+        $from_time = $from_time->getTimestamp();
+    }
     $to_time = $to_time ?: time();
 
     $distance_in_minutes = floor(abs($to_time - $from_time) / 60);

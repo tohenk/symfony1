@@ -40,7 +40,7 @@ abstract class sfMessageSource_File extends sfMessageSource
      *
      * @param string $source the directory where the messages are stored
      *
-     * @see MessageSource::factory();
+     * @see sfMessageSource::factory();
      */
     public function __construct($source)
     {
@@ -114,7 +114,7 @@ abstract class sfMessageSource_File extends sfMessageSource
 
     /**
      * Returns a list of catalogue and its culture ID.
-     * E.g. array('messages', 'en_AU').
+     * E.g. ['messages', 'en_AU'].
      *
      * @return array list of catalogues
      *
@@ -160,7 +160,7 @@ abstract class sfMessageSource_File extends sfMessageSource
     /**
      * Returns a list of catalogue and its culture ID. This takes care
      * of directory structures.
-     * E.g. array('messages', 'en_AU').
+     * E.g. ['messages', 'en_AU'].
      *
      * @param mixed|null $dir
      * @param mixed|null $variant

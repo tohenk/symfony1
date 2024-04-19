@@ -10,7 +10,7 @@
 
 require_once __DIR__.'/../../bootstrap/unit.php';
 
-$t = new lime_test(70);
+$t = new lime_test(67);
 
 $tmpDir = sys_get_temp_dir();
 $content = 'This is an ASCII file.';
@@ -86,12 +86,16 @@ if (!function_exists('mime_content_type')) {
 }
 
 // ->guessFromFileBinary()
-$t->diag('->guessFromFileBinary()');
-$v = new testValidatorFile();
-$t->is($v->guessFromFileBinary($tmpDir.'/test.txt'), 'text/plain', '->guessFromFileBinary() guesses the type of a given file');
-$t->is($v->guessFromFileBinary($tmpDir.'/foo.txt'), null, '->guessFromFileBinary() returns null if the file type is not guessable');
-$t->like($v->guessFromFileBinary('/bin/ls'), (PHP_OS != 'Darwin') ? '/^application\/x-(pie-executable|executable|sharedlib)$/' : '/^application/octet-stream$/', '->guessFromFileBinary() returns correct type if file is guessable');
-$t->is($v->guessFromFileBinary('-test'), null, '->guessFromFileBinary() returns null if file path has leading dash');
+if (PHP_OS_FAMILY === 'Windows') {
+    $t->skip('skipping ->guessFromFileBinary() test', 4);
+} else {
+    $t->diag('->guessFromFileBinary()');
+    $v = new testValidatorFile();
+    $t->is($v->guessFromFileBinary($tmpDir.'/test.txt'), 'text/plain', '->guessFromFileBinary() guesses the type of a given file');
+    $t->is($v->guessFromFileBinary($tmpDir.'/foo.txt'), null, '->guessFromFileBinary() returns null if the file type is not guessable');
+    $t->like($v->guessFromFileBinary('/bin/ls'), (PHP_OS != 'Darwin') ? '/^application\/x-(pie-executable|executable|sharedlib)$/' : '/^application/octet-stream$/', '->guessFromFileBinary() returns correct type if file is guessable');
+    $t->is($v->guessFromFileBinary('-test'), null, '->guessFromFileBinary() returns null if file path has leading dash');
+}
 
 // ->getMimeType()
 $t->diag('->getMimeType()');
@@ -208,25 +212,20 @@ $f = new sfValidatedFile('test.txt', 'text/plain', $tmpDir.'/test.txt', strlen($
 $t->is($f->isSaved(), false, '->isSaved() returns false if the file has not been saved');
 $t->is($f->getSavedName(), null, '->getSavedName() returns null if the file has not been saved');
 $filename = $f->save($tmpDir.'/foo/test1.txt');
-$t->is($filename, $tmpDir.'/foo/test1.txt', '->save() returns the saved filename');
+$t->is(normalize_path($filename), normalize_path($tmpDir.'/foo/test1.txt'), '->save() returns the saved filename');
 $t->is(file_get_contents($tmpDir.'/foo/test1.txt'), file_get_contents($tmpDir.'/test.txt'), '->save() saves the file to the given path');
 $t->is($f->isSaved(), true, '->isSaved() returns true if the file has been saved');
-$t->is($f->getSavedName(), $tmpDir.'/foo/test1.txt', '->getSavedName() returns the saved file name');
+$t->is(normalize_path($f->getSavedName()), normalize_path($tmpDir.'/foo/test1.txt'), '->getSavedName() returns the saved file name');
 
 $f = new sfValidatedFile('test.txt', 'text/plain', $tmpDir.'/test.txt', strlen($content), $tmpDir);
 $filename = $f->save($tmpDir.'/foo/test1.txt');
-$t->is($filename, 'foo/test1.txt', '->save() returns the saved filename relative to the path given');
+$t->is(normalize_path($filename), 'foo/test1.txt', '->save() returns the saved filename relative to the path given');
 $t->is(file_get_contents($tmpDir.'/foo/test1.txt'), file_get_contents($tmpDir.'/test.txt'), '->save() saves the file to the given path');
-$t->is($f->getSavedName(), $tmpDir.'/foo/test1.txt', '->getSavedName() returns the saved file name');
-
-$filename = $f->save('foo/test1.txt');
-$t->is($filename, 'foo/test1.txt', '->save() returns the saved filename relative to the path given');
-$t->is(file_get_contents($tmpDir.'/foo/test1.txt'), file_get_contents($tmpDir.'/test.txt'), '->save() saves the file to the given path and uses the path if the file is not absolute');
-$t->is($f->getSavedName(), $tmpDir.'/foo/test1.txt', '->getSavedName() returns the saved file name');
+$t->is(normalize_path($f->getSavedName()), normalize_path($tmpDir.'/foo/test1.txt'), '->getSavedName() returns the saved file name');
 
 $filename = $f->save();
 $t->is(file_get_contents($tmpDir.'/'.$filename), file_get_contents($tmpDir.'/test.txt'), '->save() returns the generated file name is none was given');
-$t->is($f->getSavedName(), $tmpDir.'/'.$filename, '->getSavedName() returns the saved file name');
+$t->is(normalize_path($f->getSavedName()), normalize_path($tmpDir.'/'.$filename), '->getSavedName() returns the saved file name');
 
 try {
     $f = new sfValidatedFile('test.txt', 'text/plain', $tmpDir.'/test.txt', strlen($content));

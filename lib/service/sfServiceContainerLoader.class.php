@@ -49,7 +49,7 @@ abstract class sfServiceContainerLoader implements sfServiceContainerLoaderInter
      * the parameters passed to the container constructor to have precedence
      * over the loaded ones.
      *
-     * $container = new sfServiceContainerBuilder(array('foo' => 'bar'));
+     * $container = new sfServiceContainerBuilder(['foo' => 'bar']);
      * $loader = new sfServiceContainerLoaderXXX($container);
      * $loader->load('resource_name');
      * $container->register('foo', new stdClass());

@@ -30,7 +30,7 @@
  * <code>
  *  echo auto_discovery_link_tag('rss', 'module/feed');
  *    => <link rel="alternate" type="application/rss+xml" title="RSS" href="http://www.curenthost.com/module/feed" />
- *  echo auto_discovery_link_tag('rss', 'module/feed', array('title' => 'My RSS'));
+ *  echo auto_discovery_link_tag('rss', 'module/feed', ['title' => 'My RSS']);
  *    => <link rel="alternate" type="application/rss+xml" title="My RSS" href="http://www.curenthost.com/module/feed" />
  * </code>
  *
@@ -69,7 +69,7 @@ function auto_discovery_link_tag($type = 'rss', $url = '', $tag_options = [])
  *
  * @return string file path to the JavaScript file
  *
- * @see    javascript_include_tag
+ * @see    javascript_include_tag()
  */
 function javascript_path($source, $absolute = false)
 {
@@ -93,7 +93,7 @@ function javascript_path($source, $absolute = false)
  *
  * @return string XHTML compliant <script> tag(s)
  *
- * @see    javascript_path
+ * @see    javascript_path()
  */
 function javascript_include_tag()
 {
@@ -120,7 +120,8 @@ function javascript_include_tag()
             unset($sourceOptions['raw_name']);
         }
 
-        $options = array_merge(['type' => 'text/javascript', 'src' => $source], $sourceOptions);
+        $type = '.mjs' === substr($source, -4) ? 'module' : 'text/javascript';
+        $options = array_merge(['type' => $type, 'src' => $source], $sourceOptions);
         $tag = content_tag('script', '', $options);
 
         if (null !== $condition) {
@@ -152,7 +153,7 @@ function javascript_include_tag()
  *
  * @return string file path to the stylesheet file
  *
- * @see    stylesheet_tag
+ * @see    stylesheet_tag()
  */
 function stylesheet_path($source, $absolute = false)
 {
@@ -172,9 +173,9 @@ function stylesheet_path($source, $absolute = false)
  * <code>
  *  echo stylesheet_tag('style');
  *    => <link href="/stylesheets/style.css" media="screen" rel="stylesheet" type="text/css" />
- *  echo stylesheet_tag('style', array('media' => 'all'));
+ *  echo stylesheet_tag('style', ['media' => 'all']);
  *    => <link href="/stylesheets/style.css" media="all" rel="stylesheet" type="text/css" />
- *  echo stylesheet_tag('style', array('raw_name' => true));
+ *  echo stylesheet_tag('style', ['raw_name' => true]);
  *    => <link href="style" media="all" rel="stylesheet" type="text/css" />
  *  echo stylesheet_tag('random.styles', '/css/stylish');
  *    => <link href="/stylesheets/random.styles" media="screen" rel="stylesheet" type="text/css" />
@@ -186,7 +187,7 @@ function stylesheet_path($source, $absolute = false)
  *
  * @return string XHTML compliant <link> tag(s)
  *
- * @see    stylesheet_path
+ * @see    stylesheet_path()
  */
 function stylesheet_tag()
 {
@@ -213,7 +214,7 @@ function stylesheet_tag()
             unset($sourceOptions['raw_name']);
         }
 
-        $options = array_merge(['rel' => 'stylesheet', 'type' => 'text/css', 'media' => 'screen', 'href' => $source], $sourceOptions);
+        $options = array_merge(['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $source], $sourceOptions);
         $tag = tag('link', $options);
 
         if (null !== $condition) {
@@ -279,7 +280,7 @@ function decorate_with($layout)
  *
  * @return string file path to the image file
  *
- * @see    image_tag
+ * @see    image_tag()
  */
 function image_path($source, $absolute = false)
 {
@@ -298,7 +299,7 @@ function image_path($source, $absolute = false)
  * <code>
  *  echo image_tag('foobar');
  *    => <img src="images/foobar.png" alt="Foobar" />
- *  echo image_tag('/my_images/image.gif', array('alt' => 'Alternative text', 'size' => '100x200'));
+ *  echo image_tag('/my_images/image.gif', ['alt' => 'Alternative text', 'size' => '100x200']);
  *    => <img src="/my_images/image.gif" alt="Alternative text" width="100" height="200" />
  * </code>
  *
@@ -307,7 +308,7 @@ function image_path($source, $absolute = false)
  *
  * @return string XHTML compliant <img> tag
  *
- * @see    image_path
+ * @see    image_path()
  */
 function image_tag($source, $options = [])
 {
@@ -402,7 +403,7 @@ function _compute_public_path($source, $dir, $ext, $absolute = false)
  *
  * @return string XHTML compliant <meta> tag(s)
  *
- * @see    include_http_metas
+ * @see    include_http_metas()
  * @see    sfWebResponse::addMeta()
  */
 function include_metas()
@@ -428,7 +429,7 @@ function include_metas()
  *
  * @return string XHTML compliant <meta> tag(s)
  *
- * @see    include_metas
+ * @see    include_metas()
  * @see    sfWebResponse::addHttpMeta()
  */
 function include_http_metas()
@@ -547,7 +548,7 @@ function clear_stylesheets()
  *
  * @return string XHTML compliant <script> tag(s)
  *
- * @see    javascript_include_tag
+ * @see    javascript_include_tag()
  */
 function dynamic_javascript_include_tag($uri, $absolute = false, $options = [])
 {
@@ -602,7 +603,7 @@ function _dynamic_path($uri, $format, $absolute = false)
  * {
  *   public function getJavaScripts()
  *   {
- *     return array('/path/to/a/file.js');
+ *     return ['/path/to/a/file.js'];
  *   }
  * }
  * </code>
@@ -652,7 +653,7 @@ function use_javascripts_for_form(sfForm $form)
  * {
  *   public function getStyleSheets()
  *   {
- *     return array('/path/to/a/file.css');
+ *     return ['/path/to/a/file.css'];
  *   }
  * }
  * </code>
