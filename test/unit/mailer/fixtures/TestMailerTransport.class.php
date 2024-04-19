@@ -34,6 +34,10 @@ class TestMailerTransport implements Swift_Transport
         $this->started = false;
     }
 
+    public function ping()
+    {
+    }
+
     public function registerPlugin(Swift_Events_EventListener $plugin)
     {
     }
@@ -53,7 +57,7 @@ class TestMailerTransport implements Swift_Transport
         return $this->count;
     }
 
-    public function send(Swift_Mime_Message $message, &$failedRecipients = null)
+    public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
     {
         ++$this->count;
 

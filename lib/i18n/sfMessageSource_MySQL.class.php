@@ -106,7 +106,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     /**
      * A resource link to the database.
      *
-     * @var db
+     * @var resource
      */
     protected $db;
 
@@ -116,7 +116,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
      *
      * @param string $source mySQL datasource, in PEAR's DB DSN format
      *
-     * @see MessageSource::factory();
+     * @see sfMessageSource::factory();
      */
     public function __construct($source)
     {
@@ -136,7 +136,7 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     /**
      * Gets the database connection.
      *
-     * @return db database connection
+     * @return resource database connection
      */
     public function connection()
     {
@@ -402,11 +402,11 @@ class sfMessageSource_MySQL extends sfMessageSource_Database
     }
 
     /**
-     * Retrieves catalogue details, array($cat_id, $variant, $count).
+     * Retrieves catalogue details, [$cat_id, $variant, $count].
      *
      * @param string $catalogue catalogue
      *
-     * @return array catalogue details, array($cat_id, $variant, $count)
+     * @return array catalogue details, [$cat_id, $variant, $count]
      */
     protected function getCatalogueDetails($catalogue = 'messages')
     {

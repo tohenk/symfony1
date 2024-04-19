@@ -9,8 +9,6 @@
  */
 require_once __DIR__.'/../../bootstrap/unit.php';
 
-require_once sfConfig::get('sf_symfony_lib_dir').'/vendor/swiftmailer/lib/swift_required.php';
-
 require_once __DIR__.'/fixtures/TestMailerTransport.class.php';
 
 require_once __DIR__.'/fixtures/TestSpool.class.php';
@@ -23,7 +21,6 @@ $dispatcher = new sfEventDispatcher();
 
 // __construct()
 $t->diag('__construct()');
-
 try {
     new sfMailer($dispatcher, ['delivery_strategy' => 'foo']);
 

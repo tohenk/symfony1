@@ -43,7 +43,7 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
             $stmt->bindParam(1, $id, PDO::PARAM_STR);
             $stmt->execute();
         } catch (PDOException $e) {
-            throw new sfDatabaseException(sprintf('PDOException was thrown when trying to manipulate session data. Message: %s', $e->getMessage()));
+            throw new sfDatabaseException(sprintf('Error deleting session data for %d. Message: %s', $id, sfException::getExceptionMessage($e)));
         }
 
         return true;
@@ -70,7 +70,7 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
         try {
             $this->db->query($sql);
         } catch (PDOException $e) {
-            throw new sfDatabaseException(sprintf('PDOException was thrown when trying to manipulate session data. Message: %s', $e->getMessage()));
+            throw new sfDatabaseException(sprintf('Error cleaning expired session data. Message: %s', sfException::getExceptionMessage($e)));
         }
 
         return true;
@@ -118,7 +118,7 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
 
             return '';
         } catch (PDOException $e) {
-            throw new sfDatabaseException(sprintf('PDOException was thrown when trying to manipulate session data. Message: %s', $e->getMessage()));
+            throw new sfDatabaseException(sprintf('Error reading session data for %s. Message: %s', $id, sfException::getExceptionMessage($e)));
         }
     }
 
@@ -148,7 +148,7 @@ class sfPDOSessionStorage extends sfDatabaseSessionStorage
             $stmt->bindParam(2, $id, PDO::PARAM_STR);
             $stmt->execute();
         } catch (PDOException $e) {
-            throw new sfDatabaseException(sprintf('PDOException was thrown when trying to manipulate session data. Message: %s', $e->getMessage()));
+            throw new sfDatabaseException(sprintf('Error writing session data for %s. Message: %s', $id, sfException::getExceptionMessage($e)));
         }
 
         return true;

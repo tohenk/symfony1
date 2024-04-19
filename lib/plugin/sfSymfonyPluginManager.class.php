@@ -131,8 +131,8 @@ class sfSymfonyPluginManager extends sfPluginManager
         $file = $configDir.'/ProjectConfiguration.class.php';
         $source = file_get_contents($file);
 
-        $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(([^\)]+), *\'%s\'([^\)]*)\)\)#', $plugin), '$this->enablePlugins(array($1$2))', $source);
-        $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(\'%s\', *([^\)]*)\)\)#', $plugin), '$this->enablePlugins(array($1))', $source);
+        $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(([^\)]+), *\'%s\'([^\)]*)\)\)#', $plugin), '$this->enablePlugins([$1$2])', $source);
+        $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(\'%s\', *([^\)]*)\)\)#', $plugin), '$this->enablePlugins([$1])', $source);
         $source = preg_replace(sprintf('# *\$this\->enablePlugins\(\'%s\'\); *\n?#', $plugin), '', $source);
         $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(\'%s\'\)\); *\n?#', $plugin), '', $source);
         $source = preg_replace(sprintf('# *\$this\->enablePlugins\(array\(\)\); *\n?#', $plugin), '', $source);
