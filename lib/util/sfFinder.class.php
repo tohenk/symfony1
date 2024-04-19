@@ -252,7 +252,7 @@ class sfFinder
      * Element match if functino or method returns true.
      *
      * $finder->exec('myfunction');
-     * $finder->exec(array($object, 'mymethod'));
+     * $finder->exec([$object, 'mymethod']);
      *
      * @param  mixed  function or method to call
      *
@@ -581,7 +581,7 @@ class sfFinder
  *
  * // prints foo.bar and foo.baz
  * $regex = glob_to_regex("foo.*");
- * for (array('foo.bar', 'foo.baz', 'foo', 'bar') as $t)
+ * for (['foo.bar', 'foo.baz', 'foo', 'bar'] as $t)
  * {
  *   if (/$regex/) echo "matched: $car\n";
  * }

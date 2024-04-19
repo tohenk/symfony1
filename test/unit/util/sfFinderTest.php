@@ -222,8 +222,12 @@ $finder = sfFinder::type('any')->relative()->prune('dir2');
 $t->arrays_are_equal($finder->in($fixtureDir), $anyWithoutDir2, '->prune() ignore all files/directories under the given directory');
 
 // ->in() permissions
-$t->diag('->in() permissions');
-chmod($fixtureDir.'_permissions/secret', 0000);
-$finder = sfFinder::type('file')->relative();
-$t->arrays_are_equal($finder->in($fixtureDir.'_permissions'), [], '->in() ignores directories it cannot read');
-chmod($fixtureDir.'_permissions/secret', 0755);
+if (PHP_OS_FAMILY === 'Windows') {
+    $t->skip('skipping finder permissions test');
+} else {
+    $t->diag('->in() permissions');
+    chmod($fixtureDir.'_permissions/secret', 0000);
+    $finder = sfFinder::type('file')->relative();
+    $t->arrays_are_equal($finder->in($fixtureDir.'_permissions'), [], '->in() ignores directories it cannot read');
+    chmod($fixtureDir.'_permissions/secret', 0755);
+}

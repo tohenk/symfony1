@@ -56,7 +56,7 @@ class sfMailer extends Swift_Mailer
             'logging' => false,
             'delivery_strategy' => self::REALTIME,
             'transport' => [
-                'class' => 'Swift_MailTransport',
+                'class' => 'Swift_SmtpTransport',
                 'param' => [],
             ],
         ], $options);

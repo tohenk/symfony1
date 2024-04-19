@@ -97,7 +97,7 @@ class sfMessageSource_SQLite3 extends sfMessageSource_Database
      * Constructor.
      * Creates a new message source using SQLite.
      *
-     * @see MessageSource::factory();
+     * @see sfMessageSource::factory();
      *
      * @param string $source SQLite datasource, in PEAR's DB DSN format
      */
@@ -334,11 +334,11 @@ class sfMessageSource_SQLite3 extends sfMessageSource_Database
     }
 
     /**
-     * Retrieves catalogue details, array($cat_id, $variant, $count).
+     * Retrieves catalogue details, [$cat_id, $variant, $count].
      *
      * @param string $catalogue catalogue
      *
-     * @return array catalogue details, array($cat_id, $variant, $count)
+     * @return array catalogue details, [$cat_id, $variant, $count]
      */
     protected function getCatalogueDetails($catalogue = 'messages')
     {

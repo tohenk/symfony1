@@ -361,7 +361,7 @@ class sfWebResponse extends sfResponse
         foreach ($this->cookies as $cookie) {
             $expire = isset($cookie['expire']) ? $cookie['expire'] : 0;
             $domain = isset($cookie['domain']) ? $cookie['domain'] : '';
-            setrawcookie($cookie['name'], $cookie['value'], [
+            setrawcookie($cookie['name'], (string) $cookie['value'], [
                 'expires' => $expire,
                 'path' => $cookie['path'],
                 'domain' => $domain,
@@ -413,6 +413,9 @@ class sfWebResponse extends sfResponse
     public static function getDate($timestamp, $type = 'rfc1123')
     {
         $type = strtolower($type);
+        if ($timestamp instanceof DateTime) {
+            $timestamp = $timestamp->getTimestamp();
+        }
 
         if ('rfc1123' == $type) {
             return substr(gmdate('r', $timestamp), 0, -5).'GMT';

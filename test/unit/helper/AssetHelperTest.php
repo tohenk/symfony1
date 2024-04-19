@@ -89,33 +89,33 @@ $t->is(image_tag('test', ['alt_title' => 'Foo', 'title' => 'Bar']), '<img title=
 $t->diag('stylesheet_tag()');
 $t->is(
     stylesheet_tag('style'),
-    '<link rel="stylesheet" type="text/css" media="screen" href="/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/css/style.css" />'."\n",
     'stylesheet_tag() takes a stylesheet name as its first argument'
 );
 $t->is(
     stylesheet_tag('random.styles', '/css/stylish'),
-    '<link rel="stylesheet" type="text/css" media="screen" href="/css/random.styles" />'."\n".
-    '<link rel="stylesheet" type="text/css" media="screen" href="/css/stylish.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/css/random.styles" />'."\n".
+    '<link rel="stylesheet" type="text/css" href="/css/stylish.css" />'."\n",
     'stylesheet_tag() can takes n stylesheet names as its arguments'
 );
 $t->is(
     stylesheet_tag('style', ['media' => 'all']),
-    '<link rel="stylesheet" type="text/css" media="all" href="/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/css/style.css" media="all" />'."\n",
     'stylesheet_tag() can take a media option'
 );
 $t->is(
     stylesheet_tag('style', ['absolute' => true]),
-    '<link rel="stylesheet" type="text/css" media="screen" href="http://localhost/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="http://localhost/css/style.css" />'."\n",
     'stylesheet_tag() can take an absolute option to output an absolute file name'
 );
 $t->is(
     stylesheet_tag('style', ['raw_name' => true]),
-    '<link rel="stylesheet" type="text/css" media="screen" href="style" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="style" />'."\n",
     'stylesheet_tag() can take a raw_name option to bypass file name decoration'
 );
 $t->is(
     stylesheet_tag('style', ['condition' => 'IE 6']),
-    '<!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/css/style.css" /><![endif]-->'."\n",
+    '<!--[if IE 6]><link rel="stylesheet" type="text/css" href="/css/style.css" /><![endif]-->'."\n",
     'stylesheet_tag() can take a condition option'
 );
 
@@ -207,26 +207,26 @@ $t->diag('use_stylesheet() get_stylesheets()');
 use_stylesheet('style');
 $t->is(
     get_stylesheets(),
-    '<link rel="stylesheet" type="text/css" media="screen" href="/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/css/style.css" />'."\n",
     'get_stylesheets() returns a stylesheet previously added by use_stylesheet()'
 );
 use_stylesheet('style', '', ['raw_name' => true]);
 $t->is(
     get_stylesheets(),
-    '<link rel="stylesheet" type="text/css" media="screen" href="style" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="style" />'."\n",
     'use_stylesheet() accepts an array of options as a third parameter'
 );
 use_stylesheet('style', '', ['absolute' => true]);
 $t->is(
     get_stylesheets(),
-    '<link rel="stylesheet" type="text/css" media="screen" href="http://localhost/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="http://localhost/css/style.css" />'."\n",
     'use_stylesheet() accepts an array of options as a third parameter'
 );
 use_stylesheet('style');
 use_stylesheet('style2');
 $t->is(
     get_stylesheets(),
-    '<link rel="stylesheet" type="text/css" media="screen" href="/css/style.css" />'."\n".'<link rel="stylesheet" type="text/css" media="screen" href="/css/style2.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/css/style.css" />'."\n".'<link rel="stylesheet" type="text/css" href="/css/style2.css" />'."\n",
     'get_stylesheets() returns all the stylesheets previously added by use_stylesheet()'
 );
 
@@ -258,7 +258,7 @@ $t->diag('use_dynamic_stylesheet()');
 use_dynamic_stylesheet('module/action');
 $t->is(
     get_stylesheets(),
-    '<link rel="stylesheet" type="text/css" media="screen" href="module/action?sf_format=css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="module/action?sf_format=css" />'."\n",
     'use_dynamic_stylesheet() register a dynamic stylesheet in the response'
 );
 
@@ -285,8 +285,8 @@ $output = <<<'EOF'
 EOF;
 $t->is(get_javascripts_for_form($form), fix_linebreaks($output), 'get_javascripts_for_form() returns script tags');
 $output = <<<'EOF'
-<link rel="stylesheet" type="text/css" media="all" href="/path/to/a/foo.css" />
-<link rel="stylesheet" type="text/css" media="print" href="/path/to/a/bar.css" />
+<link rel="stylesheet" type="text/css" href="/path/to/a/foo.css" media="all" />
+<link rel="stylesheet" type="text/css" href="/path/to/a/bar.css" media="print" />
 
 EOF;
 $t->is(get_stylesheets_for_form($form), fix_linebreaks($output), 'get_stylesheets_for_form() returns link tags');
@@ -320,7 +320,7 @@ sfConfig::set('sf_web_css_dir_name', 'static/css');
 $t->is(stylesheet_path('style'), '/static/css/style.css', 'stylesheet_path() decorates a relative filename with css dir name and extension with custom css dir');
 $t->is(
     stylesheet_tag('style'),
-    '<link rel="stylesheet" type="text/css" media="screen" href="/static/css/style.css" />'."\n",
+    '<link rel="stylesheet" type="text/css" href="/static/css/style.css" />'."\n",
     'stylesheet_tag() takes a stylesheet name as its first argument'
 );
 

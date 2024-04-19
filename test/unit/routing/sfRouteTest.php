@@ -84,8 +84,8 @@ $t->is($route->matchesParameters(['foo' => null]), true, '->matchesParameters() 
 
 /*
 $route = new sfRoute('/:foo/bar');
-$t->is($route->matchesParameters(array('foo' => '')), false, '->matchesParameters() does not match is required parameters are empty');
-$t->is($route->matchesParameters(array('foo' => null)), false, '->matchesParameters() does not match is required parameters are empty');
+$t->is($route->matchesParameters(['foo' => '']), false, '->matchesParameters() does not match is required parameters are empty');
+$t->is($route->matchesParameters(['foo' => null]), false, '->matchesParameters() does not match is required parameters are empty');
 */
 
 $route = new sfRoute('/:foo');
@@ -127,7 +127,7 @@ $t->is($route->generate(['foo' => null]), '/', '->generate() generates a route i
 $route = new sfRoute('/:foo/bar');
 try
 {
-  $route->generate(array('foo' => ''));
+  $route->generate(['foo' => '']);
   $t->fail('->generate() cannot generate a route if a variable is empty and mandatory');
 }
 catch (Exception $e)
@@ -136,7 +136,7 @@ catch (Exception $e)
 }
 try
 {
-  $route->generate(array('foo' => null));
+  $route->generate(['foo' => null]);
   $t->fail('->generate() cannot generate a route if a variable is empty and mandatory');
 }
 catch (Exception $e)

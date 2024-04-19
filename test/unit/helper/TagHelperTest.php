@@ -26,7 +26,7 @@ $t->is(tag('p', null, true), '<p>', 'tag() takes a boolean parameter as its thir
 $t->is(tag('br', ['class' => 'foo'], false), '<br class="foo" />', 'tag() takes an array of options as its second parameters');
 $t->is(tag('br', 'class=foo', false), '<br class="foo" />', 'tag() takes a string of options as its second parameters');
 $t->is(tag('p', ['class' => 'foo', 'id' => 'bar'], true), '<p class="foo" id="bar">', 'tag() takes a boolean parameter as its third parameter');
-// $t->is(tag('br', array('class' => '"foo"')), '<br class="&quot;foo&quot;" />');
+// $t->is(tag('br', ['class' => '"foo"']), '<br class="&quot;foo&quot;" />');
 
 // content_tag()
 $t->diag('content_tag()');

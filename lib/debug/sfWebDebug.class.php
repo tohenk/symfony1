@@ -259,7 +259,7 @@ function sfWebDebugGetElementsByClassName(strClass, strTag, objContElm)
   strTag = strTag || "*";
   objContElm = objContElm || document;
   var objColl = (strTag == '*' && document.all) ? document.all : objContElm.getElementsByTagName(strTag);
-  var arr = new Array();
+  var arr = [];
   var delim = strClass.indexOf('|') != -1  ? '|' : ' ';
   var arrClass = strClass.split(delim);
   var j = objColl.length;
@@ -377,10 +377,7 @@ function sfWebDebugToggleAllLogLines(show, klass)
 
 function sfWebDebugShowOnlyLogLines(type)
 {
-  var types = new Array();
-  types[0] = 'info';
-  types[1] = 'warning';
-  types[2] = 'error';
+  var types = ['info', 'warning', 'error'];
   for (klass in types)
   {
     var elements = sfWebDebugGetElementsByClassName('sfWebDebug' + types[klass].substring(0, 1).toUpperCase() + types[klass].substring(1, types[klass].length));

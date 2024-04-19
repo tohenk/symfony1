@@ -208,7 +208,7 @@ class sfObjectRoute extends sfRequestRoute
     {
         $variables = [];
 
-        foreach (array_keys($this->variables) as $variable) {
+        foreach (array_keys(array_merge($this->defaults, $this->variables)) as $variable) {
             if (0 === strpos($variable, 'sf_') || in_array($variable, ['module', 'action'])) {
                 continue;
             }

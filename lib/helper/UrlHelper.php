@@ -144,13 +144,13 @@ function url_for()
  *    => <a href="/path/to/my/action">Delete this page</a>
  *  echo link_to('Visit Hoogle', 'http://www.hoogle.com');
  *    => <a href="http://www.hoogle.com">Visit Hoogle</a>
- *  echo link_to('Delete this page', 'my_module/my_action', array('id' => 'myid', 'confirm' => 'Are you sure?', 'absolute' => true));
+ *  echo link_to('Delete this page', 'my_module/my_action', ['id' => 'myid', 'confirm' => 'Are you sure?', 'absolute' => true]);
  *    => <a href="http://myapp.example.com/path/to/my/action" id="myid" onclick="return confirm('Are you sure?');">Delete this page</a>
  * </code>
  *
  * @return string XHTML compliant <a href> tag
  *
- * @see    url_for
+ * @see    url_for()
  */
 function link_to()
 {
@@ -210,7 +210,7 @@ function form_tag_for(sfForm $form, $routePrefix, $attributes = [])
  *
  * @return string XHTML compliant <a href> tag or name
  *
- * @see    link_to
+ * @see    link_to()
  */
 function link_to_if()
 {
@@ -261,7 +261,7 @@ function link_to_if()
  *
  * @return string XHTML compliant <a href> tag or name
  *
- * @see    link_to
+ * @see    link_to()
  */
 function link_to_unless()
 {
@@ -277,7 +277,7 @@ function link_to_unless()
  * @param string $path     The route to append
  * @param bool   $absolute If true, an absolute path is returned (optional)
  *
- * @return The web URL root
+ * @return string The web URL root
  */
 function public_path($path, $absolute = false)
 {
@@ -326,7 +326,8 @@ function public_path($path, $absolute = false)
  *
  * @return string XHTML compliant <input> tag
  *
- * @see    url_for, link_to
+ * @see    url_for()
+ * @see    link_to()
  */
 function button_to($name, $internal_uri, $options = [])
 {
@@ -379,7 +380,7 @@ function button_to($name, $internal_uri, $options = [])
  *
  * <b>Examples:</b>
  *   <code><?php echo form_tag('@myroute'); ?></code>
- *   <code><?php echo form_tag('/module/action', array('name' => 'myformname', 'multipart' => true)); ?></code>
+ *   <code><?php echo form_tag('/module/action', ['name' => 'myformname', 'multipart' => true]); ?></code>
  *
  * @param string $url_for_options valid action, route or URL
  * @param array  $options         optional HTML parameters for the <form> tag
@@ -424,7 +425,7 @@ function form_tag($url_for_options = '', $options = [])
  *    => <a href="mailto:webmaster@example.com">webmaster@example.com</a>
  *  echo mail_to('webmaster@example.com', 'send us an email');
  *    => <a href="mailto:webmaster@example.com">send us an email</a>
- *  echo mail_to('webmaster@example.com', 'send us an email', array('encode' => true));
+ *  echo mail_to('webmaster@example.com', 'send us an email', ['encode' => true]);
  *    => <a href="
  * &#x6d;a&#x69;&#x6c;&#x74;&#111;&#58;&#x77;&#x65;b&#x6d;as&#116;&#x65;&#114;
  * &#64;&#101;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#46;&#99;&#x6f;&#109;
@@ -438,7 +439,7 @@ function form_tag($url_for_options = '', $options = [])
  *
  * @return string XHTML compliant <a href> tag
  *
- * @see    link_to
+ * @see    link_to()
  */
 function mail_to($email, $name = '', $options = [], $default_value = [])
 {

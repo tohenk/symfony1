@@ -296,7 +296,7 @@ class sfCommandManager
                     if (count($this->arguments) && '-' != $this->arguments[0][0]) {
                         $value = array_shift($this->arguments);
                     } else {
-                        $value = $option->getDefault();
+                        $value = true;
                     }
                 }
 
@@ -346,7 +346,7 @@ class sfCommandManager
                 $this->errors[] = sprintf('Option "--%s" requires an argument.', $name);
             }
 
-            $value = $option->acceptParameter() ? $option->getDefault() : true;
+            $value = $option->isParameterRequired() ? $option->getDefault() : true;
         }
 
         $this->setOption($option, $value);

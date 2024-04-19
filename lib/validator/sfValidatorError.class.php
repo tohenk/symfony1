@@ -105,6 +105,15 @@ class sfValidatorError extends Exception implements Serializable
             if (is_array($value)) {
                 continue;
             }
+            if ($value instanceof DateTime) {
+                $user = sfContext::getInstance()->getUser();
+                $df = new sfDateFormat($user->getCulture());
+                if ('00:00:00' === $value->format('H:i:s')) {
+                    $value = $df->format($value, 'd');
+                } else {
+                    $value = $df->format($value, 'F');
+                }
+            }
 
             $arguments["%{$key}%"] = htmlspecialchars($value, ENT_QUOTES, sfValidatorBase::getCharset());
         }

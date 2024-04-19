@@ -251,7 +251,7 @@ class sfRoute implements Serializable
         if ($this->options['extra_parameters_as_query_string'] && !$this->hasStarParameter()) {
             // add a query string if needed
             if ($extra = array_diff_key($params, $this->variables, $defaults)) {
-                $url .= '?'.http_build_query($extra);
+                $url .= '?'.$this->buildQueryString($extra);
             }
         }
 
@@ -438,6 +438,26 @@ class sfRoute implements Serializable
         $array = unserialize($serialized);
 
         $this->__unserialize($array);
+    }
+
+    protected function buildQueryString($params, $keys = null)
+    {
+        $result = '';
+        foreach ($params as $key => $value) {
+            if (is_array($value)) {
+                $param = $this->buildQueryString($value, $key);
+            } else {
+                if (null !== $keys) {
+                    $key = sprintf('%s[%s]', $keys, is_integer($key) ? '' : $key);
+                }
+                $param = urlencode($key).'='.urlencode((string) $value);
+            }
+            if ($param) {
+                $result .= ($result ? '&' : '').$param;
+            }
+        }
+
+        return $result;
     }
 
     /**

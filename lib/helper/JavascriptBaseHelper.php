@@ -26,7 +26,7 @@
  *
  * Examples:
  *   <?php echo link_to_function('Greeting', "alert('Hello world!')") ?>
- *   <?php echo link_to_function(image_tag('delete'), "do_delete()", array('confirm' => 'Really?')) ?>
+ *   <?php echo link_to_function(image_tag('delete'), "do_delete()", ['confirm' => 'Really?']) ?>
  */
 function link_to_function($name, $function, $html_options = [])
 {

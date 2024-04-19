@@ -170,7 +170,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
      *
      * @return bool true if the schema has a field with the given name, false otherwise
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return isset($this->fields[$name]);
@@ -183,7 +183,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
      *
      * @return sfValidatorBase The sfValidatorBase instance associated with the given name, null if it does not exist
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return isset($this->fields[$name]) ? $this->fields[$name] : null;
@@ -195,7 +195,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
      * @param string          $name      The field name
      * @param sfValidatorBase $validator An sfValidatorBase instance
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $validator)
     {
         if (!$validator instanceof sfValidatorBase) {
@@ -210,7 +210,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
      *
      * @param string $name
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         unset($this->fields[$name]);
@@ -352,19 +352,21 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
 
     protected function getBytes($value)
     {
-        $value = trim($value);
+        $value = trim((string) $value);
         $number = (float) $value;
-        $modifier = strtolower($value[strlen($value) - 1]);
+        if (strlen($value)) {
+            $modifier = strtolower($value[strlen($value) - 1]);
 
-        $exp_by_modifier = [
-            'k' => 1,
-            'm' => 2,
-            'g' => 3,
-        ];
+            $exp_by_modifier = [
+                'k' => 1,
+                'm' => 2,
+                'g' => 3,
+            ];
 
-        if (array_key_exists($modifier, $exp_by_modifier)) {
-            $exp = $exp_by_modifier[$modifier];
-            $number = $number * pow(1024, $exp);
+            if (array_key_exists($modifier, $exp_by_modifier)) {
+                $exp = $exp_by_modifier[$modifier];
+                $number = $number * pow(1024, $exp);
+            }
         }
 
         return $number;

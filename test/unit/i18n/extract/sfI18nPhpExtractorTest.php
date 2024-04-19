@@ -49,7 +49,7 @@ $content = <<<'EOF'
   echo __('foo');
   echo __("bar");
   echo __ ( 'foobar' );
-  echo __('foo %a% bar', array('%a%' => foo));
+  echo __('foo %a% bar', ['%a%' => foo]);
 ?>
 EOF;
 

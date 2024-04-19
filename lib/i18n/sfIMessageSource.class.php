@@ -54,10 +54,10 @@ interface sfIMessageSource
      * # "catalogue+variant" the catalogue and its variants.
      * # "source string" translation keys, and its translations.
      * <code>
-     *   array('catalogue+variant' =>
-     *       array('source string' => 'target string', ...)
-     *             ...),
-     *        ...);
+     *   ['catalogue+variant' =>
+     *       ['source string' => 'target string', ...]
+     *       ...],
+     *   ...];
      * </code>.
      *
      * @return array 2 level array translation table

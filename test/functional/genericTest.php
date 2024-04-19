@@ -9,7 +9,7 @@
  */
 
 $app = 'frontend';
-if (!include __DIR__.'/../bootstrap/functional.php') {
+if (!include (__DIR__.'/../bootstrap/functional.php')) {
     return;
 }
 
@@ -23,7 +23,7 @@ $b->
     checkElement('link[href="/sf/sf_default/css/screen.css"]')->
     checkElement('link[href="/css/main.css"]')->
     checkElement('link[href="/css/multiple_media.css"][media="print,handheld"]')->
-    matches('#'.preg_quote('<!--[if lte IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/css/ie6.css" /><![endif]-->').'#')->
+    matches('#'.preg_quote('<!--[if lte IE 6]><link rel="stylesheet" type="text/css" href="/css/ie6.css" /><![endif]-->').'#')->
   end();
 
 // default 404

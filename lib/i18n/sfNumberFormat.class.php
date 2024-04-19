@@ -64,7 +64,7 @@ class sfNumberFormat
     /**
      * The DateTimeFormatInfo, containing culture specific patterns and names.
      *
-     * @var DateTimeFormatInfo
+     * @var sfDateTimeFormatInfo
      */
     protected $formatInfo;
 
