@@ -13,13 +13,14 @@ require_once __DIR__.'/../../bootstrap/unit.php';
 $t = new lime_test(5);
 
 $dir = __DIR__.'/fixtures/php';
+$normalized_dir = normalize_path(__DIR__);
 
 // ->dump()
 $t->diag('->dump()');
 $dumper = new sfServiceContainerDumperPhp($container = new sfServiceContainerBuilder());
 
-$t->is($dumper->dump(), file_get_contents($dir.'/services1.php'), '->dump() dumps an empty container as an empty PHP class');
-$t->is($dumper->dump(['class' => 'Container', 'base_class' => 'AbstractContainer']), file_get_contents($dir.'/services1-1.php'), '->dump() takes a class and a base_class options');
+$t->is(fix_linebreaks($dumper->dump()), fix_linebreaks(file_get_contents($dir.'/services1.php')), '->dump() dumps an empty container as an empty PHP class');
+$t->is(fix_linebreaks($dumper->dump(['class' => 'Container', 'base_class' => 'AbstractContainer'])), fix_linebreaks(file_get_contents($dir.'/services1-1.php')), '->dump() takes a class and a base_class options');
 
 $container = new sfServiceContainerBuilder();
 $dumper = new sfServiceContainerDumperPhp($container);
@@ -28,13 +29,13 @@ $dumper = new sfServiceContainerDumperPhp($container);
 $t->diag('->addParameters()');
 $container = include __DIR__.'/fixtures/containers/container8.php';
 $dumper = new sfServiceContainerDumperPhp($container);
-$t->is($dumper->dump(), file_get_contents($dir.'/services8.php'), '->dump() dumps parameters');
+$t->is(fix_linebreaks($dumper->dump()), fix_linebreaks(file_get_contents($dir.'/services8.php')), '->dump() dumps parameters');
 
 // ->addService()
 $t->diag('->addService()');
 $container = include __DIR__.'/fixtures/containers/container9.php';
 $dumper = new sfServiceContainerDumperPhp($container);
-$t->is($dumper->dump(), str_replace('%path%', __DIR__.'/fixtures/includes', file_get_contents($dir.'/services9.php')), '->dump() dumps services');
+$t->is(fix_linebreaks($dumper->dump()), fix_linebreaks(str_replace('%path%', $normalized_dir.'/fixtures/includes', file_get_contents($dir.'/services9.php'))), '->dump() dumps services');
 
 $dumper = new sfServiceContainerDumperPhp($container = new sfServiceContainerBuilder());
 $container->register('foo', 'FooClass')->addArgument(new stdClass());

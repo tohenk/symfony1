@@ -44,7 +44,7 @@ class sfServiceConfigHandler extends sfYamlConfigHandler
             "// date: %s\n\n".
             "\$class = '%s';\n".
             "if (!class_exists(\$class, false)) {\n".
-            "%s\n".
+            "\n%s\n\n".
             "}\n".
             "return \$class;\n\n",
             date('Y/m/d H:i:s'),

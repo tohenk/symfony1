@@ -204,7 +204,7 @@ abstract class sfAction extends sfComponent
      *
      * @throws sfStopException
      *
-     * @see redirect
+     * @see sfAction::redirect()
      */
     public function redirectIf($condition, $url, $statusCode = 302)
     {
@@ -226,7 +226,7 @@ abstract class sfAction extends sfComponent
      *
      * @throws sfStopException
      *
-     * @see redirect
+     * @see sfAction::redirect()
      */
     public function redirectUnless($condition, $url, $statusCode = 302)
     {
@@ -258,7 +258,7 @@ abstract class sfAction extends sfComponent
     /**
      * Convert the given data into a JSON response.
      *
-     * <code>return $this->renderJson(array('username' => 'john'))</code>
+     * <code>return $this->renderJson(['username' => 'john'])</code>
      *
      * @param mixed $data Data to encode as JSON
      *
@@ -307,7 +307,7 @@ abstract class sfAction extends sfComponent
      *
      * @return string sfView::NONE
      *
-     * @see    getPartial
+     * @see    sfAction::getPartial()
      */
     public function renderPartial($templateName, $vars = null)
     {
@@ -351,7 +351,7 @@ abstract class sfAction extends sfComponent
      *
      * @return string sfView::NONE
      *
-     * @see    getComponent
+     * @see    sfAction::getComponent()
      */
     public function renderComponent($moduleName, $componentName, $vars = null)
     {

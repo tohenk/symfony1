@@ -9,12 +9,24 @@
  */
 
 $app = 'cache';
-if (!include __DIR__.'/../bootstrap/functional.php') {
+if (!include (__DIR__.'/../bootstrap/functional.php')) {
     return;
 }
 
 class myTestBrowser extends sfTestBrowser
 {
+    /** @return sfBrowser */
+    public function getBrowser()
+    {
+        return $this->browser;
+    }
+
+    /** @return sfCache */
+    public function getCache()
+    {
+        return $this->getBrowser()->getContext()->getViewCacheManager()->getCache();
+    }
+
     public function checkResponseContent($content, $message)
     {
         $this->test()->ok($this->getResponse()->getContent() == $content, $message);
@@ -150,7 +162,7 @@ class myTestBrowser extends sfTestBrowser
           with('view_cache')->isCached(true);
 
         // remove all cache
-        sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
+        $b->getCache()->clean();
 
         $b->
           getMultiAction()->
@@ -166,7 +178,7 @@ class myTestBrowser extends sfTestBrowser
           end();
 
         // remove all cache
-        sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
+        $b->getCache()->clean();
 
         $b->
           getMultiAction('requestParam')->
@@ -236,7 +248,7 @@ class myTestBrowser extends sfTestBrowser
           end();
 
         // remove all cache
-        sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
+        $b->getCache()->clean();
 
         // check user supplied cache key for partials and components
         $b->
@@ -266,7 +278,7 @@ class myTestBrowser extends sfTestBrowser
         // check cache content for actions
 
         // remove all cache
-        sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
+        $b->getCache()->clean();
 
         $b->
           get('/cache/action')->
@@ -340,7 +352,7 @@ $b->
 sfConfig::set('sf_web_debug', false);
 
 // check stylesheets, javascripts inclusions
-sfToolkit::clearDirectory(sfConfig::get('sf_app_cache_dir'));
+$b->getCache()->clean();
 $b->
   get('/cache/multiBis')->
   with('request')->begin()->

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Inline as YamlInline;
+
 /**
  * sfValidatorFromDescription converts a string to a validator.
  *
@@ -159,7 +161,7 @@ class sfValidatorFromDescription extends sfValidatorDecorator
 
         ++$i;
 
-        return sfYamlInline::load('['.(!$args ? '{}' : $args).']');
+        return YamlInline::parse('['.(!$args ? '{}' : $args).']');
     }
 
     /**
@@ -319,7 +321,7 @@ class sfValidatorFDTokenOperator
     public function asPhp($tokenLeft, $tokenRight)
     {
         return sprintf(
-            'new %s(array(%s, %s), %s)',
+            'new %s([%s, %s], %s)',
             $this->class,
             is_object($tokenLeft) && in_array(get_class($tokenLeft), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenLeft->asPhp() : $tokenLeft,
             is_object($tokenRight) && in_array(get_class($tokenRight), ['sfValidatorFDToken', 'sfValidatorFDTokenFilter']) ? $tokenRight->asPhp() : $tokenRight,
