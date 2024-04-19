@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
@@ -24,7 +26,7 @@ class sfI18nYamlValidateExtractor extends sfI18nYamlExtractor
     {
         $strings = [];
 
-        $config = sfYaml::load($content, sfConfig::get('sf_charset', 'UTF-8'));
+        $config = Yaml::parse($content);
 
         // New validate.yml format
 
