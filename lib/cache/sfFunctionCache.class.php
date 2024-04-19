@@ -34,8 +34,8 @@ class sfFunctionCache
      *
      * The first argument can be any PHP callable:
      *
-     * $cache->call('functionName', array($arg1, $arg2));
-     * $cache->call(array($object, 'methodName'), array($arg1, $arg2));
+     * $cache->call('functionName', [$arg1, $arg2]);
+     * $cache->call([$object, 'methodName'], [$arg1, $arg2]);
      *
      * @param mixed $callable  A PHP callable
      * @param array $arguments An array of arguments to pass to the callable

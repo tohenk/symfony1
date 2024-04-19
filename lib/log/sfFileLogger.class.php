@@ -68,6 +68,9 @@ class sfFileLogger extends sfLogger
         }
 
         $this->fp = fopen($options['file'], 'a');
+        if (false === $this->fp) {
+            throw new sfFileException(sprintf('Unable to open log file "%s" for appending.', $options['file']));
+        }
         if (!$fileExists) {
             chmod($options['file'], isset($options['file_mode']) ? $options['file_mode'] : 0666);
         }

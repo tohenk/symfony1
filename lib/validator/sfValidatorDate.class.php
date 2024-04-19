@@ -81,13 +81,16 @@ class sfValidatorDate extends sfValidatorBase
         if (is_numeric($value)) {
             $cleanTime = (int) $value;
             $clean = date('YmdHis', $cleanTime);
+        } elseif ($value instanceof DateTime) {
+            $date = $value;
+            $clean = $this->getDateComparable($date);
         }
         // convert string to date number format
         else {
             try {
                 $date = new DateTime($value);
                 $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
-                $clean = $date->format('YmdHis');
+                $clean = $this->getDateComparable($date);
             } catch (Exception $e) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
@@ -97,14 +100,14 @@ class sfValidatorDate extends sfValidatorBase
         if ($max = $this->getOption('max')) {
             // convert timestamp to date number format
             if (is_numeric($max)) {
-                $maxError = date($this->getOption('date_format_range_error'), $max);
-                $max = date('YmdHis', $max);
+                $maxError = date($this->getDateFormatRangeError(), $max);
+                $max = $this->getDateComparable($max);
             }
             // convert string to date number
             else {
                 $dateMax = new DateTime($max);
-                $max = $dateMax->format('YmdHis');
-                $maxError = $dateMax->format($this->getOption('date_format_range_error'));
+                $max = $this->getDateComparable($dateMax);
+                $maxError = $dateMax->format($this->getDateFormatRangeError());
             }
 
             if ($clean > $max) {
@@ -116,14 +119,14 @@ class sfValidatorDate extends sfValidatorBase
         if ($min = $this->getOption('min')) {
             // convert timestamp to date number
             if (is_numeric($min)) {
-                $minError = date($this->getOption('date_format_range_error'), $min);
-                $min = date('YmdHis', $min);
+                $minError = date($this->getDateFormatRangeError(), $min);
+                $min = $this->getDateComparable($min);
             }
             // convert string to date number
             else {
                 $dateMin = new DateTime($min);
-                $min = $dateMin->format('YmdHis');
-                $minError = $dateMin->format($this->getOption('date_format_range_error'));
+                $min = $this->getDateComparable($dateMin);
+                $minError = $dateMin->format($this->getDateFormatRangeError());
             }
 
             if ($clean < $min) {
@@ -138,6 +141,23 @@ class sfValidatorDate extends sfValidatorBase
         $format = $this->getOption('with_time') ? $this->getOption('datetime_output') : $this->getOption('date_output');
 
         return isset($date) ? $date->format($format) : date($format, $cleanTime);
+    }
+
+    protected function getDateComparable($date)
+    {
+        $format = $this->getOption('with_time') ? 'YmdHis' : 'Ymd';
+
+        return $date instanceof DateTime ? $date->format($format) : date($format, $date);
+    }
+
+    public function getDateFormatRangeError()
+    {
+        $format = $this->getOption('date_format_range_error');
+        if (!$this->getOption('with_time')) {
+            $format = substr($format, 0, strpos($format, ' '));
+        }
+
+        return $format;
     }
 
     /**

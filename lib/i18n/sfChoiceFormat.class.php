@@ -147,7 +147,7 @@ class sfChoiceFormat
      *
      * @param string $string the string containing the choices
      *
-     * @return array array($sets, $strings)
+     * @return [$sets, $strings]
      */
     public function parse($string)
     {

@@ -118,7 +118,9 @@ EOF;
 
         // execute the choosen ORM installer script
         if ('Doctrine' === $options['orm']) {
-            include __DIR__.'/../../plugins/sf'.$options['orm'].'Plugin/config/installer.php';
+            if (is_readable($installer = __DIR__.'/../../plugins/sf'.$options['orm'].'Plugin/config/installer.php')) {
+                include $installer;
+            }
         }
 
         // execute a custom installer

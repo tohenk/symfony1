@@ -385,10 +385,6 @@ class sfCoreAutoload
         'sfwidgetformselectradio' => 'widget/sfWidgetFormSelectRadio.class.php',
         'sfwidgetformtextarea' => 'widget/sfWidgetFormTextarea.class.php',
         'sfwidgetformtime' => 'widget/sfWidgetFormTime.class.php',
-        'sfyaml' => 'yaml/sfYaml.class.php',
-        'sfyamldumper' => 'yaml/sfYamlDumper.class.php',
-        'sfyamlinline' => 'yaml/sfYamlInline.class.php',
-        'sfyamlparser' => 'yaml/sfYamlParser.class.php',
     ];
 
     protected function __construct()
@@ -520,7 +516,7 @@ class sfCoreAutoload
             }
         }
 
-        $content = preg_replace('/protected \$classes = array *\(.*?\);/s', sprintf("protected \$classes = array(\n%s  );", $classes), file_get_contents(__FILE__));
+        $content = preg_replace('/protected \$classes = array *\(.*?\);/s', sprintf("protected \$classes = [\n%s  ];", $classes), file_get_contents(__FILE__));
 
         file_put_contents(__FILE__, $content);
     }

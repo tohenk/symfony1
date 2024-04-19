@@ -10,6 +10,8 @@
 
 require_once __DIR__.'/sfGeneratorBaseTask.class.php';
 
+use Symfony\Component\Yaml\Inline as YamlInline;
+
 /**
  * Generates a new application.
  *
@@ -115,8 +117,8 @@ EOF;
         $finder = sfFinder::type('file')->name('settings.yml');
         $this->getFilesystem()->replaceTokens($finder->in($appDir.'/config'), '##', '##', [
             'NO_SCRIPT_NAME' => $firstApp ? 'true' : 'false',
-            'CSRF_SECRET' => sfYamlInline::dump(sfYamlInline::parseScalar($options['csrf-secret'])),
-            'ESCAPING_STRATEGY' => sfYamlInline::dump((bool) sfYamlInline::parseScalar($options['escaping-strategy'])),
+            'CSRF_SECRET' => YamlInline::dump(YamlInline::parseScalar($options['csrf-secret'])),
+            'ESCAPING_STRATEGY' => YamlInline::dump((bool) YamlInline::parseScalar($options['escaping-strategy'])),
             'USE_DATABASE' => sfConfig::has('sf_orm') ? 'true' : 'false',
         ]);
 
@@ -136,7 +138,7 @@ EOF;
             'IS_DEBUG' => 'true',
             'IP_CHECK' => '// this check prevents access to debug front controllers that are deployed by accident to production servers.'.PHP_EOL.
                              '// feel free to remove this, extend it or make something more sophisticated.'.PHP_EOL.
-                             'if (!in_array(@$_SERVER[\'REMOTE_ADDR\'], array(\'127.0.0.1\', \'::1\')))'.PHP_EOL.
+                             'if (!in_array(@$_SERVER[\'REMOTE_ADDR\'], [\'127.0.0.1\', \'::1\']))'.PHP_EOL.
                              '{'.PHP_EOL.
                              '  die(\'You are not allowed to access this file. Check \'.basename(__FILE__).\' for more information.\');'.PHP_EOL.
                              '}'.PHP_EOL,
