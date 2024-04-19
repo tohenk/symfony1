@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Inline as YamlInline;
+
 /**
  * sfValidatorFromDescription converts a string to a validator.
  *
@@ -159,7 +161,7 @@ class sfValidatorFromDescription extends sfValidatorDecorator
 
         ++$i;
 
-        return sfYamlInline::load('['.(!$args ? '{}' : $args).']');
+        return YamlInline::parse('['.(!$args ? '{}' : $args).']');
     }
 
     /**

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Inline as YamlInline;
+
 /**
  * sfValidatorSchemaCompare compares several values from an array.
  *
@@ -74,8 +76,8 @@ class sfValidatorSchemaCompare extends sfValidatorSchema
         if ($options || $messages) {
             $arguments = sprintf(
                 '(%s%s)',
-                $options ? sfYamlInline::dump($options) : ($messages ? '{}' : ''),
-                $messages ? ', '.sfYamlInline::dump($messages) : ''
+                $options ? YamlInline::dump($options) : ($messages ? '{}' : ''),
+                $messages ? ', '.YamlInline::dump($messages) : ''
             );
         }
 
