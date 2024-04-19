@@ -385,10 +385,6 @@ class sfCoreAutoload
         'sfwidgetformselectradio' => 'widget/sfWidgetFormSelectRadio.class.php',
         'sfwidgetformtextarea' => 'widget/sfWidgetFormTextarea.class.php',
         'sfwidgetformtime' => 'widget/sfWidgetFormTime.class.php',
-        'sfyaml' => 'yaml/sfYaml.class.php',
-        'sfyamldumper' => 'yaml/sfYamlDumper.class.php',
-        'sfyamlinline' => 'yaml/sfYamlInline.class.php',
-        'sfyamlparser' => 'yaml/sfYamlParser.class.php',
     ];
 
     protected function __construct()

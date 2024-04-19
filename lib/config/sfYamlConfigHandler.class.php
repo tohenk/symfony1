@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * sfYamlConfigHandler is a base class for YAML (.yml) configuration handlers. This class
  * provides a central location for parsing YAML files.
@@ -61,8 +63,13 @@ abstract class sfYamlConfigHandler extends sfConfigHandler
             throw new sfConfigurationException(sprintf('Configuration file "%s" does not exist or is not readable.', $configFile));
         }
 
+        // pre-process PHP using include
+        ob_start();
+        include $configFile;
+        $content = ob_get_clean();
+
         // parse our config
-        $config = sfYaml::load($configFile, sfConfig::get('sf_charset', 'UTF-8'));
+        $config = Yaml::parse($content);
 
         if (false === $config) {
             // configuration couldn't be parsed
