@@ -98,36 +98,36 @@ HED;
 
 class {$taskClassName} extends sfBaseTask
 {
-  protected function configure()
-  {
-    // // add your own arguments here
-    // \$this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+    protected function configure()
+    {
+        // // add your own arguments here
+        // \$this->addArguments([
+        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
+        // ]);
 
-    \$this->addOptions(array(
-      new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
-      new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
-      new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', '{$defaultConnection}'),
-      // add your own options here
-    ));
+        \$this->addOptions([
+            new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
+            new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
+            new sfCommandOption('connection', null, sfCommandOption::PARAMETER_REQUIRED, 'The connection name', '{$defaultConnection}'),
+            // add your own options here
+        ]);
 
-    \$this->namespace        = '{$namespace}';
-    \$this->name             = '{$name}';
-    \$this->briefDescription = '{$briefDescription}';
-    \$this->detailedDescription = <<<EOF
+        \$this->namespace        = '{$namespace}';
+        \$this->name             = '{$name}';
+        \$this->briefDescription = '{$briefDescription}';
+        \$this->detailedDescription = <<<EOF
 {$detailedDescription}
 EOF;
-  }
+    }
 
-  protected function execute(\$arguments = array(), \$options = array())
-  {
-    // initialize the database connection
-    \$databaseManager = new sfDatabaseManager(\$this->configuration);
-    \$connection = \$databaseManager->getDatabase(\$options['connection'])->getConnection();
+    protected function execute(\$arguments = [], \$options = [])
+    {
+        // initialize the database connection
+        \$databaseManager = new sfDatabaseManager(\$this->configuration);
+        \$connection = \$databaseManager->getDatabase(\$options['connection'])->getConnection();
 
-    // add your code here
-  }
+        // add your code here
+    }
 }
 
 HED;
@@ -137,30 +137,30 @@ HED;
 
 class {$taskClassName} extends sfBaseTask
 {
-  protected function configure()
-  {
-    // // add your own arguments here
-    // \$this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
+    protected function configure()
+    {
+        // // add your own arguments here
+        // \$this->addArguments([
+        //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
+        // ]);
 
-    // // add your own options here
-    // \$this->addOptions(array(
-    //   new sfCommandOption('my_option', null, sfCommandOption::PARAMETER_REQUIRED, 'My option'),
-    // ));
+        // // add your own options here
+        // \$this->addOptions([
+        //   new sfCommandOption('my_option', null, sfCommandOption::PARAMETER_REQUIRED, 'My option'),
+        // ]);
 
-    \$this->namespace        = '{$namespace}';
-    \$this->name             = '{$name}';
-    \$this->briefDescription = '{$briefDescription}';
-    \$this->detailedDescription = <<<EOF
+        \$this->namespace        = '{$namespace}';
+        \$this->name             = '{$name}';
+        \$this->briefDescription = '{$briefDescription}';
+        \$this->detailedDescription = <<<EOF
 {$detailedDescription}
 EOF;
-  }
+    }
 
-  protected function execute(\$arguments = array(), \$options = array())
-  {
-    // add your code here
-  }
+    protected function execute(\$arguments = [], \$options = [])
+    {
+        // add your code here
+    }
 }
 
 HED;

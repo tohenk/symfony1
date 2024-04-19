@@ -22,13 +22,15 @@
  *
  * <b>Example:</b>
  * <code>
- *  include_component_slot('sidebar', array('myvar' => 12345));
+ *  include_component_slot('sidebar', ['myvar' => 12345]);
  * </code>
  *
  * @param  string slot name
  * @param  array variables to be made accessible to the component
  *
- * @see    get_component_slot, include_partial, include_component
+ * @see    get_component_slot()
+ * @see    include_partial()
+ * @see    include_component()
  */
 function include_component_slot($name, $vars = [])
 {
@@ -41,7 +43,7 @@ function include_component_slot($name, $vars = [])
  *
  * <b>Example:</b>
  * <code>
- *  echo get_component_slot('sidebar', array('myvar' => 12345));
+ *  echo get_component_slot('sidebar', ['myvar' => 12345]);
  * </code>
  *
  * @param string $name slot name
@@ -49,7 +51,9 @@ function include_component_slot($name, $vars = [])
  *
  * @return string result of the component execution
  *
- * @see    get_component_slot, include_partial, include_component
+ * @see    get_component_slot()
+ * @see    include_partial()
+ * @see    include_component()
  */
 function get_component_slot($name, $vars = [])
 {
@@ -96,18 +100,26 @@ function has_component_slot($name)
  *
  * <b>Example:</b>
  * <code>
- *  include_component('mymodule', 'mypartial', array('myvar' => 12345));
+ *  include_component('mymodule', 'mypartial', ['myvar' => 12345]);
  * </code>
  *
  * @param string $moduleName    module name
  * @param string $componentName component name
  * @param array  $vars          variables to be made accessible to the component
  *
- * @see    get_component, include_partial, include_component_slot
+ * @see    get_component()
+ * @see    include_partial()
+ * @see    include_component_slot()
  */
 function include_component($moduleName, $componentName, $vars = [])
 {
-    echo get_component($moduleName, $componentName, $vars);
+    if (function_exists('_content_wrapper')) {
+        $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $trace = array_shift($traces);
+        echo _content_wrapper(get_component($moduleName, $componentName, $vars), $trace);
+    } else {
+        echo get_component($moduleName, $componentName, $vars);
+    }
 }
 
 /**
@@ -116,7 +128,7 @@ function include_component($moduleName, $componentName, $vars = [])
  *
  * <b>Example:</b>
  * <code>
- *  echo get_component('mymodule', 'mypartial', array('myvar' => 12345));
+ *  echo get_component('mymodule', 'mypartial', ['myvar' => 12345]);
  * </code>
  *
  * @param string $moduleName    module name
@@ -125,7 +137,7 @@ function include_component($moduleName, $componentName, $vars = [])
  *
  * @return string result of the component execution
  *
- * @see    include_component
+ * @see    include_component()
  */
 function get_component($moduleName, $componentName, $vars = [])
 {
@@ -163,17 +175,24 @@ function get_component($moduleName, $componentName, $vars = [])
  *
  * <b>Example:</b>
  * <code>
- *  include_partial('mypartial', array('myvar' => 12345));
+ *  include_partial('mypartial', ['myvar' => 12345]);
  * </code>
  *
  * @param string $templateName partial name
  * @param array  $vars         variables to be made accessible to the partial
  *
- * @see    get_partial, include_component
+ * @see    get_partial()
+ * @see    include_component()
  */
 function include_partial($templateName, $vars = [])
 {
-    echo get_partial($templateName, $vars);
+    if (function_exists('_content_wrapper')) {
+        $traces = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+        $trace = array_shift($traces);
+        echo _content_wrapper(get_partial($templateName, $vars), $trace);
+    } else {
+        echo get_partial($templateName, $vars);
+    }
 }
 
 /**
@@ -182,7 +201,7 @@ function include_partial($templateName, $vars = [])
  *
  * <b>Example:</b>
  * <code>
- *  echo get_partial('mypartial', array('myvar' => 12345));
+ *  echo get_partial('mypartial', ['myvar' => 12345]);
  * </code>
  *
  * @param string $templateName partial name
@@ -190,7 +209,7 @@ function include_partial($templateName, $vars = [])
  *
  * @return string result of the partial execution
  *
- * @see    include_partial
+ * @see    include_partial()
  */
 function get_partial($templateName, $vars = [])
 {
@@ -218,7 +237,7 @@ function get_partial($templateName, $vars = [])
  * @param string $name  slot name
  * @param string $value The slot content
  *
- * @see    end_slot
+ * @see    end_slot()
  */
 function slot($name, $value = null)
 {
@@ -252,7 +271,7 @@ function slot($name, $value = null)
 /**
  * Stops the content capture and save the content in the slot.
  *
- * @see    slot
+ * @see    slot()
  */
 function end_slot()
 {
@@ -277,7 +296,8 @@ function end_slot()
  *
  * @return bool true, if the slot exists
  *
- * @see    get_slot, include_slot
+ * @see    get_slot()
+ * @see    include_slot()
  */
 function has_slot($name)
 {
@@ -295,7 +315,8 @@ function has_slot($name)
  * @param string $name    slot name
  * @param string $default default content to return if slot is unexistent
  *
- * @see    has_slot, get_slot
+ * @see    has_slot()
+ * @see    get_slot()
  */
 function include_slot($name, $default = '')
 {
@@ -315,7 +336,8 @@ function include_slot($name, $default = '')
  *
  * @return string content of the slot
  *
- * @see    has_slot, include_slot
+ * @see    has_slot()
+ * @see    include_slot()
  */
 function get_slot($name, $default = '')
 {

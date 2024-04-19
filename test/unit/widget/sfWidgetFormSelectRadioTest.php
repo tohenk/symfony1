@@ -32,7 +32,7 @@ $t->diag('->render()');
 $w = new sfWidgetFormSelectRadio(['choices' => ['foo' => 'bar', 'foobar' => 'foo'], 'separator' => '']);
 $output = '<ul class="radio_list">'.
 '<li><input name="foo" type="radio" value="foo" id="foo_foo" />&nbsp;<label for="foo_foo">bar</label></li>'.
-'<li><input name="foo" type="radio" value="foobar" id="foo_foobar" checked="checked" />&nbsp;<label for="foo_foobar">foo</label></li>'.
+'<li><input name="foo" type="radio" value="foobar" id="foo_foobar" checked />&nbsp;<label for="foo_foobar">foo</label></li>'.
 '</ul>';
 $t->is($w->render('foo', 'foobar'), $output, '->render() renders a radio tag with the value checked');
 
@@ -40,14 +40,14 @@ $t->is($w->render('foo', 'foobar'), $output, '->render() renders a radio tag wit
 $onChange = '<ul class="radio_list">'.
 '<li><input name="foo" type="radio" value="foo" id="foo_foo" onChange="alert(42)" />'.
 '&nbsp;<label for="foo_foo">bar</label></li>'.
-'<li><input name="foo" type="radio" value="foobar" id="foo_foobar" checked="checked" onChange="alert(42)" />'.
+'<li><input name="foo" type="radio" value="foobar" id="foo_foobar" onChange="alert(42)" checked />'.
 '&nbsp;<label for="foo_foobar">foo</label></li>'.
 '</ul>';
 $t->is($w->render('foo', 'foobar', ['onChange' => 'alert(42)']), $onChange, '->render() renders a radio tag using extra attributes');
 
 $w = new sfWidgetFormSelectRadio(['choices' => ['0' => 'bar', '1' => 'foo']]);
 $output = <<< 'EOF'
-<ul class="radio_list"><li><input name="myname" type="radio" value="0" id="myname_0" checked="checked" />&nbsp;<label for="myname_0">bar</label></li>
+<ul class="radio_list"><li><input name="myname" type="radio" value="0" id="myname_0" checked />&nbsp;<label for="myname_0">bar</label></li>
 <li><input name="myname" type="radio" value="1" id="myname_1" />&nbsp;<label for="myname_1">foo</label></li></ul>
 EOF;
 $t->is($w->render('myname', false), fix_linebreaks($output), '->render() considers false to be an integer 0');
@@ -55,7 +55,7 @@ $t->is($w->render('myname', false), fix_linebreaks($output), '->render() conside
 $w = new sfWidgetFormSelectRadio(['choices' => ['0' => 'bar', '1' => 'foo']]);
 $output = <<< 'EOF'
 <ul class="radio_list"><li><input name="myname" type="radio" value="0" id="myname_0" />&nbsp;<label for="myname_0">bar</label></li>
-<li><input name="myname" type="radio" value="1" id="myname_1" checked="checked" />&nbsp;<label for="myname_1">foo</label></li></ul>
+<li><input name="myname" type="radio" value="1" id="myname_1" checked />&nbsp;<label for="myname_1">foo</label></li></ul>
 EOF;
 $t->is($w->render('myname', true), fix_linebreaks($output), '->render() considers true to be an integer 1');
 
@@ -66,7 +66,7 @@ $t->is($w->render('myname', []), '', '->render() returns an empty HTML string if
 $t->diag('group support');
 $w = new sfWidgetFormSelectRadio(['choices' => ['foo' => ['foo' => 'bar', 'bar' => 'foo'], 'bar' => ['foobar' => 'barfoo']]]);
 $output = <<<'EOF'
-foo <ul class="radio_list"><li><input name="foo" type="radio" value="foo" id="foo_foo" checked="checked" />&nbsp;<label for="foo_foo">bar</label></li>
+foo <ul class="radio_list"><li><input name="foo" type="radio" value="foo" id="foo_foo" checked />&nbsp;<label for="foo_foo">bar</label></li>
 <li><input name="foo" type="radio" value="bar" id="foo_bar" />&nbsp;<label for="foo_bar">foo</label></li></ul>
 bar <ul class="radio_list"><li><input name="foo" type="radio" value="foobar" id="foo_foobar" />&nbsp;<label for="foo_foobar">barfoo</label></li></ul>
 EOF;

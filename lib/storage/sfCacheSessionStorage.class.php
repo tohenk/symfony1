@@ -123,7 +123,7 @@ class sfCacheSessionStorage extends sfStorage
             $this->data = [];
         } else {
             // load data from cache. Watch out for the default case. We could
-            // serialize(array()) as the default to the call but that would be a performance hit
+            // serialize([]) as the default to the call but that would be a performance hit
             $raw = $this->cache->get($this->id, null);
             if (null === $raw) {
                 $this->data = [];

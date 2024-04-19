@@ -231,7 +231,7 @@ abstract class sfWidget
      *
      * The array keys are files and values are the media names (separated by a ,):
      *
-     *   array('/path/to/file.css' => 'all', '/another/file.css' => 'screen,print')
+     *   ['/path/to/file.css' => 'all', '/another/file.css' => 'screen,print']
      *
      * @return array An array of stylesheet paths
      */
@@ -357,11 +357,19 @@ abstract class sfWidget
     public function attributesToHtml($attributes)
     {
         $attributes = array_merge($this->attributes, $attributes);
+        $extras = [];
         foreach ($attributes as $key => &$value) {
-            $value = $this->attributesToHtmlCallback($key, $value);
+            if (in_array($key, ['checked', 'disabled', 'readonly', 'required'])) {
+                if ($key == $value) {
+                    $extras[] = ' '.$key;
+                }
+                $value = '';
+            } else {
+                $value = $this->attributesToHtmlCallback($key, $value);
+            }
         }
 
-        return implode('', $attributes);
+        return implode('', $attributes + $extras);
     }
 
     /**

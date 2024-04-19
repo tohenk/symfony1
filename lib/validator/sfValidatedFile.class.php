@@ -110,7 +110,7 @@ class sfValidatedFile
 
         $this->savedName = $file;
 
-        return null === $this->path ? $file : str_replace($this->path.DIRECTORY_SEPARATOR, '', $file);
+        return null === $this->path ? $file : str_replace(realpath($this->path).DIRECTORY_SEPARATOR, '', realpath($file));
     }
 
     /**

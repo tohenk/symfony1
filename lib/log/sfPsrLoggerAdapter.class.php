@@ -66,7 +66,7 @@ class sfPsrLoggerAdapter extends sfLogger
     public function listenContextLoadFactoriesEvent(sfEvent $event)
     {
         $context = $event->getSubject();
-        // @var $context sfContext
+        /* @var $context sfContext */
         $this->setLogger($context->getService($this->loggerServiceId));
         $this->dispatcher->disconnect('context.load_factories', [$this, 'listenContextLoadFactoriesEvent']);
     }

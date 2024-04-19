@@ -103,7 +103,16 @@ function _tag_options($options = [])
 
     $html = '';
     foreach ($options as $key => $value) {
-        $html .= ' '.$key.'="'.escape_once($value).'"';
+        if (null === $value) {
+            continue;
+        }
+        if (is_bool($value) || in_array($value, ['true', 'false'])) {
+            if (true === $value || 'true' === $value) {
+                $html .= ' '.$key;
+            }
+        } else {
+            $html .= ' '.$key.'="'.escape_once($value).'"';
+        }
     }
 
     return $html;

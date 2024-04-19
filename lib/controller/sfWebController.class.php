@@ -41,7 +41,7 @@ abstract class sfWebController extends sfController
                 return $parameters;
             }
 
-            if ('#' == $parameters) {
+            if (strlen($parameters) && '#' === $parameters[0]) {
                 return $parameters;
             }
 
@@ -92,7 +92,7 @@ abstract class sfWebController extends sfController
         }
 
         // we get the query string out of the url
-        if ($pos = strpos($url, '?')) {
+        if (false !== ($pos = strpos($url, '?'))) {
             $queryString = substr($url, $pos + 1);
             $url = substr($url, 0, $pos);
         }
@@ -102,12 +102,12 @@ abstract class sfWebController extends sfController
         // module/action?key1=value1&key2=value2...
 
         // first slash optional
-        if ('/' == $url[0]) {
+        if ('/' === $url[0]) {
             $url = substr($url, 1);
         }
 
         // routeName?
-        if ($url && '@' == $url[0]) {
+        if ($url && '@' === $url[0]) {
             $route = substr($url, 1);
         } elseif (false !== strpos($url, '/')) {
             list($params['module'], $params['action']) = explode('/', $url);
@@ -119,14 +119,15 @@ abstract class sfWebController extends sfController
 
         // split the query string
         if ($queryString) {
-            $matched = preg_match_all('/
-        ([^&=]+)            # key
-        =                   # =
-        (.*?)               # value
-        (?:
-          (?=&[^&=]+=) | $  # followed by another key= or the end of the string
-        )
-      /x', $queryString, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+            $matched = preg_match_all(
+                '/
+                    ([^&=]+)            # key
+                    =                   # =
+                    (.*?)               # value
+                    (?:
+                    (?=&[^&=]+=) | $  # followed by another key= or the end of the string
+                    )
+                /x', $queryString, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
             foreach ($matches as $match) {
                 $params[urldecode($match[1][0])] = urldecode($match[2][0]);
             }

@@ -72,7 +72,7 @@ class sfTesterMailer extends sfTester
     /**
      * Changes the context to use the email corresponding to the given criteria.
      *
-     * @param array|string $to       the email or array(email => alias)
+     * @param array|string $to       the email or [email => alias]
      * @param int          $position address position
      *
      * @return sfTester|sfTestFunctionalBase

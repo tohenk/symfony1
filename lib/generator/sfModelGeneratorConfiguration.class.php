@@ -44,6 +44,8 @@ abstract class sfModelGeneratorConfiguration
 
     abstract public function getFilterDisplay();
 
+    abstract public function getFilterTitle();
+
     abstract public function getFormDisplay();
 
     abstract public function getNewDisplay();
@@ -294,8 +296,8 @@ abstract class sfModelGeneratorConfiguration
     /**
      * Gets a new form object.
      *
-     * @param array      $options An array of options to merge with the options returned by getFormOptions()
      * @param mixed|null $object
+     * @param array      $options An array of options to merge with the options returned by getFormOptions()
      *
      * @return sfForm
      */
@@ -347,6 +349,7 @@ abstract class sfModelGeneratorConfiguration
             ],
             'filter' => [
                 'fields' => [],
+                'title' => $this->getFilterTitle(),
             ],
             'form' => [
                 'fields' => [],
@@ -429,6 +432,7 @@ abstract class sfModelGeneratorConfiguration
         $this->parseVariables('edit', 'title');
         $this->parseVariables('list', 'title');
         $this->parseVariables('new', 'title');
+        $this->parseVariables('filter', 'title');
 
         // action credentials
         $this->configuration['credentials'] = [

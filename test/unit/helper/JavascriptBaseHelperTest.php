@@ -37,7 +37,7 @@ alert("foo");
 //]]>
 </script>
 EOT;
-$t->is(javascript_tag('alert("foo");'), $expect, 'javascript_tag() takes the content as string parameter');
+$t->is(fix_linebreaks(javascript_tag('alert("foo");')), fix_linebreaks($expect), 'javascript_tag() takes the content as string parameter');
 
 // link_to_function()
 $t->diag('link_to_function()');

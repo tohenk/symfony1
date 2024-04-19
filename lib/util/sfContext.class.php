@@ -31,6 +31,7 @@ class sfContext implements ArrayAccess
 
     protected static $instances = [];
     protected static $current = 'default';
+    protected static $storage;
 
     /**
      * Calls methods defined via sfEventDispatcher.
@@ -182,7 +183,7 @@ class sfContext implements ArrayAccess
         $this->dispatcher->notify(new sfEvent($this, 'context.load_factories'));
 
         if (sfConfig::get('sf_debug') && sfConfig::get('sf_logging_enabled')) {
-            // @var $timer sfTimer
+            /* @var $timer sfTimer */
             $timer->addTime();
         }
     }
@@ -241,11 +242,9 @@ class sfContext implements ArrayAccess
     {
         // get the last action stack entry
         if ($this->factories['actionStack'] && $lastEntry = $this->factories['actionStack']->getLastEntry()) {
-            // @var $lastEntry sfActionStackEntry
+            /* @var $lastEntry sfActionStackEntry */
             return $lastEntry->getActionName();
         }
-
-        return null;
     }
 
     /**
@@ -348,11 +347,9 @@ class sfContext implements ArrayAccess
     {
         // get the last action stack entry
         if (isset($this->factories['actionStack']) && $lastEntry = $this->factories['actionStack']->getLastEntry()) {
-            // @var $lastEntry sfActionStackEntry
+            /* @var $lastEntry sfActionStackEntry */
             return sfConfig::get('sf_app_module_dir').'/'.$lastEntry->getModuleName();
         }
-
-        return null;
     }
 
     /**
@@ -364,11 +361,9 @@ class sfContext implements ArrayAccess
     {
         // get the last action stack entry
         if (isset($this->factories['actionStack']) && $lastEntry = $this->factories['actionStack']->getLastEntry()) {
-            // @var $lastEntry sfActionStackEntry
+            /* @var $lastEntry sfActionStackEntry */
             return $lastEntry->getModuleName();
         }
-
-        return null;
     }
 
     /**
@@ -512,7 +507,7 @@ class sfContext implements ArrayAccess
      *
      * @return bool true if the context object exists, false otherwise
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->has($name);
@@ -525,7 +520,7 @@ class sfContext implements ArrayAccess
      *
      * @return mixed The context object if exists, null otherwise
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);
@@ -537,7 +532,7 @@ class sfContext implements ArrayAccess
      * @param string $offset Service name
      * @param mixed  $value  Service
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->set($offset, $value);
@@ -548,7 +543,7 @@ class sfContext implements ArrayAccess
      *
      * @param string $offset The parameter name
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->factories[$offset]);

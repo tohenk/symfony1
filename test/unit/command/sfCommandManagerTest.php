@@ -62,17 +62,17 @@ $optionSet = new sfCommandOptionSet([
     new sfCommandOption('foo11', 'v', sfCommandOption::PARAMETER_OPTIONAL, '', 'default11'),
 ]);
 $manager = new sfCommandManager($argumentSet, $optionSet);
-$manager->process('--foo1 -f --foo3 --foo4="foo4" --foo5=foo5 -r"foo6 foo6" -t foo7 --foo8="foo" --foo8=bar -s -u foo10 -vfoo11 foo1 foo2 foo3 foo4');
+$manager->process('--foo1 -f --foo3=foo --foo4="foo4" --foo5=foo5 -r"foo6 foo6" -t foo7 --foo8="foo" --foo8=bar -s -u foo10 -vfoo11 foo1 foo2 foo3 foo4');
 $options = [
     'foo1' => true,
     'foo2' => true,
-    'foo3' => 'default3',
+    'foo3' => 'foo',
     'foo4' => 'foo4',
     'foo5' => 'foo5',
     'foo6' => 'foo6 foo6',
     'foo7' => 'foo7',
     'foo8' => ['foo', 'bar'],
-    'foo9' => 'default9',
+    'foo9' => true,
     'foo10' => 'foo10',
     'foo11' => 'foo11',
 ];

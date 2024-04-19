@@ -62,7 +62,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 
                     unset($this->credentials[$key]);
 
-                    $this->storage->regenerate(true);
+                    $this->flushStorage();
 
                     return;
                 }
@@ -105,7 +105,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
         }
 
         if ($added) {
-            $this->storage->regenerate(true);
+            $this->flushStorage();
         }
     }
 
@@ -182,7 +182,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
 
             $this->dispatcher->notify(new sfEvent($this, 'user.change_authentication', ['authenticated' => $this->authenticated]));
 
-            $this->storage->regenerate(true);
+            $this->flushStorage();
         }
     }
 
@@ -204,6 +204,14 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
     public function getLastRequestTime()
     {
         return $this->lastRequest;
+    }
+
+    /**
+     * Flush user storage.
+     */
+    public function flushStorage()
+    {
+        $this->storage->regenerate(true);
     }
 
     /**
