@@ -112,9 +112,13 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                     break;
 
                 case 'storage':
+                    $session_name = $parameters['session_name'];
+                    unset($parameters['session_name']);
+
                     $defaultParameters = [];
                     $defaultParameters[] = "'auto_shutdown' => false";
-                    $defaultParameters[] = sprintf("'session_id' => \$this->getRequest()->getParameter('%s')", $parameters['session_name']);
+                    $defaultParameters[] = "'session_id' => \$this->getRequest()->getParameter(\$session_name)";
+                    $defaultParameters[] = "'session_name' => \$session_name";
                     if (is_subclass_of($class, 'sfDatabaseSessionStorage')) {
                         $defaultParameters[] = sprintf("'database' => \$this->getDatabaseManager()->getDatabase('%s')", isset($parameters['database']) ? $parameters['database'] : 'default');
                         unset($parameters['database']);
@@ -128,6 +132,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "if (self::\$storage) {\n".
                         "    \$this->factories['storage'] = self::\$storage;\n".
                         "} else {\n".
+                        "    \$session_name = sfConfig::get('sf_factory_session_name', '%s');\n".
                         "    \$class = sfConfig::get('sf_factory_storage', '%s');\n".
                         "    \$this->factories['storage'] = new \$class(array_merge(\n".
                         "        [\n".
@@ -137,6 +142,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "     ));\n".
                         "     self::\$storage = \$this->factories['storage'];\n".
                         "}\n",
+                        $session_name,
                         $class,
                         implode(",\n            ", $defaultParameters),
                         var_export($parameters, true)
