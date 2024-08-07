@@ -181,7 +181,7 @@ class sfWebRequest extends sfRequest
         $pathArray = $this->getPathInfoArray();
 
         // for IIS with rewrite module (IIFR, ISAPI Rewrite, ...)
-        if ('HTTP_X_REWRITE_URL' == $this->getOption('path_info_key')) {
+        if ('HTTP_X_REWRITE_URL' === $this->getOption('path_info_key')) {
             $uri = isset($pathArray['HTTP_X_REWRITE_URL']) ? $pathArray['HTTP_X_REWRITE_URL'] : '';
         } else {
             $uri = isset($pathArray['REQUEST_URI']) ? $pathArray['REQUEST_URI'] : '';
@@ -274,6 +274,8 @@ class sfWebRequest extends sfRequest
 
         if (!$pathInfo) {
             $pathInfo = '/';
+        } elseif ('?' === $pathInfo[0]) {
+            $pathInfo = '/'.$pathInfo;
         }
 
         return $pathInfo;
@@ -388,7 +390,7 @@ class sfWebRequest extends sfRequest
      */
     public function isMethod($method)
     {
-        return strtoupper($method) == $this->getMethod();
+        return strtoupper($method) === $this->getMethod();
     }
 
     /**
@@ -434,7 +436,7 @@ class sfWebRequest extends sfRequest
         foreach ($languages as $lang) {
             if (false !== strpos($lang, '-')) {
                 $codes = explode('-', $lang);
-                if ('i' == $codes[0]) {
+                if ('i' === $codes[0]) {
                     // Language not listed in ISO 639 that are not variants
                     // of any listed language, which can be registerd with the
                     // i-prefix, such as i-cherokee
@@ -443,7 +445,7 @@ class sfWebRequest extends sfRequest
                     }
                 } else {
                     for ($i = 0, $max = count($codes); $i < $max; ++$i) {
-                        if (0 == $i) {
+                        if (0 === $i) {
                             $lang = strtolower($codes[0]);
                         } else {
                             $lang .= '_'.strtoupper($codes[$i]);
@@ -508,7 +510,7 @@ class sfWebRequest extends sfRequest
      */
     public function isXmlHttpRequest()
     {
-        return 'XMLHttpRequest' == $this->getHttpHeader('X_REQUESTED_WITH');
+        return 'XMLHttpRequest' === $this->getHttpHeader('X_REQUESTED_WITH');
     }
 
     /**
@@ -561,9 +563,9 @@ class sfWebRequest extends sfRequest
         $pathArray = $this->getPathInfoArray();
 
         return
-          (isset($pathArray['HTTPS']) && ('on' == strtolower($pathArray['HTTPS']) || 1 == $pathArray['HTTPS']))
-          || ($this->getOption('trust_proxy') && isset($pathArray['HTTP_SSL_HTTPS']) && ('on' == strtolower($pathArray['HTTP_SSL_HTTPS']) || 1 == $pathArray['HTTP_SSL_HTTPS']))
-          || ($this->getOption('trust_proxy') && $this->isForwardedSecure());
+            (isset($pathArray['HTTPS']) && ('on' === strtolower($pathArray['HTTPS']) || 1 == $pathArray['HTTPS']))
+            || ($this->getOption('trust_proxy') && isset($pathArray['HTTP_SSL_HTTPS']) && ('on' === strtolower($pathArray['HTTP_SSL_HTTPS']) || 1 == $pathArray['HTTP_SSL_HTTPS']))
+            || ($this->getOption('trust_proxy') && $this->isForwardedSecure());
     }
 
     /**
@@ -911,7 +913,7 @@ class sfWebRequest extends sfRequest
     {
         $pathArray = $this->getPathInfoArray();
 
-        return isset($pathArray['HTTP_X_FORWARDED_PROTO']) && 'https' == strtolower($pathArray['HTTP_X_FORWARDED_PROTO']);
+        return isset($pathArray['HTTP_X_FORWARDED_PROTO']) && 'https' === strtolower($pathArray['HTTP_X_FORWARDED_PROTO']);
     }
 
     /**
