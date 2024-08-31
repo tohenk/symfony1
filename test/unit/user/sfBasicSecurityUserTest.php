@@ -10,7 +10,7 @@
 
 require_once __DIR__.'/../../bootstrap/unit.php';
 
-$t = new lime_test(47);
+$t = new lime_test(49);
 
 class MySessionStorage extends sfSessionTestStorage
 {
@@ -137,6 +137,10 @@ $t->is($user->hasCredential('superadmin1'), true);
 
 // admin and (user or subscriber) and (superadmin1 or subscriber1)
 $t->is($user->hasCredential([['admin', ['user', 'subscriber'], ['superadmin1', 'subscriber1']]]), true);
+
+// negated credential
+$t->is($user->hasCredential('~admin'), false);
+$t->is($user->hasCredential(['admin', '~superadmin']), false);
 
 // numerical credentials
 $user->clearCredentials();
