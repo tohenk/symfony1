@@ -85,7 +85,7 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
      */
     public function addCredentials()
     {
-        if (0 == func_num_args()) {
+        if (0 === func_num_args()) {
             return;
         }
 
@@ -125,7 +125,10 @@ class sfBasicSecurityUser extends sfUser implements sfSecurityUser
         }
 
         if (!is_array($credentials)) {
-            return in_array($credentials, $this->credentials);
+            $flip = '~' === substr($credentials, 0, 1);
+            $exist = in_array($flip ? substr($credentials, 1) : $credentials, $this->credentials);
+
+            return $flip ? !$exist : $exist;
         }
 
         // now we assume that $credentials is an array
