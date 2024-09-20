@@ -130,7 +130,7 @@ class sfException extends Exception
         $message = null;
         while (null !== $exception) {
             if ($msg = $exception->getMessage()) {
-                if (null == $message) {
+                if (null === $message) {
                     $message = $msg;
                 } else {
                     $message = sprintf($wrapper, $message, $msg);
