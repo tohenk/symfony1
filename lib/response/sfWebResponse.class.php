@@ -769,7 +769,7 @@ class sfWebResponse extends sfResponse
     /**
      * Retrieves HTTP headers from the current web response.
      *
-     * @return string HTTP headers
+     * @return array HTTP headers
      */
     public function getHttpHeaders()
     {
