@@ -306,19 +306,22 @@ class sfViewCacheManager
             return false;
         }
 
-        list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
+        try {
+            list($route_name, $params) = $this->controller->convertUrlStringToParameters($internalUri);
 
-        if (!isset($params['module'])) {
-            return false;
-        }
+            if (!isset($params['module'])) {
+                return false;
+            }
 
-        $this->registerConfiguration($params['module']);
+            $this->registerConfiguration($params['module']);
 
-        if (isset($this->cacheConfig[$params['module']][$params['action']])) {
-            return $this->cacheConfig[$params['module']][$params['action']]['lifeTime'] > 0;
-        }
-        if (isset($this->cacheConfig[$params['module']]['DEFAULT'])) {
-            return $this->cacheConfig[$params['module']]['DEFAULT']['lifeTime'] > 0;
+            if (isset($this->cacheConfig[$params['module']][$params['action']])) {
+                return $this->cacheConfig[$params['module']][$params['action']]['lifeTime'] > 0;
+            }
+            if (isset($this->cacheConfig[$params['module']]['DEFAULT'])) {
+                return $this->cacheConfig[$params['module']]['DEFAULT']['lifeTime'] > 0;
+            }
+        } catch (Exception $e) {
         }
 
         return false;
