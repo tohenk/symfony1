@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfDatabaseConfigHandler allows you to setup database connections in a
  * configuration file that will be created for you automatically upon first
@@ -38,7 +40,7 @@ class sfDatabaseConfigHandler extends sfYamlConfigHandler
         }
 
         foreach ($data as $name => $database) {
-            $data[$name] = sprintf("\n'%s' => new %s(%s),", $name, $database[0], var_export($database[1], true));
+            $data[$name] = sprintf("\n'%s' => new %s(%s),", $name, $database[0], PHPObj::create($database[1]));
         }
 
         // compile data
