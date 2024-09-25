@@ -152,8 +152,6 @@ class sfServiceContainerDumperGraphviz extends sfServiceContainerDumper
 
     protected function startDot()
     {
-        $parameters = var_export($this->container->getParameters(), true);
-
         return sprintf(
             "digraph sc {\n  %s\n  node [%s];\n  edge [%s];\n\n",
             $this->addOptions($this->options['graph']),
