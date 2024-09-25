@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfViewConfigHandler allows you to configure views.
  *
@@ -147,8 +149,8 @@ class sfViewConfigHandler extends sfYamlConfigHandler
         $templateName = $this->getConfigValue('template', $viewName);
         $defaultTemplateName = $templateName ? "'{$templateName}'" : '$this->actionName';
 
-        $data .= "  \$templateName = sfConfig::get('symfony.view.'.\$this->moduleName.'_'.\$this->actionName.'_template', {$defaultTemplateName});\n";
-        $data .= "  \$this->setTemplate(\$templateName.\$this->viewName.\$this->getExtension());\n";
+        $data .= "\$templateName = sfConfig::get('symfony.view.'.\$this->moduleName.'_'.\$this->actionName.'_template', {$defaultTemplateName});\n";
+        $data .= "\$this->setTemplate(\$templateName.\$this->viewName.\$this->getExtension());\n";
 
         return $data;
     }
@@ -170,20 +172,18 @@ class sfViewConfigHandler extends sfYamlConfigHandler
 
         // the user set a decorator in the action
         $data = <<<'EOF'
-  if (null !== $layout = sfConfig::get('symfony.view.'.$this->moduleName.'_'.$this->actionName.'_layout'))
-  {
+if (null !== $layout = sfConfig::get('symfony.view.'.$this->moduleName.'_'.$this->actionName.'_layout')) {
     $this->setDecoratorTemplate(false === $layout ? false : $layout.$this->getExtension());
-  }
+}
 EOF;
 
         if ($hasLocalLayout) {
             // the user set a decorator in view.yml for this action
             $data .= <<<EOF
 
-  else
-  {
+else {
     \$this->setDecoratorTemplate('' == '{$layout}' ? false : '{$layout}'.\$this->getExtension());
-  }
+}
 
 EOF;
         } else {
@@ -193,10 +193,9 @@ EOF;
             //   * the request is an XMLHttpRequest request
             $data .= <<<EOF
 
-  else if (null === \$this->getDecoratorTemplate() && !\$this->context->getRequest()->isXmlHttpRequest())
-  {
+else if (null === \$this->getDecoratorTemplate() && !\$this->context->getRequest()->isXmlHttpRequest()) {
     \$this->setDecoratorTemplate('' == '{$layout}' ? false : '{$layout}'.\$this->getExtension());
-  }
+}
 
 EOF;
         }
@@ -216,11 +215,11 @@ EOF;
         $data = [];
 
         foreach ($this->mergeConfigValue('http_metas', $viewName) as $httpequiv => $content) {
-            $data[] = sprintf("  \$response->addHttpMeta('%s', '%s', false);", $httpequiv, str_replace('\'', '\\\'', $content));
+            $data[] = sprintf("\$response->addHttpMeta('%s', '%s', false);", $httpequiv, str_replace('\'', '\\\'', $content));
         }
 
         foreach ($this->mergeConfigValue('metas', $viewName) as $name => $content) {
-            $data[] = sprintf("  \$response->addMeta('%s', '%s', false, false);", $name, str_replace('\'', '\\\'', preg_replace('/&amp;(?=\w+;)/', '&', htmlspecialchars((string) $content, ENT_QUOTES, sfConfig::get('sf_charset')))));
+            $data[] = sprintf("\$response->addMeta('%s', '%s', false, false);", $name, str_replace('\'', '\\\'', preg_replace('/&amp;(?=\w+;)/', '&', htmlspecialchars((string) $content, ENT_QUOTES, sfConfig::get('sf_charset')))));
         }
 
         return implode("\n", $data)."\n";
@@ -260,7 +259,7 @@ EOF;
         $escaping = $this->getConfigValue('escaping', $viewName);
 
         if (isset($escaping['method'])) {
-            $data[] = sprintf('  $this->getAttributeHolder()->setEscapingMethod(%s);', var_export($escaping['method'], true));
+            $data[] = sprintf('$this->getAttributeHolder()->setEscapingMethod(%s);', PHPObj::create($escaping['method']));
         }
 
         return implode("\n", $data)."\n";
@@ -317,7 +316,7 @@ EOF;
             } elseif ('-' == $key[0]) {
                 unset($tmp[substr($key, 1)]);
             } else {
-                $tmp[$key] = sprintf("  \$response->add%s('%s', '%s', %s);", $type, $key, $position, str_replace("\n", '', var_export($options, true)));
+                $tmp[$key] = sprintf("\$response->add%s('%s', '%s', %s);", $type, $key, $position, PHPObj::inline($options));
             }
         }
 
