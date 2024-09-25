@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * Model generator.
  *
@@ -355,7 +357,7 @@ EOF;
 
     public function asPhp($variable)
     {
-        return str_replace(["\n", 'array ('], ['', 'array('], var_export($variable, true));
+        return PHPObj::inline($variable);
     }
 
     public function escapeString($string)

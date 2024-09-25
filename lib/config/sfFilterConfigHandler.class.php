@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfFilterConfigHandler allows you to register filters with the system.
  *
@@ -73,7 +75,7 @@ class sfFilterConfigHandler extends sfYamlConfigHandler
 
             if ($condition) {
                 // parse parameters
-                $parameters = isset($keys['param']) ? var_export($keys['param'], true) : 'null';
+                $parameters = PHPObj::inline(isset($keys['param']) ? $keys['param'] : null);
 
                 // append new data
                 if ('security' == $type) {
@@ -161,8 +163,8 @@ class sfFilterConfigHandler extends sfYamlConfigHandler
     {
         return sprintf(
             "\nlist(\$class, \$parameters) = (array) sfConfig::get('sf_%s_filter', ['%s', %s]);\n".
-                          "\$filter = new \$class(sfContext::getInstance(), \$parameters);\n".
-                          '$this->register($filter);',
+            "\$filter = new \$class(sfContext::getInstance(), \$parameters);\n".
+            '$this->register($filter);',
             $category,
             $class,
             $parameters
@@ -183,9 +185,8 @@ class sfFilterConfigHandler extends sfYamlConfigHandler
         return <<<EOF
 
 // does this action require security?
-if (\$actionInstance->isSecure())
-{
-  {$this->addFilter($category, $class, $parameters)}
+if (\$actionInstance->isSecure()) {
+    {$this->addFilter($category, $class, $parameters)}
 }
 EOF;
     }

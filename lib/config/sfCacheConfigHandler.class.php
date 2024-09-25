@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfCacheConfigHandler allows you to configure cache.
  *
@@ -35,15 +37,12 @@ class sfCacheConfigHandler extends sfYamlConfigHandler
 
         // iterate through all action names
         $data = [];
-        $first = true;
         foreach ($this->yamlConfig as $actionName => $values) {
             if ('all' == $actionName) {
                 continue;
             }
 
             $data[] = $this->addCache($actionName);
-
-            $first = false;
         }
 
         // general cache configuration
@@ -84,16 +83,16 @@ class sfCacheConfigHandler extends sfYamlConfigHandler
         $enabled = $this->getConfigValue('enabled', $actionName);
 
         // cache with or without loayout
-        $withLayout = $this->getConfigValue('with_layout', $actionName) ? 'true' : 'false';
+        $withLayout = $this->getConfigValue('with_layout', $actionName) ? true : false;
 
         // lifetime
-        $lifeTime = !$enabled ? '0' : $this->getConfigValue('lifetime', $actionName, '0');
+        $lifeTime = !$enabled ? 0 : $this->getConfigValue('lifetime', $actionName, 0);
 
         // client_lifetime
-        $clientLifetime = !$enabled ? '0' : $this->getConfigValue('client_lifetime', $actionName, $lifeTime);
+        $clientLifetime = !$enabled ? 0 : $this->getConfigValue('client_lifetime', $actionName, $lifeTime);
 
         // contextual
-        $contextual = $this->getConfigValue('contextual', $actionName) ? 'true' : 'false';
+        $contextual = $this->getConfigValue('contextual', $actionName) ? true : false;
 
         // vary
         $vary = $this->getConfigValue('vary', $actionName, []);
@@ -102,14 +101,11 @@ class sfCacheConfigHandler extends sfYamlConfigHandler
         }
 
         // add cache information to cache manager
+        $parameters = ['withLayout' => $withLayout, 'lifeTime' => $lifeTime, 'clientLifeTime' => $clientLifetime, 'contextual' => $contextual, 'vary' => $vary];
         $data[] = sprintf(
-            "\$this->addCache(\$moduleName, '%s', ['withLayout' => %s, 'lifeTime' => %s, 'clientLifeTime' => %s, 'contextual' => %s, 'vary' => %s]);\n",
+            "\$this->addCache(\$moduleName, '%s', %s);\n",
             $actionName,
-            $withLayout,
-            $lifeTime,
-            $clientLifetime,
-            $contextual,
-            str_replace("\n", '', var_export($vary, true))
+            PHPObj::inline($parameters)
         );
 
         return implode("\n", $data);
