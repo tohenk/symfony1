@@ -11,7 +11,7 @@ class ProjectServiceContainer extends sfServiceContainer
     {
         require_once '%path%/foo.php';
 
-        $instance = call_user_func(['FooClass', 'getInstance'], 'foo', $this->getService('foo.baz'), array($this->getParameter('foo') => 'foo is '.$this->getParameter('foo')), true, $this);
+        $instance = call_user_func(['FooClass', 'getInstance'], 'foo', $this->getService('foo.baz'), [$this->getParameter('foo') => 'foo is '.$this->getParameter('foo')], true, $this);
         $instance->setBar('bar');
         $instance->initialize();
         sc_configure($instance);
@@ -61,10 +61,10 @@ class ProjectServiceContainer extends sfServiceContainer
 
     protected function getDefaultParameters()
     {
-        return array(
+        return [
             'baz_class' => 'BazClass',
             'foo' => 'bar',
             'foo_bar' => new sfServiceReference('foo_bar'),
-        );
+        ];
     }
 }

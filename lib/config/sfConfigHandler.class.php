@@ -115,6 +115,8 @@ abstract class sfConfigHandler
      *
      * @param array $configFiles An array of ordered configuration files
      *
+     * @return array Configuration files
+     *
      * @throws LogicException no matter what
      */
     public static function getConfiguration(array $configFiles)

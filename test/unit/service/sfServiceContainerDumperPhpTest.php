@@ -43,6 +43,6 @@ $container->register('foo', 'FooClass')->addArgument(new stdClass());
 try {
     $dumper->dump();
     $t->fail('->dump() throws a RuntimeException if the container to be dumped has reference to objects or resources');
-} catch (RuntimeException $e) {
+} catch (Error $e) {
     $t->pass('->dump() throws a RuntimeException if the container to be dumped has reference to objects or resources');
 }

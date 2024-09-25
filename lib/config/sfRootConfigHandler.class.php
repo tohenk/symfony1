@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfRootConfigHandler allows you to specify configuration handlers for the
  * application or on a module level.
@@ -69,7 +71,7 @@ class sfRootConfigHandler extends sfYamlConfigHandler
             }
 
             // parse parameters
-            $parameters = (isset($keys['param']) ? var_export($keys['param'], true) : null);
+            $parameters = PHPObj::inline(isset($keys['param']) ? $keys['param'] : null);
 
             // append new data
             $data[] = sprintf("\$this->handlers['%s'] = new %s(%s);", $category, $class, $parameters);
