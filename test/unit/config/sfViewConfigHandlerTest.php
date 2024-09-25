@@ -36,7 +36,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds stylesheets to the response');
@@ -47,7 +47,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('foobar', 'last', array ());
+$response->addStylesheet('foobar', 'last', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds stylesheets to the response');
@@ -58,7 +58,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds JavaScript to the response');
@@ -69,7 +69,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('foobar', 'last', array ());
+$response->addJavascript('foobar', 'last', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds JavaScript to the response');
@@ -86,8 +86,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('all_foobar', '', array ());
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('all_foobar', '', []);
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific stylesheets after application-wide assets');
@@ -101,8 +101,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('all_foobar', '', array ());
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('all_foobar', '', []);
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific stylesheets after application-wide assets');
@@ -116,8 +116,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('default_foobar', '', array ());
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('default_foobar', '', []);
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific stylesheets after default assets');
@@ -131,8 +131,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('default_foobar', '', array ());
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('default_foobar', '', []);
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific stylesheets after default assets');
@@ -146,8 +146,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('default_foobar', '', array ());
-  $response->addStylesheet('all_foobar', '', array ());
+$response->addStylesheet('default_foobar', '', []);
+$response->addStylesheet('all_foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds application-specific stylesheets after default assets');
@@ -161,8 +161,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('default_foobar', '', array ());
-  $response->addStylesheet('all_foobar', '', array ());
+$response->addStylesheet('default_foobar', '', []);
+$response->addStylesheet('all_foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds application-specific stylesheets after default assets');
@@ -179,8 +179,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('all_foobar', '', array ());
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('all_foobar', '', []);
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific javascripts after application-wide assets');
@@ -194,8 +194,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('all_foobar', '', array ());
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('all_foobar', '', []);
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific javascripts after application-wide assets');
@@ -209,8 +209,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('default_foobar', '', array ());
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('default_foobar', '', []);
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific javascripts after default assets');
@@ -224,8 +224,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('default_foobar', '', array ());
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('default_foobar', '', []);
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds view-specific javascripts after default assets');
@@ -239,8 +239,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('default_foobar', '', array ());
-  $response->addJavascript('all_foobar', '', array ());
+$response->addJavascript('default_foobar', '', []);
+$response->addJavascript('all_foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds application-specific javascripts after default assets');
@@ -254,8 +254,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('default_foobar', '', array ());
-  $response->addJavascript('all_foobar', '', array ());
+$response->addJavascript('default_foobar', '', []);
+$response->addJavascript('all_foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() adds application-specific javascripts after default assets');
@@ -272,8 +272,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('all_foo', '', array ());
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('all_foo', '', []);
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the - option to remove one stylesheet previously added');
@@ -287,8 +287,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('all_foo', '', array ());
-  $response->addJavascript('foobar', '', array ());
+$response->addJavascript('all_foo', '', []);
+$response->addJavascript('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the - option to remove one javascript previously added');
@@ -299,7 +299,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('baz', '', array ());
+$response->addStylesheet('baz', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the -* option to remove all stylesheets previously added');
@@ -310,7 +310,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addJavascript('baz', '', array ());
+$response->addJavascript('baz', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the -* option to remove all javascripts previously added');
@@ -324,7 +324,7 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('foobar', '', array ());
+$response->addStylesheet('foobar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the -* option to remove all assets previously added');
@@ -344,8 +344,8 @@ $handler->setConfiguration([
     ],
 ]);
 $content = <<<'EOF'
-  $response->addStylesheet('bar', '', array ());
-  $response->addJavascript('bar', '', array ());
+$response->addStylesheet('bar', '', []);
+$response->addJavascript('bar', '', []);
 
 EOF;
 $t->is(fix_linebreaks($handler->addHtmlAsset('myView')), fix_linebreaks($content), 'addHtmlAsset() supports the -* option to remove all assets previously added');

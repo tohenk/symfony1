@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfPatternRouting class controls the generation and parsing of URLs.
  *
@@ -317,7 +319,7 @@ class sfPatternRouting extends sfRouting
         } else {
             // find a matching route
             if (false === $route = $this->getRouteThatMatchesParameters($params)) {
-                throw new sfConfigurationException(sprintf('Unable to find a matching route to generate url for params "%s".', is_object($params) ? 'Object('.get_class($params).')' : str_replace("\n", '', var_export($params, true))));
+                throw new sfConfigurationException(sprintf('Unable to find a matching route to generate url for params "%s".', PHPObj::inline($params)));
             }
         }
 
@@ -349,7 +351,7 @@ class sfPatternRouting extends sfRouting
         }
 
         if ($this->options['logging']) {
-            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Match route "%s" (%s) for %s with parameters %s', $info['name'], $info['pattern'], $url, str_replace("\n", '', var_export($info['parameters'], true)))]));
+            $this->dispatcher->notify(new sfEvent($this, 'application.log', [sprintf('Match route "%s" (%s) for %s with parameters %s', $info['name'], $info['pattern'], $url, PHPObj::inline($info['parameters']))]));
         }
 
         // store the current internal URI

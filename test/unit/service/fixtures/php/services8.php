@@ -9,19 +9,10 @@ class ProjectServiceContainer extends sfServiceContainer
 
     protected function getDefaultParameters()
     {
-        return array(
+        return [
             'foo' => 'bar',
             'bar' => 'foo is %foo bar',
-            'values' => array(
-                0 => true,
-                1 => false,
-                2 => NULL,
-                3 => 0,
-                4 => 1000.3,
-                5 => 'true',
-                6 => 'false',
-                7 => 'null',
-            ),
-        );
+            'values' => [true, false, null, 0, 1000.3, 'true', 'false', 'null', ],
+        ];
     }
 }

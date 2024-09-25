@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfFactoryConfigHandler allows you to specify which factory implementation the
  * system will use.
@@ -90,7 +92,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "\$class = sfConfig::get('sf_factory_request', '%s');\n".
                         "\$this->factories['request'] = new \$class(\$this->dispatcher, [], [], sfConfig::get('sf_factory_request_parameters', %s), sfConfig::get('sf_factory_request_attributes', []));\n",
                         $class,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -106,7 +108,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "    \$this->factories['response']->setHeaderOnly(true);\n".
                         "}\n",
                         $class,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -145,7 +147,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         $session_name,
                         $class,
                         implode(",\n            ", $defaultParameters),
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -155,7 +157,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "\$class = sfConfig::get('sf_factory_user', '%s');\n".
                         "\$this->factories['user'] = new \$class(\$this->dispatcher, \$this->factories['storage'], array_merge(['auto_shutdown' => false, 'culture' => \$this->factories['request']->getParameter('sf_culture')], sfConfig::get('sf_factory_user_parameters', %s)));\n",
                         $class,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -170,9 +172,9 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "    \$this->factories['viewCacheManager'] = null;\n".
                         "}\n",
                         $class,
-                        var_export($parameters, true),
+                        PHPObj::inline($parameters),
                         $config['view_cache_manager']['class'],
-                        var_export($config['view_cache_manager']['param'], true)
+                        PHPObj::inline($config['view_cache_manager']['param'])
                     );
 
                     break;
@@ -182,7 +184,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         $cache = sprintf(
                             "\$cache = new %s(%s);\n",
                             $parameters['cache']['class'],
-                            var_export($parameters['cache']['param'], true)
+                            PHPObj::inline($parameters['cache']['param'])
                         );
                         unset($parameters['cache']);
                     } else {
@@ -198,7 +200,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "}\n",
                         $class,
                         $cache,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -208,7 +210,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         $cache = sprintf(
                             "\$cache = new %s(%s);\n",
                             $parameters['cache']['class'],
-                            var_export($parameters['cache']['param'], true)
+                            PHPObj::inline($parameters['cache']['param'])
                         );
                         unset($parameters['cache']);
                     } else {
@@ -224,7 +226,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "}\n",
                         $class,
                         $cache,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
@@ -254,7 +256,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                                     "\$logger = new %s(\$this->dispatcher, array_merge(['auto_shutdown' => false], %s));\n".
                                     "\$this->factories['logger']->addLogger(\$logger);\n",
                                     $keys['class'],
-                                    isset($keys['param']) ? var_export($keys['param'], true) : 'array()'
+                                    PHPObj::inline(isset($keys['param']) ? $keys['param'] : [])
                                 );
                             }
                         }
@@ -267,7 +269,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "\$this->factories['logger'] = new \$class(\$this->dispatcher, array_merge(['auto_shutdown' => false], sfConfig::get('sf_factory_logger_parameters', %s)));\n".
                         "%s\n",
                         $class,
-                        var_export($parameters, true),
+                        PHPObj::inline($parameters),
                         $loggers
                     );
 
@@ -281,7 +283,7 @@ class sfFactoryConfigHandler extends sfYamlConfigHandler
                         "}\n".
                         "\$this->setMailerConfiguration(array_merge(['class' => sfConfig::get('sf_factory_mailer', '%s')], sfConfig::get('sf_factory_mailer_parameters', %s)));\n",
                         $class,
-                        var_export($parameters, true)
+                        PHPObj::inline($parameters)
                     );
 
                     break;
