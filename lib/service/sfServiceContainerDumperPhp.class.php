@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * sfServiceContainerDumperPhp dumps a service container as a PHP class.
  *
@@ -35,11 +37,11 @@ class sfServiceContainerDumperPhp extends sfServiceContainerDumper
         ], $options);
 
         return
-          $this->startClass($options['class'], $options['base_class']).
-          $this->addConstructor().
-          $this->addServices().
-          $this->addDefaultParametersMethod().
-          $this->endClass();
+            $this->startClass($options['class'], $options['base_class']).
+            $this->addConstructor().
+            $this->addServices().
+            $this->addDefaultParametersMethod().
+            $this->endClass();
     }
 
     public function replaceParameter($match)
@@ -186,12 +188,12 @@ EOF;
 EOF;
 
         $code .=
-          $this->addServiceInclude($id, $definition).
-          $this->addServiceShared($id, $definition).
-          $this->addServiceInstance($id, $definition).
-          $this->addServiceMethodCalls($id, $definition).
-          $this->addServiceConfigurator($id, $definition).
-          $this->addServiceReturn($id, $definition);
+            $this->addServiceInclude($id, $definition).
+            $this->addServiceShared($id, $definition).
+            $this->addServiceInstance($id, $definition).
+            $this->addServiceMethodCalls($id, $definition).
+            $this->addServiceConfigurator($id, $definition).
+            $this->addServiceReturn($id, $definition);
 
         return $code;
     }
@@ -256,7 +258,7 @@ EOF;
             return '';
         }
 
-        $parameters = $this->exportParameters($this->container->getParameters());
+        $parameters = ltrim($this->exportParameters($this->container->getParameters()));
 
         return <<<EOF
 
@@ -270,23 +272,19 @@ EOF;
 
     protected function exportParameters($parameters, $indent = 2, $sz = 4)
     {
-        $php = [];
-        $pad = str_repeat(' ', $sz);
-        foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->exportParameters($value, $indent + 1, $sz);
-            } elseif ($value instanceof sfServiceReference) {
-                $value = sprintf("new sfServiceReference('%s')", $value);
-            } elseif ($value instanceof sfServiceParameter) {
-                $value = sprintf("\$this->getParameter('%s')", $value);
-            } else {
-                $value = var_export($value, true);
-            }
-
-            $php[] = sprintf('%s%s => %s,', str_repeat($pad, $indent + 1), var_export($key, true), $value);
-        }
-
-        return sprintf("array(\n%s\n%s)", implode("\n", $php), str_repeat($pad, $indent));
+        return PHPObj::create($parameters, [
+            'indentation' => str_repeat(' ', $sz),
+            'level' => $indent,
+            'trailing_delimiter' => true,
+            'callback' => function ($value) {
+                if ($value instanceof sfServiceReference) {
+                    return sprintf("new sfServiceReference('%s')", $value);
+                }
+                if ($value instanceof sfServiceParameter) {
+                    return sprintf("\$this->getParameter('%s')", $value);
+                }
+            },
+        ]);
     }
 
     protected function endClass()
@@ -299,37 +297,27 @@ EOF;
 
     protected function dumpValue($value)
     {
-        if (is_array($value)) {
-            $code = [];
-            foreach ($value as $k => $v) {
-                $code[] = sprintf('%s => %s', $this->dumpValue($k), $this->dumpValue($v));
-            }
+        $callback = [$this, 'replaceParameter'];
 
-            return sprintf('array(%s)', implode(', ', $code));
-        }
-        if (is_object($value) && $value instanceof sfServiceReference) {
-            return $this->getServiceCall((string) $value);
-        }
-        if (is_object($value) && $value instanceof sfServiceParameter) {
-            return sprintf("\$this->getParameter('%s')", strtolower($value));
-        }
-        if (is_string($value)) {
-            if (preg_match('/^%([^%]+)%$/', $value, $match)) {
-                // we do this to deal with non string values (boolean, integer, ...)
-                // the preg_replace_callback converts them to strings
-                return sprintf("\$this->getParameter('%s')", strtolower($match[1]));
-            }
+        return PHPObj::create($value, [
+            'inline' => true,
+            'callback' => function ($value) {
+                if ($value instanceof sfServiceReference) {
+                    return $this->getServiceCall((string) $value);
+                }
+                if ($value instanceof sfServiceParameter) {
+                    return sprintf("\$this->getParameter('%s')", strtolower($value));
+                }
+            },
+            'post.process' => function ($value) use ($callback) {
+                if (preg_match('/%([^%]+)%/', $value, $match)) {
+                    $code = str_replace('%%', '%', preg_replace_callback('/(?<!%)(%)([^%]+)\1/', $callback, $value));
 
-            $code = str_replace('%%', '%', preg_replace_callback('/(?<!%)(%)([^%]+)\1/', [$this, 'replaceParameter'], var_export($value, true)));
-
-            // optimize string
-            return preg_replace(["/^''\\./", "/\\.''$/", "/\\.''\\./"], ['', '', '.'], $code);
-        }
-        if (is_object($value) || is_resource($value)) {
-            throw new RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
-        }
-
-        return var_export($value, true);
+                    // optimize string
+                    return preg_replace(["/''\\./", "/\\.''/", "/\\.''\\./"], ['', '', '.'], $code);
+                }
+            },
+        ]);
     }
 
     protected function getServiceCall($id)

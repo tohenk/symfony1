@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use NTLAB\Object\PHP as PHPObj;
+
 /**
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
@@ -38,7 +40,7 @@ class sfRoutingConfigHandler extends sfYamlConfigHandler
             $routes = $route instanceof sfRouteCollection ? $route : [$name => $route];
             foreach (sfPatternRouting::flattenRoutes($routes) as $name => $route) {
                 $route->setDefaultOptions($options);
-                $data[] = sprintf('$this->routes[\'%s\'] = %s;', $name, var_export(serialize($route), true));
+                $data[] = sprintf('$this->routes[\'%s\'] = %s;', $name, PHPObj::create(serialize($route)));
             }
         }
 
