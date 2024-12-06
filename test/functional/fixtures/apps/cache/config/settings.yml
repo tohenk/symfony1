@@ -5,6 +5,7 @@ prod:
 
 dev:
   .settings:
+    # E_ALL | E_NOTICE = 30719
     error_reporting:        30719
     web_debug:              true
     cache:                  true
@@ -13,7 +14,8 @@ dev:
 
 test:
   .settings:
-    error_reporting:        30719
+    # E_ALL ^ E_NOTICE = 30711
+    error_reporting:        30711
     web_debug:              false
     cache:                  true
     no_script_name:         false
