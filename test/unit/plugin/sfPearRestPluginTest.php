@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-error_reporting(error_reporting() & ~E_STRICT);
+error_reporting(error_reporting() & ~E_NOTICE);
 
 require_once __DIR__.'/../../bootstrap/unit.php';
 
