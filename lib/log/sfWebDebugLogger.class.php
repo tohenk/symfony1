@@ -57,7 +57,7 @@ class sfWebDebugLogger extends sfVarLogger
      *
      * PHP user space error handler can not handle E_ERROR, E_PARSE,
      * E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING,
-     * and most of E_STRICT.
+     * and most of E_NOTICE.
      *
      * @param string $errno      the level of the error raised, as an integer
      * @param string $errstr     the error message, as a string
@@ -76,11 +76,6 @@ class sfWebDebugLogger extends sfVarLogger
         $message = sprintf(' %%s at %s on line %s (%s)', $errfile, $errline, str_replace('%', '%%', $errstr));
 
         switch ($errno) {
-            case E_STRICT:
-                $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::ERR, sprintf($message, 'Strict notice')]));
-
-                break;
-
             case E_NOTICE:
                 $this->dispatcher->notify(new sfEvent($this, 'application.log', ['priority' => sfLogger::NOTICE, sprintf($message, 'Notice')]));
 
