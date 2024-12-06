@@ -17,6 +17,7 @@ class sfContext
     public $routing;
     public $user;
     public $storage;
+    public $dispatcher;
     protected static $instance;
 
     protected $sessionPath = '';
