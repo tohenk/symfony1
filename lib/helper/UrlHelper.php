@@ -63,11 +63,13 @@ function link_to1($name, $internal_uri, $options = [])
         }
     }
 
+    $href = $html_options['href'];
+    unset($html_options['href']);
     if ('' === $name) {
-        $name = $html_options['href'];
+        $name = $href;
     }
 
-    return content_tag('a', $name, $html_options);
+    return content_tag('a', $name, array_merge(['href' => $href], $html_options));
 }
 
 /**
