@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @author     Sean Kerr <sean@code-box.org>
@@ -147,23 +149,22 @@ class sfAutoloadConfigHandler extends sfYamlConfigHandler
                 $path = $entry['path'];
 
                 // we automatically add our php classes
-                require_once sfConfig::get('sf_symfony_lib_dir').'/util/sfFinder.class.php';
-                $finder = sfFinder::type('file')->name('*'.$ext)->follow_link();
+                $finder = Finder::create()->files()->name('*'.$ext)->followLinks();
 
                 // recursive mapping?
                 $recursive = isset($entry['recursive']) ? $entry['recursive'] : false;
                 if (!$recursive) {
-                    $finder->maxdepth(0);
+                    $finder->depth(0);
                 }
 
                 // exclude files or directories?
                 if (isset($entry['exclude']) && is_array($entry['exclude'])) {
-                    $finder->prune($entry['exclude'])->discard($entry['exclude']);
+                    $finder->exclude($entry['exclude'])->notPath($entry['exclude']);
                 }
 
                 if ($matches = glob($path)) {
                     foreach ($finder->in($matches) as $file) {
-                        $mapping = array_merge($mapping, $this->parseFile($path, $file, isset($entry['prefix']) ? $entry['prefix'] : ''));
+                        $mapping = array_merge($mapping, $this->parseFile($path, (string) $file, isset($entry['prefix']) ? $entry['prefix'] : ''));
                     }
                 }
             }

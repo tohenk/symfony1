@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfSymfonyPluginManager allows you to manage symfony plugins installation and uninstallation.
  *
@@ -87,7 +89,7 @@ class sfSymfonyPluginManager extends sfPluginManager
             if (is_link($targetDir)) {
                 $filesystem->remove($targetDir);
             } else {
-                $filesystem->remove(sfFinder::type('any')->in($targetDir));
+                $filesystem->remove([...Finder::create()->in($targetDir)]);
                 $filesystem->remove($targetDir);
             }
         }

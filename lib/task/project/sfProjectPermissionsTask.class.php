@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Fixes symfony directory permissions.
  *
@@ -65,12 +67,12 @@ EOF;
             sfConfig::get('sf_upload_dir'),
         ];
 
-        $dirFinder = sfFinder::type('dir');
-        $fileFinder = sfFinder::type('file');
+        $dirFinder = Finder::create()->directories();
+        $fileFinder = Finder::create()->files();
 
         foreach ($dirs as $dir) {
-            $this->chmod($dirFinder->in($dir), 0777);
-            $this->chmod($fileFinder->in($dir), 0666);
+            $this->chmod([...$dirFinder->in($dir)], 0777);
+            $this->chmod([...$fileFinder->in($dir)], 0666);
         }
 
         // note those files that failed

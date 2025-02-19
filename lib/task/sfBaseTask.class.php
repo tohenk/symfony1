@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Base class for all symfony tasks.
  *
@@ -228,8 +230,9 @@ abstract class sfBaseTask extends sfCommandApplicationTask
      */
     protected function getFirstApplication()
     {
-        if (count($dirs = sfFinder::type('dir')->maxdepth(0)->follow_link()->relative()->in(sfConfig::get('sf_apps_dir')))) {
-            return $dirs[0];
+        if (count($apps = array_values(array_map(fn ($f) => $f->getRelativePathname(),
+            [...Finder::create()->directories()->depth(0)->followLinks()->in(sfConfig::get('sf_apps_dir'))])))) {
+            return $apps[0];
         }
 
         return null;
@@ -261,8 +264,8 @@ abstract class sfBaseTask extends sfCommandApplicationTask
         if ($reload) {
             $this->logSection('autoload', 'Resetting application autoloaders');
 
-            $finder = sfFinder::type('file')->name('*autoload.yml.php');
-            $this->getFilesystem()->remove($finder->in(sfConfig::get('sf_cache_dir')));
+            $finder = Finder::create()->files()->name('*autoload.yml.php');
+            $this->getFilesystem()->remove([...$finder->in(sfConfig::get('sf_cache_dir'))]);
             sfAutoload::getInstance()->reloadClasses(true);
         }
 
@@ -277,10 +280,10 @@ abstract class sfBaseTask extends sfCommandApplicationTask
 
             // project
             $autoload = sfSimpleAutoload::getInstance(sfConfig::get('sf_cache_dir').'/project_autoload.cache');
-            $autoload->loadConfiguration(sfFinder::type('file')->name('autoload.yml')->in([
+            $autoload->loadConfiguration([...Finder::create()->files()->name('autoload.yml')->in([
                 sfConfig::get('sf_symfony_lib_dir').'/config/config',
                 sfConfig::get('sf_config_dir'),
-            ]));
+            ])]);
             $autoload->register();
 
             if ($reload) {
@@ -293,13 +296,13 @@ abstract class sfBaseTask extends sfCommandApplicationTask
     /**
      * Mirrors a directory structure inside the created project.
      *
-     * @param string   $dir    The directory to mirror
-     * @param sfFinder $finder A sfFinder instance to use for the mirroring
+     * @param string $dir    The directory to mirror
+     * @param Finder $finder A Finder instance to use for the mirroring
      */
     protected function installDir($dir, $finder = null)
     {
         if (null === $finder) {
-            $finder = sfFinder::type('any')->discard('.sf');
+            $finder = Finder::create()->ignoreDotFiles(true);
         }
 
         $this->getFilesystem()->mirror($dir, sfConfig::get('sf_root_dir'), $finder);
@@ -323,7 +326,7 @@ abstract class sfBaseTask extends sfCommandApplicationTask
 
         $tokens = array_merge(isset($this->tokens) ? $this->tokens : [], $tokens);
 
-        $this->getFilesystem()->replaceTokens(sfFinder::type('file')->prune('vendor')->in($dirs), '##', '##', $tokens);
+        $this->getFilesystem()->replaceTokens(Finder::create()->files()->exclude('vendor')->in($dirs), '##', '##', $tokens);
     }
 
     /**

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfFilesystem provides basic utility to manipulate the file system.
  *
@@ -116,6 +118,9 @@ class sfFilesystem
      */
     public function remove($files)
     {
+        if ($files instanceof Finder) {
+            $files = [...$files];
+        }
         if (!is_array($files)) {
             $files = [$files];
         }
@@ -190,7 +195,7 @@ class sfFilesystem
     public function symlink($originDir, $targetDir, $copyOnWindows = false)
     {
         if ('\\' == DIRECTORY_SEPARATOR && $copyOnWindows) {
-            $finder = sfFinder::type('any');
+            $finder = Finder::create();
             $this->mirror($originDir, $targetDir, $finder);
 
             return;
@@ -230,16 +235,17 @@ class sfFilesystem
     /**
      * Mirrors a directory to another.
      *
-     * @param string   $originDir The origin directory
-     * @param string   $targetDir The target directory
-     * @param sfFinder $finder    An sfFinder instance
-     * @param array    $options   An array of options (see copy())
+     * @param string $originDir The origin directory
+     * @param string $targetDir The target directory
+     * @param Finder $finder    A Finder instance
+     * @param array  $options   An array of options (see copy())
      *
      * @throws sfException
      */
     public function mirror($originDir, $targetDir, $finder, $options = [])
     {
-        foreach ($finder->relative()->in($originDir) as $file) {
+        foreach ($finder->in($originDir) as $file) {
+            $file = $file->getRelativePathname();
             if (is_dir($originDir.DIRECTORY_SEPARATOR.$file)) {
                 $this->mkdirs($targetDir.DIRECTORY_SEPARATOR.$file);
             } elseif (is_file($originDir.DIRECTORY_SEPARATOR.$file)) {
@@ -324,6 +330,9 @@ class sfFilesystem
      */
     public function replaceTokens($files, $beginToken, $endToken, $tokens)
     {
+        if ($files instanceof Finder) {
+            $files = [...$files];
+        }
         if (!is_array($files)) {
             $files = [$files];
         }

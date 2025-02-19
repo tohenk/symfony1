@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
@@ -172,7 +174,7 @@ abstract class sfI18nExtract
     {
         $phpExtractor = new sfI18nPhpExtractor();
 
-        $files = sfFinder::type('file')->name('*.php');
+        $files = Finder::create()->files()->name('*.php');
         $messages = [];
         foreach ($files->in($dir) as $file) {
             $messages = array_merge($messages, $phpExtractor->extract(file_get_contents($file)));
