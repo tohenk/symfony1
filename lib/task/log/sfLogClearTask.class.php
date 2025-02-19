@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Clears log files.
  *
@@ -36,7 +38,7 @@ EOF;
      */
     protected function execute($arguments = [], $options = [])
     {
-        $logs = sfFinder::type('file')->in(sfConfig::get('sf_log_dir'));
+        $logs = [...Finder::create()->files()->in(sfConfig::get('sf_log_dir'))];
         $this->getFilesystem()->remove($logs);
 
         return 0;

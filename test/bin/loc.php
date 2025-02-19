@@ -1,10 +1,10 @@
 <?php
 
+use Symfony\Component\Finder\Finder;
+
 $root_dir = realpath(__DIR__.'/../..');
 
 require_once $root_dir.'/lib/vendor/lime/lime.php';
-
-require_once $root_dir.'/lib/util/sfFinder.class.php';
 
 require_once $root_dir.'/lib/autoload/sfCoreAutoload.class.php';
 $version = SYMFONY_VERSION;
@@ -14,18 +14,18 @@ printf("==============%s\n\n", str_repeat('=', strlen($version)));
 
 // symfony core LOC
 $total_loc = 0;
-$files = sfFinder::type('file')->name('*.php')->prune('vendor', 'plugins')->in($root_dir.'/lib');
+$files = Finder::create()->files()->name('*.php')->exclude('vendor', 'plugins')->in($root_dir.'/lib');
 foreach ($files as $file) {
     $total_loc += count(lime_coverage::get_php_lines($file));
 }
-$files = sfFinder::type('file')->name('*.php')->prune('vendor')->in($root_dir.'/lib/plugins/*/lib');
+$files = Finder::create()->files()->name('*.php')->exclude('vendor')->in($root_dir.'/lib/plugins/*/lib');
 foreach ($files as $file) {
     $total_loc += count(lime_coverage::get_php_lines($file));
 }
 
 // symfony tests LOC
 $total_tests_loc = 0;
-$files = sfFinder::type('file')->name('*Test.php')->in([
+$files = Finder::create()->files()->name('*Test.php')->in([
     $root_dir.'/lib/plugins/sfDoctrinePlugin/test/unit',
     $root_dir.'/lib/plugins/sfDoctrinePlugin/test/functional',
     $root_dir.'/test/unit',

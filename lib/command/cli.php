@@ -9,16 +9,21 @@
  */
 
 // Try autoloading using composer if available.
-if (!file_exists($autoload = __DIR__.'/../../../../autoload.php')) {
-    $autoload = __DIR__.'/../../autoload.php';
+foreach ([
+    __DIR__.'/../../vendor/autoload.php',
+    __DIR__.'/../../../../autoload.php',
+    __DIR__.'/../../autoload.php',
+] as $autoload) {
+    if (is_readable($autoload)) {
+        require_once $autoload;
+        break;
+    }
 }
 
 // Fall back to classic Symfony loading
-if (!file_exists($autoload)) {
+if (!is_readable($autoload)) {
     require_once __DIR__.'/../autoload/sfCoreAutoload.class.php';
     sfCoreAutoload::register();
-} else {
-    require_once $autoload;
 }
 
 try {

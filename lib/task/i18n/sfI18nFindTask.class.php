@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Finds non "i18n ready" strings in an application.
  *
@@ -24,15 +26,15 @@ class sfI18nFindTask extends sfBaseTask
 
         // Look in templates
         $dirs = [];
-        $moduleNames = sfFinder::type('dir')->maxdepth(0)->relative()->in(sfConfig::get('sf_app_module_dir'));
+        $moduleNames = Finder::create()->directories()->depth(0)->in(sfConfig::get('sf_app_module_dir'));
         foreach ($moduleNames as $moduleName) {
-            $dirs[] = sfConfig::get('sf_app_module_dir').'/'.$moduleName.'/templates';
+            $dirs[] = sfConfig::get('sf_app_module_dir').'/'.$moduleName->getRelativePathname().'/templates';
         }
         $dirs[] = sfConfig::get('sf_app_dir').'/templates';
 
         $strings = [];
         foreach ($dirs as $dir) {
-            $templates = sfFinder::type('file')->name('*.php')->in($dir);
+            $templates = Finder::create()->files()->name('*.php')->in($dir);
             foreach ($templates as $template) {
                 if (!isset($strings[$template])) {
                     $strings[$template] = [];
