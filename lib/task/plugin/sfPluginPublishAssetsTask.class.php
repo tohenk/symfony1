@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 require_once __DIR__.'/sfPluginBaseTask.class.php';
 
 /**
@@ -65,7 +67,7 @@ EOF;
         }
 
         if ($options['core-only']) {
-            $corePlugins = sfFinder::type('dir')->relative()->maxdepth(0)->in($this->configuration->getSymfonyLibDir().'/plugins');
+            $corePlugins = array_map(fn ($f) => $f->getRelativePathname(), [...Finder::create()->directories()->depth(0)->in($this->configuration->getSymfonyLibDir().'/plugins')]);
             $arguments['plugins'] = array_unique(array_merge($arguments['plugins'], array_intersect($enabledPlugins, $corePlugins)));
         } elseif (!count($arguments['plugins'])) {
             $arguments['plugins'] = $enabledPlugins;

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Launches all tests.
  *
@@ -97,8 +99,8 @@ EOF;
             }
         } else {
             // filter and register all tests
-            $finder = sfFinder::type('file')->follow_link()->name('*Test.php');
-            $h->register($this->filterTestFiles($finder->in($h->base_dir), $arguments, $options));
+            $finder = Finder::create()->files()->followLinks()->name('*Test.php');
+            $h->register($this->filterTestFiles([...$finder->in($h->base_dir)], $arguments, $options));
         }
 
         $ret = $h->run() ? 0 : 1;

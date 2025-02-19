@@ -27,15 +27,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.1
           tools: php-cs-fixer:3.95, cs2pr
 
       - uses: actions/cache@v4
         with:
           path: '.php-cs-fixer.cache'
-          key: php-cs-fixer-74-${{ hashFiles('.php-cs-fixer.dist.php') }}
+          key: php-cs-fixer-81-${{ hashFiles('.php-cs-fixer.dist.php') }}
           restore-keys: |
-            php-cs-fixer-74-
+            php-cs-fixer-81-
 
       - name: Run PHP-CS-Fixer
         # Using cs2pr settings, see: https://github.com/shivammathur/setup-php#tools-with-checkstyle-support

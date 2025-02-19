@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfSimpleAutoload class.
  *
@@ -187,7 +189,7 @@ class sfSimpleAutoload
      */
     public function addDirectory($dir, $ext = '.php')
     {
-        $finder = sfFinder::type('file')->follow_link()->name('*'.$ext);
+        $finder = Finder::create()->files()->followLinks()->name('*'.$ext);
 
         if ($dirs = glob($dir)) {
             foreach ($dirs as $dir) {
@@ -203,7 +205,7 @@ class sfSimpleAutoload
                 }
 
                 $this->cacheChanged = true;
-                $this->addFiles($finder->in($dir), false);
+                $this->addFiles([...$finder->in($dir)], false);
             }
         }
     }
@@ -217,7 +219,7 @@ class sfSimpleAutoload
     public function addFiles(array $files, $register = true)
     {
         foreach ($files as $file) {
-            $this->addFile($file, $register);
+            $this->addFile((string) $file, $register);
         }
     }
 

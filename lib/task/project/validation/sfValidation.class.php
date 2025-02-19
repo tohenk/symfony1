@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Abstract class for validation classes.
  *
@@ -34,11 +36,21 @@ abstract class sfValidation extends sfBaseTask
      *
      * @param string $type String directory or file or any (for both file and directory)
      *
-     * @return sfFinder A sfFinder instance
+     * @return Finder A Finder instance
      */
     protected function getFinder($type)
     {
-        return sfFinder::type($type)->prune('symfony')->discard('symfony');
+        $finder = Finder::create();
+        switch ($type) {
+            case 'file':
+                $finder->files();
+                break;
+            case 'dir':
+                $finder->directories();
+                break;
+        }
+
+        return $finder->notName('symfony')->exclude('symfony');
     }
 
     /**
@@ -107,6 +119,6 @@ abstract class sfValidation extends sfBaseTask
      */
     protected function getApplications()
     {
-        return sfFinder::type('dir')->maxdepth(0)->relative()->in(sfConfig::get('sf_apps_dir'));
+        return array_map(fn ($f) => $f->getRelativePathname(), [...Finder::create()->directories()->depth(0)->in(sfConfig::get('sf_apps_dir'))]);
     }
 }
