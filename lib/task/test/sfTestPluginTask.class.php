@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Launches a plugin test suite.
  *
@@ -64,8 +66,8 @@ EOF;
         $h = new lime_harness(new lime_output_color());
         $h->base_dir = sfConfig::get('sf_plugins_dir').'/'.$arguments['plugin'].'/test/'.$options['only'];
 
-        $finder = sfFinder::type('file')->follow_link()->name('*Test.php');
-        $h->register($finder->in($h->base_dir));
+        $finder = Finder::create()->files()->followLinks()->name('*Test.php');
+        $h->register([...$finder->in($h->base_dir)]);
 
         return $h->run() ? 0 : 1;
     }

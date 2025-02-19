@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 require_once __DIR__.'/sfGeneratorBaseTask.class.php';
 
 /**
@@ -92,7 +94,7 @@ EOF;
         }
 
         // create basic application structure
-        $finder = sfFinder::type('any')->discard('.sf');
+        $finder = Finder::create()->ignoreDotFiles(true);
         $this->getFilesystem()->mirror($skeletonDir.'/module', $moduleDir, $finder);
 
         // create basic test
@@ -102,7 +104,7 @@ EOF;
         $this->getFilesystem()->replaceTokens(sfConfig::get('sf_test_dir').'/functional/'.$app.DIRECTORY_SEPARATOR.$module.'ActionsTest.php', '##', '##', $constants);
 
         // customize php and yml files
-        $finder = sfFinder::type('file')->name('*.php', '*.yml');
+        $finder = Finder::create()->files()->name('*.php', '*.yml');
         $this->getFilesystem()->replaceTokens($finder->in($moduleDir), '##', '##', $constants);
 
         return 0;

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Outputs test code coverage.
  *
@@ -92,7 +94,7 @@ EOF;
     protected function getFiles($directory)
     {
         if (is_dir($directory)) {
-            return sfFinder::type('file')->name('*.php')->in($directory);
+            return [...Finder::create()->files()->name('*.php')->in($directory)];
         }
         if (file_exists($directory)) {
             return [$directory];

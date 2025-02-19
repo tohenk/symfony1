@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfProjectConfiguration represents a configuration for a symfony project.
  *
@@ -480,14 +482,16 @@ class sfProjectConfiguration
 
         // search for *Plugin directories representing plugins
         // follow links and do not recurse. No need to exclude VC because they do not end with *Plugin
-        $finder = sfFinder::type('dir')->maxdepth(0)->ignore_version_control(false)->follow_link()->name('*Plugin');
-        $dirs = [
+        $finder = Finder::create()->directories()->depth(0)->ignoreVCS(false)->followLinks()->name('*Plugin');
+        $dirs = array_filter([
             $this->getSymfonyLibDir().'/plugins',
             sfConfig::get('sf_plugins_dir'),
-        ];
+        ], fn ($d) => is_dir($d));
 
-        foreach ($finder->in($dirs) as $path) {
-            $pluginPaths[basename($path)] = $path;
+        if (count($dirs)) {
+            foreach ($finder->in($dirs) as $path) {
+                $pluginPaths[basename($path)] = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+            }
         }
 
         foreach ($this->overriddenPluginPaths as $plugin => $path) {

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfSymfonyCommandApplication manages the symfony CLI.
  *
@@ -93,9 +95,11 @@ class sfSymfonyCommandApplication extends sfCommandApplication
         // project tasks
         $dirs[] = sfConfig::get('sf_lib_dir').'/task';
 
-        $finder = sfFinder::type('file')->name('*Task.class.php');
-        foreach ($finder->in($dirs) as $file) {
-            $this->taskFiles[basename($file, '.class.php')] = $file;
+        if (count($dirs = array_filter(array_unique($dirs), fn ($d) => is_dir($d)))) {
+            $finder = Finder::create()->files()->name('*Task.class.php');
+            foreach ($finder->in($dirs) as $file) {
+                $this->taskFiles[basename($file, '.class.php')] = $file;
+            }
         }
 
         // register local autoloader for tasks

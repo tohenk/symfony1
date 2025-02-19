@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 $name = '*';
 $verbose = false;
 
@@ -17,8 +19,6 @@ if (isset($argv[1])) {
 }
 
 require_once __DIR__.'/../../lib/vendor/lime/lime.php';
-
-require_once __DIR__.'/../../lib/util/sfFinder.class.php';
 
 $h = new lime_harness();
 $h->base_dir = realpath(__DIR__.'/..');
@@ -39,7 +39,7 @@ $c->extension = '.class.php';
 $c->verbose = $verbose;
 $c->base_dir = realpath(__DIR__.'/../../lib');
 
-$finder = sfFinder::type('file')->name($name.'.class.php')->prune('vendor')->prune('test')->prune('data');
+$finder = Finder::create()->files()->name($name.'.class.php')->exclude('vendor')->exclude('test')->exclude('data');
 
-$c->register($finder->in($c->base_dir));
+$c->register([...$finder->in($c->base_dir)]);
 $c->run();

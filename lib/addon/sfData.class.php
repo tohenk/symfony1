@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -76,7 +77,7 @@ abstract class sfData
         } elseif (is_file($element)) {
             $files[] = $element;
         } elseif (is_dir($element)) {
-            $files = sfFinder::type('file')->name('*.yml')->sort_by_name()->in($element);
+            $files = [...Finder::create()->files()->name('*.yml')->sortByName()->in($element)];
         } else {
             throw new sfInitializationException(sprintf('You must give an array, a directory or a file to sfData::getFiles() (%s given).', $element));
         }

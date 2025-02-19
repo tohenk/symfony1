@@ -9,6 +9,7 @@
  */
 
 use NTLAB\Object\PHP as PHPObj;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Model generator.
@@ -58,7 +59,7 @@ abstract class sfModelGenerator extends sfGenerator
         $this->configuration = $this->loadConfiguration();
 
         // generate files
-        $this->generatePhpFiles($this->generatedModuleName, sfFinder::type('file')->relative()->in($themeDir));
+        $this->generatePhpFiles($this->generatedModuleName, array_map(fn ($f) => $f->getRelativePathname(), [...Finder::create()->files()->in($themeDir)]));
 
         // move helper file
         if (file_exists($file = $this->generatorManager->getBasePath().'/'.$this->getGeneratedModuleName().'/lib/helper.php')) {

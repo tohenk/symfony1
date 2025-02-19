@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Clears all non production environment controllers.
  *
@@ -57,7 +59,7 @@ EOF;
      */
     protected function execute($arguments = [], $options = [])
     {
-        $finder = sfFinder::type('file')->maxdepth(1)->name('*.php');
+        $finder = Finder::create()->files()->depth(1)->name('*.php');
         foreach ($finder->in(sfConfig::get('sf_web_dir')) as $controller) {
             $content = file_get_contents($controller);
 

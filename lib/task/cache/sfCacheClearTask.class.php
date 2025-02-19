@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Clears the symfony cache.
  *
@@ -112,10 +114,10 @@ EOF;
         }
 
         // finder to find directories (1 level) in a directory
-        $dirFinder = sfFinder::type('dir')->discard('.*')->maxdepth(0)->relative();
+        $dirFinder = Finder::create()->directories()->exclude('.*')->depth(0);
 
         // iterate through applications
-        $apps = null === $options['app'] ? $dirFinder->in(sfConfig::get('sf_apps_dir')) : [$options['app']];
+        $apps = null === $options['app'] ? array_map(fn ($f) => $f->getRelativePathname(), [...$dirFinder->in(sfConfig::get('sf_apps_dir'))]) : [$options['app']];
         foreach ($apps as $app) {
             $this->checkAppExists($app);
 
@@ -152,7 +154,7 @@ EOF;
 
         // clear global cache
         if (null === $options['app'] && 'all' == $options['type']) {
-            $this->getFilesystem()->remove(sfFinder::type('file')->discard('.*')->in(sfConfig::get('sf_cache_dir')));
+            $this->getFilesystem()->remove([...Finder::create()->files()->notName('.*')->in(sfConfig::get('sf_cache_dir'))]);
         }
 
         return 0;
@@ -178,7 +180,7 @@ EOF;
 
         if (is_dir($subDir)) {
             // remove cache files
-            $this->getFilesystem()->remove(sfFinder::type('file')->discard('.*')->in($subDir));
+            $this->getFilesystem()->remove([...Finder::create()->files()->notName('.*')->in($subDir)]);
         }
     }
 
@@ -215,7 +217,7 @@ EOF;
 
         if (is_dir($subDir)) {
             // remove cache files
-            $this->getFilesystem()->remove(sfFinder::type('file')->discard('.*')->in($subDir));
+            $this->getFilesystem()->remove([...Finder::create()->files()->notName('.*')->in($subDir)]);
         }
     }
 

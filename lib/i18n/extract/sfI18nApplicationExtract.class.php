@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  */
@@ -23,9 +25,9 @@ class sfI18nApplicationExtract extends sfI18nExtract
         $this->extractObjects = [];
 
         // Modules
-        $moduleNames = sfFinder::type('dir')->maxdepth(0)->relative()->in(sfConfig::get('sf_app_module_dir'));
+        $moduleNames = Finder::create()->directories()->depth(0)->in(sfConfig::get('sf_app_module_dir'));
         foreach ($moduleNames as $moduleName) {
-            $this->extractObjects[] = new sfI18nModuleExtract($this->i18n, $this->culture, ['module' => $moduleName]);
+            $this->extractObjects[] = new sfI18nModuleExtract($this->i18n, $this->culture, ['module' => $moduleName->getRelativePathname()]);
         }
     }
 

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * sfPluginConfiguration represents a configuration for a symfony plugin.
  *
@@ -180,8 +182,8 @@ abstract class sfPluginConfiguration
         }
 
         foreach ($names as $name) {
-            $finder = sfFinder::type('file')->follow_link()->name(basename($name).'Test.php');
-            $files = array_merge($files, $finder->in($directory.'/'.dirname($name)));
+            $finder = Finder::create()->files()->followLinks()->name(basename($name).'Test.php');
+            $files = array_merge($files, [...$finder->in($directory.'/'.dirname($name))]);
         }
 
         return array_unique($files);

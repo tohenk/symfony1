@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Launches functional tests.
  *
@@ -73,7 +75,7 @@ EOF;
             $files = [];
 
             foreach ($arguments['controller'] as $controller) {
-                $finder = sfFinder::type('file')->follow_link()->name(basename($controller).'Test.php');
+                $finder = Finder::create()->files()->followLinks()->name(basename($controller).'Test.php');
                 $files = array_merge($files, $finder->in(sfConfig::get('sf_test_dir').'/functional/'.$app.'/'.dirname($controller)));
             }
 
@@ -97,8 +99,8 @@ EOF;
             $h->base_dir = sfConfig::get('sf_test_dir').'/functional/'.$app;
 
             // filter and register functional tests
-            $finder = sfFinder::type('file')->follow_link()->name('*Test.php');
-            $h->register($this->filterTestFiles($finder->in($h->base_dir), $arguments, $options));
+            $finder = Finder::create()->files()->followLinks()->name('*Test.php');
+            $h->register($this->filterTestFiles([...$finder->in($h->base_dir)], $arguments, $options));
 
             $ret = $h->run() ? 0 : 1;
 

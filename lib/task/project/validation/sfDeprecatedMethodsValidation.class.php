@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Finds deprecated methods usage.
  *
@@ -69,7 +71,7 @@ class sfDeprecatedMethodsValidation extends sfValidation
     public function doValidate($methods, $dir)
     {
         $found = [];
-        $files = sfFinder::type('file')->name('*.php')->prune('vendor')->in($dir);
+        $files = Finder::create()->files()->name('*.php')->exclude('vendor')->in($dir);
         foreach ($files as $file) {
             $content = sfToolkit::stripComments(file_get_contents($file));
 
