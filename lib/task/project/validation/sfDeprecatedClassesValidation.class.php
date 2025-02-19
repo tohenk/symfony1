@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Finds deprecated classes usage.
  *
@@ -60,7 +62,7 @@ class sfDeprecatedClassesValidation extends sfValidation
         ];
 
         $found = [];
-        $files = sfFinder::type('file')->name('*.php')->prune('vendor')->in([
+        $files = Finder::create()->files()->name('*.php')->exclude('vendor')->in([
             sfConfig::get('sf_apps_dir'),
             sfConfig::get('sf_lib_dir'),
             sfConfig::get('sf_test_dir'),

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Release script.
  *
@@ -20,8 +22,6 @@
 require_once __DIR__.'/../../lib/exception/sfException.class.php';
 
 require_once __DIR__.'/../../lib/task/sfFilesystem.class.php';
-
-require_once __DIR__.'/../../lib/util/sfFinder.class.php';
 
 require_once __DIR__.'/../../lib/vendor/lime/lime.php';
 
@@ -71,13 +71,13 @@ if (is_file('package.xml')) {
 $filesystem->copy(getcwd().'/package.xml.tmpl', getcwd().'/package.xml');
 
 // add class files
-$finder = sfFinder::type('file')->relative();
+$finder = Finder::create()->files();
 $xml_classes = '';
 $dirs = ['lib' => 'php', 'data' => 'data'];
 foreach ($dirs as $dir => $role) {
     $class_files = $finder->in($dir);
     foreach ($class_files as $file) {
-        $xml_classes .= '<file role="'.$role.'" baseinstalldir="symfony" install-as="'.$file.'" name="'.$dir.'/'.$file.'" />'."\n";
+        $xml_classes .= '<file role="'.$role.'" baseinstalldir="symfony" install-as="'.$file.'" name="'.$dir.'/'.$file->getRelativePathname().'" />'."\n";
     }
 }
 

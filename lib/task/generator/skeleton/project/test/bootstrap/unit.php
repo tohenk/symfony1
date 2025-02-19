@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 $_test_dir = realpath(__DIR__.'/..');
 
 // configuration
@@ -16,10 +18,10 @@ $configuration = ProjectConfiguration::hasActive() ? ProjectConfiguration::getAc
 
 // autoloader
 $autoload = sfSimpleAutoload::getInstance(sfConfig::get('sf_cache_dir').'/project_autoload.cache');
-$autoload->loadConfiguration(sfFinder::type('file')->name('autoload.yml')->in([
+$autoload->loadConfiguration([...Finder::create()->files()->name('autoload.yml')->in([
     sfConfig::get('sf_symfony_lib_dir').'/config/config',
     sfConfig::get('sf_config_dir'),
-]));
+])]);
 $autoload->register();
 
 // lime

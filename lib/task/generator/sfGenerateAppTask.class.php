@@ -10,6 +10,7 @@
 
 require_once __DIR__.'/sfGeneratorBaseTask.class.php';
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Inline as YamlInline;
 
 /**
@@ -99,7 +100,7 @@ EOF;
         }
 
         // Create basic application structure
-        $finder = sfFinder::type('any')->discard('.sf');
+        $finder = Finder::create()->ignoreDotFiles(true);
         $this->getFilesystem()->mirror($skeletonDir.'/app', $appDir, $finder);
 
         // Create $app.php or index.php if it is our first app
@@ -114,7 +115,7 @@ EOF;
         }
 
         // Set no_script_name value in settings.yml for production environment
-        $finder = sfFinder::type('file')->name('settings.yml');
+        $finder = Finder::create()->files()->name('settings.yml');
         $this->getFilesystem()->replaceTokens($finder->in($appDir.'/config'), '##', '##', [
             'NO_SCRIPT_NAME' => $firstApp ? 'true' : 'false',
             'CSRF_SECRET' => YamlInline::dump(YamlInline::parseScalar($options['csrf-secret'])),

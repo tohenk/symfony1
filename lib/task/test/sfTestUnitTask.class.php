@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Launches unit tests.
  *
@@ -68,8 +70,8 @@ EOF;
             $files = [];
 
             foreach ($arguments['name'] as $name) {
-                $finder = sfFinder::type('file')->follow_link()->name(basename($name).'Test.php');
-                $files = array_merge($files, $finder->in(sfConfig::get('sf_test_dir').'/unit/'.dirname($name)));
+                $finder = Finder::create()->files()->followLinks()->name(basename($name).'Test.php');
+                $files = array_merge($files, [...$finder->in(sfConfig::get('sf_test_dir').'/unit/'.dirname($name))]);
             }
 
             if ($allFiles = $this->filterTestFiles($files, $arguments, $options)) {
@@ -91,8 +93,8 @@ EOF;
             $h->base_dir = sfConfig::get('sf_test_dir').'/unit';
 
             // filter and register unit tests
-            $finder = sfFinder::type('file')->follow_link()->name('*Test.php');
-            $h->register($this->filterTestFiles($finder->in($h->base_dir), $arguments, $options));
+            $finder = Finder::create()->files()->followLinks()->name('*Test.php');
+            $h->register($this->filterTestFiles([...$finder->in($h->base_dir)], $arguments, $options));
 
             $ret = $h->run() ? 0 : 1;
 

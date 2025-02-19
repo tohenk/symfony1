@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 // The current symfony version.
 define('SYMFONY_VERSION', '1.5.20-dev');
 
@@ -306,7 +308,6 @@ class sfCoreAutoload
         'sfclassmanipulator' => 'util/sfClassManipulator.class.php',
         'sfcontext' => 'util/sfContext.class.php',
         'sfdomcssselector' => 'util/sfDomCssSelector.class.php',
-        'sffinder' => 'util/sfFinder.class.php',
         'sfinflector' => 'util/sfInflector.class.php',
         'sfnamespacedparameterholder' => 'util/sfNamespacedParameterHolder.class.php',
         'sfparameterholder' => 'util/sfParameterHolder.class.php',
@@ -489,17 +490,15 @@ class sfCoreAutoload
     {
         $libDir = str_replace(DIRECTORY_SEPARATOR, '/', realpath(__DIR__.DIRECTORY_SEPARATOR.'..'));
 
-        require_once $libDir.'/util/sfFinder.class.php';
-
-        $files = sfFinder::type('file')
-            ->prune('plugins')
-            ->prune('vendor')
-            ->prune('skeleton')
-            ->prune('default')
-            ->prune('helper')
+        $files = [...Finder::create()->files()
+            ->exclude('plugins')
+            ->exclude('vendor')
+            ->exclude('skeleton')
+            ->exclude('default')
+            ->exclude('helper')
             ->name('*.php')
-            ->in($libDir)
-        ;
+            ->in($libDir),
+        ];
 
         sort($files, SORT_STRING);
 

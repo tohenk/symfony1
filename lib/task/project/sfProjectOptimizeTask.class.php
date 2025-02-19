@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Optimizes a project for better performance.
  *
@@ -123,7 +125,7 @@ EOF;
     {
         $data = [];
 
-        $finder = sfFinder::type('file')->name('*Helper.php');
+        $finder = Finder::create()->files()->name('*Helper.php');
 
         // module helpers
         foreach ($modules as $module) {
@@ -157,7 +159,8 @@ EOF;
         $files = [];
 
         foreach ($modules as $module) {
-            $files[$module] = sfFinder::type('file')->follow_link()->relative()->in($this->configuration->getTemplateDirs($module));
+            $files[$module] = array_map(fn ($f) => $f->getRelativePathname(),
+                [...Finder::create()->files()->followLinks()->in($this->configuration->getTemplateDirs($module))]);
         }
 
         return $files;
@@ -171,15 +174,16 @@ EOF;
         // plugins
         $pluginSubPaths = $this->configuration->getPluginSubPaths(DIRECTORY_SEPARATOR.'modules');
         $modules = [];
-        foreach (sfFinder::type('dir')->maxdepth(0)->follow_link()->relative()->in($pluginSubPaths) as $module) {
-            if (in_array($module, sfConfig::get('sf_enabled_modules'))) {
-                $modules[] = $module;
+        foreach (Finder::create()->directories()->depth(0)->followLinks()->in($pluginSubPaths) as $module) {
+            if (in_array($module->getRelativePathname(), sfConfig::get('sf_enabled_modules'))) {
+                $modules[] = $module->getRelativePathname();
             }
         }
 
         // core modules
         $dirs[] = sfConfig::get('sf_symfony_lib_dir').'/controller';
 
-        return array_unique(array_merge(sfFinder::type('dir')->maxdepth(0)->follow_link()->relative()->in($dirs), $modules));
+        return array_unique(array_merge(array_map(fn ($f) => $f->getRelativePathname(),
+            [...Finder::create()->directories()->depth(0)->followLinks()->in($dirs)]), $modules));
     }
 }

@@ -8,6 +8,8 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * Launches the symfony test suite.
  *
@@ -49,7 +51,7 @@ EOF;
 
         // cleanup
         require_once __DIR__.'/../../util/sfToolkit.class.php';
-        if ($files = glob(sys_get_temp_dir().DIRECTORY_SEPARATOR.'/sf_autoload_unit_*')) {
+        if ($files = glob(sys_get_temp_dir().'/sf_autoload_unit_*')) {
             foreach ($files as $file) {
                 unlink($file);
             }
@@ -62,7 +64,7 @@ EOF;
         }
 
         $status = false;
-        $statusFile = sys_get_temp_dir().DIRECTORY_SEPARATOR.sprintf('/.test_symfony_%s_status', md5(__DIR__));
+        $statusFile = sys_get_temp_dir().sprintf('/.test_symfony_%s_status', md5(__DIR__));
         if ($options['only-failed']) {
             if (file_exists($statusFile)) {
                 $status = unserialize(file_get_contents($statusFile));
@@ -74,7 +76,7 @@ EOF;
 
         // remove generated files
         if ($options['rebuild-all']) {
-            $finder = sfFinder::type('dir')->name(['base', 'om', 'map']);
+            $finder = Finder::create()->directories()->name(['base', 'om', 'map']);
             foreach ($finder->in(glob($h->base_dir.'/../lib/plugins/*/test/functional/fixtures/lib')) as $dir) {
                 sfToolkit::clearDirectory($dir);
             }
@@ -85,7 +87,7 @@ EOF;
                 $h->register($file);
             }
         } else {
-            $h->register(sfFinder::type('file')->prune('fixtures')->name('*Test.php')->in(array_merge(
+            $h->register([...Finder::create()->files()->exclude('fixtures')->name('*Test.php')->in(array_merge(
                 // unit tests
                 [$h->base_dir.'/unit'],
                 glob($h->base_dir.'/../lib/plugins/*/test/unit'),
@@ -96,7 +98,7 @@ EOF;
 
                 // other tests
                 [$h->base_dir.'/other']
-            )));
+            ))]);
         }
 
         $ret = $h->run() ? 0 : 1;

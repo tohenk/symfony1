@@ -127,6 +127,8 @@ file_put_contents(
     )
 );
 
-$c->execute_command('p:run');
+if ($content = $c->execute_command('p:run')) {
+    $t->diag($content);
+}
 
 $c->shutdown();
