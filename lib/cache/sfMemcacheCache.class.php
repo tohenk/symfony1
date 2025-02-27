@@ -75,6 +75,18 @@ class sfMemcacheCache extends sfCache
     }
 
     /**
+     * Check if metadata is expired?
+     *
+     * @param string $key The cache key
+     *
+     * @return bool
+     */
+    protected function isExpired($key)
+    {
+        return false === ($metadata = $this->getMetadata($key)) || $metadata['timeout'] < time();
+    }
+
+    /**
      * @see sfCache
      *
      * @param mixed|null $default
@@ -83,7 +95,7 @@ class sfMemcacheCache extends sfCache
     {
         $value = $this->memcache->get($this->getOption('prefix').$key);
 
-        return (false === $value && false === $this->getMetadata($key)) ? $default : $value;
+        return (false === $value && $this->isExpired($key)) ? $default : $value;
     }
 
     /**
@@ -93,7 +105,7 @@ class sfMemcacheCache extends sfCache
     {
         if (false === $this->memcache->get($this->getOption('prefix').$key)) {
             // if there is metadata, $key exists with a false value
-            return !(false === $this->getMetadata($key));
+            return !$this->isExpired($key);
         }
 
         return true;
@@ -107,20 +119,23 @@ class sfMemcacheCache extends sfCache
     public function set($key, $data, $lifetime = null)
     {
         $lifetime = null === $lifetime ? $this->getOption('lifetime') : $lifetime;
+        $timeout = time() + $lifetime;
 
-        // save metadata
-        $this->setMetadata($key, $lifetime);
-
-        // save key for removePattern()
-        if ($this->getOption('storeCacheInfo', false)) {
-            $this->setCacheInfo($key);
+        if (false === $retval = $this->memcache->replace($this->getOption('prefix').$key, $data, false, $timeout)) {
+            $retval = $this->memcache->set($this->getOption('prefix').$key, $data, false, $timeout);
         }
 
-        if (false !== $this->memcache->replace($this->getOption('prefix').$key, $data, false, time() + $lifetime)) {
-            return true;
+        if ($retval) {
+            // save metadata
+            $this->setMetadata($key, $timeout);
+
+            // save key for removePattern()
+            if ($this->getOption('storeCacheInfo', false)) {
+                $this->setCacheInfo($key);
+            }
         }
 
-        return $this->memcache->set($this->getOption('prefix').$key, $data, false, time() + $lifetime);
+        return $retval;
     }
 
     /**
@@ -225,12 +240,12 @@ class sfMemcacheCache extends sfCache
     /**
      * Stores metadata about a key in the cache.
      *
-     * @param string $key      A cache key
-     * @param string $lifetime The lifetime
+     * @param string $key     A cache key
+     * @param int    $timeout The timeout
      */
-    protected function setMetadata($key, $lifetime)
+    protected function setMetadata($key, $timeout)
     {
-        $this->memcache->set($this->getOption('prefix').'_metadata'.self::SEPARATOR.$key, ['lastModified' => time(), 'timeout' => time() + $lifetime], false, time() + $lifetime);
+        $this->memcache->set($this->getOption('prefix').'_metadata'.self::SEPARATOR.$key, ['lastModified' => time(), 'timeout' => $timeout], false, $timeout);
     }
 
     /**
