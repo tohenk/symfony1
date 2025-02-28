@@ -71,6 +71,9 @@ EOF;
         $fileFinder = Finder::create()->files();
 
         foreach ($dirs as $dir) {
+            if (!is_dir($dir)) {
+                continue;
+            }
             $this->chmod([...$dirFinder->in($dir)], 0777);
             $this->chmod([...$fileFinder->in($dir)], 0666);
         }
