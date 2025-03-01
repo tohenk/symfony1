@@ -24,10 +24,16 @@ jobs:
           - "8.5"
         memcached-version:
           - "1.6"
+        redis-version:
+          - "latest"
 
     services:
       memcached:
         image: "memcached:${{ matrix.memcached-version }}"
+      redis:
+        image: "redis:${{ matrix.redis-version }}"
+        ports:
+          - 6379:6379
 
     steps:
       - name: Checkout

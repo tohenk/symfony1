@@ -49,6 +49,7 @@ class sfCoreAutoload
         'sffunctioncache' => 'cache/sfFunctionCache.class.php',
         'sfmemcachecache' => 'cache/sfMemcacheCache.class.php',
         'sfnocache' => 'cache/sfNoCache.class.php',
+        'sfrediscache' => 'cache/sfRedisCache.class.php',
         'sfsqlitecache' => 'cache/sfSQLiteCache.class.php',
         'sfansicolorformatter' => 'command/sfAnsiColorFormatter.class.php',
         'sfcommandapplication' => 'command/sfCommandApplication.class.php',
