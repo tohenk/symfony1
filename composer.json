@@ -8,8 +8,9 @@
         "ext-mbstring": "*",
         "friendsofsymfony1/swiftmailer": "^5.4.16 || ^6.2.5",
         "ntlab/php-obj": "^1.8",
-        "symfony/finder": "^5.4 || ^6.0 || ^7.0",
-        "symfony/yaml": "^5.4 || ^6.0 || ^7.0"
+        "predis/predis": "^2.3",
+        "symfony/finder": "^6.0 || ^7.0",
+        "symfony/yaml": "^6.0 || ^7.0"
     },
     "require-dev": {
         "psr/log": "*",
