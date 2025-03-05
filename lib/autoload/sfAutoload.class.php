@@ -176,11 +176,11 @@ class sfAutoload
         }
         // load the list of autoload classes
         if ($reload) {
-            self::reloadClasses($force);
+            $this->reloadClasses($force);
             $this->caches[$app] = $this->classes;
         }
 
-        return self::loadClass($class);
+        return $this->loadClass($class);
     }
 
     /**
