@@ -6,11 +6,6 @@ autoload:
     recursive:      true
     exclude:        [model, symfony, vendor]
 
-  project_model:
-    name:           project model
-    path:           '%SF_LIB_DIR%/model'
-    recursive:      true
-
   # application
   application:
     name:           application

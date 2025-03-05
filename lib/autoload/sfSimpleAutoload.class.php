@@ -97,10 +97,15 @@ class sfSimpleAutoload
      */
     public function autoload($class)
     {
+        // skip namespaced class
+        if (false !== strpos($class, '\\')) {
+            return false;
+        }
+
         $class = strtolower($class);
 
         // class already exists
-        if (class_exists($class, false) || interface_exists($class, false)) {
+        if (class_exists($class, false) || interface_exists($class, false) || (function_exists('trait_exists') && trait_exists($class, false))) {
             return true;
         }
 
