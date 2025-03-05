@@ -50,8 +50,8 @@ class sfAutoloadAgain
      */
     public function autoload($class)
     {
-        // only reload once
-        if ($this->reloaded) {
+        // only reload once and we don't like a namespaced class
+        if ($this->reloaded || false !== strpos($class, '\\')) {
             return false;
         }
 
@@ -75,7 +75,7 @@ class sfAutoloadAgain
             // since we're rearranged things, call the chain again
             spl_autoload_call($class);
 
-            return class_exists($class, false) || interface_exists($class, false);
+            return class_exists($class, false) || interface_exists($class, false) || (function_exists('trait_exists') && trait_exists($class, false));
         }
 
         $autoload = sfAutoload::getInstance();
