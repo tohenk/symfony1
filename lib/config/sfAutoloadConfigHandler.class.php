@@ -38,6 +38,7 @@ class sfAutoloadConfigHandler extends sfYamlConfigHandler
             $data[] = sprintf('  // %s', $name);
 
             foreach ($mapping as $class => $file) {
+                $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
                 $file = 0 === strpos($file, $dir) ? sprintf("\$dir.'%s'", substr($file, strlen($dir))) : "'{$file}'";
                 $data[] = sprintf("  '%s' => %s,", $class, str_replace('\\', '\\\\', $file));
             }
