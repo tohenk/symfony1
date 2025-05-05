@@ -85,20 +85,20 @@ class sfObjectRouteCollection extends sfRouteCollection
         }
 
         if ($this->options['with_wildcard_routes']) {
+            // wildcard collection actions
+            $this->routes[$this->getRoute('collection')] = new $this->routeClass(
+                sprintf('%s/:action/action.:sf_format', $this->options['prefix_path']),
+                array_merge(['module' => $this->options['module'], 'sf_format' => 'html'], $this->options['default_params']),
+                array_merge($this->options['requirements'], ['sf_method' => ['get', 'post']]),
+                ['model' => $this->options['model'], 'type' => 'list', 'method' => $this->options['model_methods']['list']]
+            );
+
             // wildcard object actions
             $this->routes[$this->getRoute('object')] = new $this->routeClass(
                 sprintf('%s/%s/:action.:sf_format', $this->options['prefix_path'], $this->getColumnParameters()),
                 array_merge(['module' => $this->options['module'], 'sf_format' => 'html'], $this->options['default_params']),
                 array_merge($this->options['requirements'], ['sf_method' => ['get', 'head']]),
                 ['model' => $this->options['model'], 'type' => 'object', 'method' => $this->options['model_methods']['object']]
-            );
-
-            // wildcard collection actions
-            $this->routes[$this->getRoute('collection')] = new $this->routeClass(
-                sprintf('%s/:action/action.:sf_format', $this->options['prefix_path']),
-                array_merge(['module' => $this->options['module'], 'sf_format' => 'html'], $this->options['default_params']),
-                array_merge($this->options['requirements'], ['sf_method' => 'post']),
-                ['model' => $this->options['model'], 'type' => 'list', 'method' => $this->options['model_methods']['list']]
             );
         }
     }
