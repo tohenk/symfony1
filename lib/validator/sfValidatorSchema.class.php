@@ -202,7 +202,47 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
             throw new InvalidArgumentException('A validator must be an instance of sfValidatorBase.');
         }
 
+        /** @var sfValidatorBase $origValidator */
+        $origValidator = isset($this->fields[$name]) ? $this->fields[$name] : null;
+
         $this->fields[$name] = clone $validator;
+
+        // on generated form from a model, a basic validator is already
+        // supplied such as on string with max_length or min_length,
+        // or number with max or min
+        if ($origValidator) {
+            $fn = function ($validator, $validatorClass) {
+                if (is_a($validator, $validatorClass)) {
+                    return $validator;
+                }
+                if ($validator instanceof sfValidatorAnd || $validator instanceof sfValidatorOr) {
+                    foreach ($validator->getValidators() as $v) {
+                        if (is_a($v, $validatorClass)) {
+                            return $v;
+                        }
+                    }
+                }
+            };
+            foreach ([
+                sfValidatorString::class => ['max_length', 'min_length'],
+                sfValidatorNumber::class => ['max', 'min'],
+            ] as $validatorClass => $copiedOptions) {
+                if (is_a($origValidator, $validatorClass) && $targetValidator = $fn($this->fields[$name], $validatorClass)) {
+                    $origOptions = $origValidator->getOptions();
+                    /** @var sfValidatorBase $targetValidator */
+                    $targetOptions = $targetValidator->getOptions();
+                    foreach ($copiedOptions as $opt) {
+                        if (!array_key_exists($opt, $targetOptions)) {
+                            continue;
+                        }
+                        if (null === $targetOptions[$opt] && null !== ($value = $origOptions[$opt])) {
+                            $targetValidator->setOption($opt, $value);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     /**
