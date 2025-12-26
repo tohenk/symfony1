@@ -4,28 +4,28 @@ CHANGELOG
 xx/xx/xxxx: Version 1.5.xx
 --------------------------
 
-26/12/2024: Version 1.5.24
+26/12/2025: Version 1.5.24
 --------------------------
 * Drop use of E_STRICT by @mentalstring in #391
 * Use php.ini-development in CI pipelines by @mentalstring in #392
 * Add PHP 8.5 support by @mentalstring in #393
 
-18/09/2024: Version 1.5.23
+18/09/2025: Version 1.5.23
 --------------------------
 * Add HTTP status code 308 "Permanent Redirect" by @wutsch0 in #388
 * Add support for SameSite cookie attribute by @mentalstring in #387
 
-05/05/2024: Version 1.5.22
+05/05/2025: Version 1.5.22
 --------------------------
 * Add support for PHP 8.4 by @thirsch in #382
 * Fix stack trace code preview in debug screen by @sebasbit in #375
 * Fix deprecation: Optional parameter declared before required parameter is implicitly treated as a required parameter by @thirsch in #365
 
-19/12/2023: Version 1.5.21
+19/12/2024: Version 1.5.21
 --------------------------
 * Fix inclusion of base test files in composer package (#379) by @vworldat in #380
 
-29/11/2023: Version 1.5.20
+29/11/2024: Version 1.5.20
 --------------------------
 * Update php-cs-fixer to v3.52 by @thePanz in #340
 * Remove sfXCacheCache as the extension is not available on PHP v7.4 anymore by @thePanz in #344
