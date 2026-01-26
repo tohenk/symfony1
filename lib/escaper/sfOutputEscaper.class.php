@@ -37,7 +37,7 @@ abstract class sfOutputEscaper
      * directly but the constructor will be inherited by sub-classes.
      *
      * @param string $escapingMethod Escaping method
-     * @param string $value          Escaping value
+     * @param mixed  $value          Escaping value
      */
     public function __construct($escapingMethod, $value)
     {
