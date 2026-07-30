@@ -120,7 +120,8 @@ function javascript_include_tag()
             unset($sourceOptions['raw_name']);
         }
 
-        $type = '.mjs' === substr($source, -4) ? 'module' : 'text/javascript';
+        $scriptName = false !== ($p = strpos($source, '?')) ? substr($source, 0, $p) : $source;
+        $type = '.mjs' === substr($scriptName, -4) ? 'module' : 'text/javascript';
         $options = array_merge(['type' => $type, 'src' => $source], $sourceOptions);
         $tag = content_tag('script', '', $options);
 
