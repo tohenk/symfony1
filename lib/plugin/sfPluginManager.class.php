@@ -268,7 +268,7 @@ class sfPluginManager
         if (null === $version) {
             try {
                 $version = $this->getPluginVersion($plugin, $stability);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 // no release available
                 return false;
             }

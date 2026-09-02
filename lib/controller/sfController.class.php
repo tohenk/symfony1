@@ -305,7 +305,7 @@ abstract class sfController
         try {
             // forward to the action
             $this->forward($module, $action);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             // put render mode back
             $this->setRenderMode($renderMode);
 

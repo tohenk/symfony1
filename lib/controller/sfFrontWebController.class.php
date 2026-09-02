@@ -20,6 +20,20 @@
 class sfFrontWebController extends sfWebController
 {
     /**
+     * Handle PHP internal error or exception.
+     *
+     * @param Throwable $e
+     */
+    protected function handleError($e)
+    {
+        if ($e instanceof sfException) {
+            $e->printStackTrace();
+        } else {
+            sfException::createFromException($e)->printStackTrace();
+        }
+    }
+
+    /**
      * Dispatches a request.
      *
      * This will determine which module and action to use by request parameters specified by the user.
@@ -42,10 +56,8 @@ class sfFrontWebController extends sfWebController
 
             // make the first request
             $this->forward($moduleName, $actionName);
-        } catch (sfException $e) {
-            $e->printStackTrace();
-        } catch (Exception $e) {
-            sfException::createFromException($e)->printStackTrace();
+        } catch (Throwable $e) {
+            $this->handleError($e);
         }
     }
 }

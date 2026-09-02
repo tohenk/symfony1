@@ -98,7 +98,7 @@ EOF;
         if (!$options['force-license']) {
             try {
                 $license = $this->getPluginManager()->getPluginLicense($arguments['name'], $options);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 throw new sfCommandException(sprintf('%s (use --force-license to force installation)', $e->getMessage()));
             }
 

@@ -49,7 +49,7 @@ abstract class sfTestBaseTask extends sfBaseTask
             sfApplicationConfiguration::getActive()->getPluginConfiguration($plugin);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

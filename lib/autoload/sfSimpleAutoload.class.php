@@ -115,7 +115,7 @@ class sfSimpleAutoload
                 require $this->classes[$class];
             } catch (sfException $e) {
                 $e->printStackTrace();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 sfException::createFromException($e)->printStackTrace();
             }
 

@@ -91,7 +91,7 @@ class sfValidatorDate extends sfValidatorBase
                 $date = new DateTime($value);
                 $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
                 $clean = $this->getDateComparable($date);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 throw new sfValidatorError($this, 'invalid', ['value' => $value]);
             }
         }
