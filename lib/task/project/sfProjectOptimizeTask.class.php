@@ -70,7 +70,7 @@ EOF;
 
             try {
                 $this->configuration->getConfigCache()->checkConfig('modules/'.$module.'/config/generator.yml', true);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $this->dispatcher->notifyUntil(new sfEvent($e, 'application.throw_exception'));
 
                 $this->logSection($module, $e->getMessage(), null, 'ERROR');

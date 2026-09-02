@@ -52,7 +52,7 @@ class sfCacheClearTask extends sfBaseTask
             try {
                 $cache = new $class($parameters);
                 $cache->clean();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $this->logSection('error', $e->getMessage(), 255, 'ERROR');
             }
         }

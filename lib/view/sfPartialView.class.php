@@ -104,7 +104,7 @@ class sfPartialView extends sfPHPView
 
             // render template
             $retval = $this->renderFile($this->getDirectory().'/'.$this->getTemplate());
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             if ($this->checkCache) {
                 $this->context->setResponse($mainResponse);
                 $mainResponse->merge($response);

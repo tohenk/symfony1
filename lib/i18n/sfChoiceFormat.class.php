@@ -198,7 +198,7 @@ class sfChoiceFormat
             eval($str);
 
             return $result;
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
     }

@@ -112,7 +112,7 @@ abstract class sfFormObject extends BaseForm
             $this->doSave($con);
 
             $con->commit();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $con->rollBack();
 
             throw $e;

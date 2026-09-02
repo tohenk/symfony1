@@ -110,7 +110,7 @@ class sfContext implements ArrayAccess
             $this->loadFactories();
         } catch (sfException $e) {
             $e->printStackTrace();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             sfException::createFromException($e)->printStackTrace();
         }
 

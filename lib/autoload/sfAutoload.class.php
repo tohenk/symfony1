@@ -205,7 +205,7 @@ class sfAutoload
                 require $this->classes[$class];
             } catch (sfException $e) {
                 $e->printStackTrace();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 sfException::createFromException($e)->printStackTrace();
             }
 
@@ -222,7 +222,7 @@ class sfAutoload
                 require $this->classes[$module.'/'.$class];
             } catch (sfException $e) {
                 $e->printStackTrace();
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 sfException::createFromException($e)->printStackTrace();
             }
 

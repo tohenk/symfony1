@@ -21,7 +21,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class sfException extends Exception
 {
-    /** @var Exception|Throwable|null */
+    /** @var ?Throwable */
     protected $wrappedException;
 
     protected static $lastException;
@@ -29,7 +29,7 @@ class sfException extends Exception
     /**
      * Wraps an Throwable.
      *
-     * @param Exception|Throwable $e An Throwable instance
+     * @param Throwable $e An Throwable instance
      *
      * @return sfException An sfException instance that wraps the given Throwable object
      */
@@ -45,7 +45,7 @@ class sfException extends Exception
     /**
      * Sets the wrapped exception.
      *
-     * @param Exception|Throwable $e A Throwable instance
+     * @param Throwable $e A Throwable instance
      */
     public function setWrappedException($e)
     {
@@ -57,7 +57,7 @@ class sfException extends Exception
     /**
      * Gets the last wrapped throwable.
      *
-     * @return Exception|Throwable An Throwable instance
+     * @return Throwable An Throwable instance
      */
     public static function getLastException()
     {
@@ -85,7 +85,16 @@ class sfException extends Exception
 
         if (!sfConfig::get('sf_test')) {
             // log all exceptions in php log
-            error_log(self::getExceptionMessage($exception));
+            if ($message = self::getExceptionMessage($exception)) {
+                error_log(sprintf('%s: %s', get_class($exception), $message));
+                if ($n = count($traces = explode("\n", $exception->getTraceAsString()))) {
+                    error_log('Stack trace:');
+                    foreach ($traces as $i => $trace) {
+                        $indent = strlen((string) $n) - strlen((string) $i);
+                        error_log(($indent > 0 ? str_repeat(' ', $indent) : '').$trace);
+                    }
+                }
+            }
 
             // clean current output buffer
             while (ob_get_level()) {
@@ -101,16 +110,9 @@ class sfException extends Exception
             header('HTTP/1.0 500 Internal Server Error');
         }
 
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            try {
-                $this->outputStackTrace($exception);
-            } catch (Throwable $e) {
-            }
-        } else {
-            try {
-                $this->outputStackTrace($exception);
-            } catch (Exception $e) {
-            }
+        try {
+            $this->outputStackTrace($exception);
+        } catch (Throwable $e) {
         }
 
         if (!sfConfig::get('sf_test')) {
@@ -121,11 +123,12 @@ class sfException extends Exception
     /**
      * Get exception message and its nested previous message.
      *
-     * @param string $wrapper
+     * @param Throwable $exception An Throwable instance
+     * @param string    $wrapper
      *
      * @return string
      */
-    public static function getExceptionMessage(Exception $exception, $wrapper = '%s: [%s]')
+    public static function getExceptionMessage($exception, $wrapper = '%s: [%s]')
     {
         $message = null;
         while (null !== $exception) {
@@ -172,7 +175,7 @@ class sfException extends Exception
     /**
      * Gets the stack trace for this exception.
      *
-     * @param Exception|Throwable $exception
+     * @param Throwable $exception
      */
     protected static function outputStackTrace($exception)
     {
@@ -283,8 +286,8 @@ class sfException extends Exception
     /**
      * Returns an array of exception traces.
      *
-     * @param Exception|Throwable $exception An Throwable implementation instance
-     * @param string              $format    The trace format (txt or html)
+     * @param Throwable $exception An Throwable implementation instance
+     * @param string    $format    The trace format (txt or html)
      *
      * @return array An array of traces
      */

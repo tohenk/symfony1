@@ -355,7 +355,7 @@ class sfValidatorSchema extends sfValidatorBase implements ArrayAccess
                 $clean[$name] = null;
 
                 $errorSchema->addError($e, (string) $name);
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $class = get_class($e);
 
                 throw new $class($e->getMessage().' of "'.$name.'" field');

@@ -321,7 +321,7 @@ class sfViewCacheManager
             if (isset($this->cacheConfig[$params['module']]['DEFAULT'])) {
                 return $this->cacheConfig[$params['module']]['DEFAULT']['lifeTime'] > 0;
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
 
         return false;
@@ -410,7 +410,7 @@ class sfViewCacheManager
 
         try {
             $ret = $this->cache->set($this->generateCacheKey($internalUri), $data, $this->getLifeTime($internalUri));
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             return false;
         }
 
@@ -531,7 +531,7 @@ class sfViewCacheManager
 
         try {
             $this->set($data, $internalUri.(strpos($internalUri, '?') ? '&' : '?').'_sf_cache_key='.$name);
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
         }
 
         return $data;

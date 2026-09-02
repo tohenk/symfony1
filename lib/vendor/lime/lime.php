@@ -588,7 +588,7 @@ class lime_test
   }
 
   /**
-   * @param Throwable|Exception $exception
+   * @param Throwable $exception
    * @return bool
    */
   public function handle_exception($exception)

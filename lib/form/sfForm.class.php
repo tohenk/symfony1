@@ -90,11 +90,11 @@ class sfForm implements ArrayAccess, Iterator, Countable
     {
         try {
             return $this->render();
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             self::setToStringException($e);
 
             // we return a simple Exception message in case the form framework is used out of symfony.
-            return 'Exception: '.sfException::getExceptionMessage($e);
+            return sprintf('%s: %s', get_class($e), sfException::getExceptionMessage($e));
         }
     }
 
@@ -1262,7 +1262,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
      *
      * This is a hack needed because PHP does not allow to throw exceptions in __toString() magic method.
      *
-     * @return Exception
+     * @return Throwable
      */
     public static function getToStringException()
     {
@@ -1274,9 +1274,9 @@ class sfForm implements ArrayAccess, Iterator, Countable
      *
      * This is a hack needed because PHP does not allow to throw exceptions in __toString() magic method.
      *
-     * @param Exception $e The exception thrown by __toString()
+     * @param Throwable $e The exception thrown by __toString()
      */
-    public static function setToStringException(Exception $e)
+    public static function setToStringException(Throwable $e)
     {
         if (null === self::$toStringException) {
             self::$toStringException = $e;

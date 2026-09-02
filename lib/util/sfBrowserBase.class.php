@@ -462,9 +462,9 @@ abstract class sfBrowserBase
     /**
      * Sets the current exception.
      *
-     * @param Exception $exception An Exception instance
+     * @param Throwable $exception An Exception instance
      */
-    public function setCurrentException(Exception $exception)
+    public function setCurrentException(Throwable $exception)
     {
         $this->currentException = $exception;
     }

@@ -32,7 +32,7 @@ try {
 
     $application = new sfSymfonyCommandApplication($dispatcher, null, ['symfony_lib_dir' => realpath(__DIR__.'/..')]);
     $statusCode = $application->run();
-} catch (Exception $e) {
+} catch (Throwable $e) {
     if (!isset($application)) {
         throw $e;
     }
