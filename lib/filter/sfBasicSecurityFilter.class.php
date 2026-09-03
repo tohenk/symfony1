@@ -21,6 +21,15 @@ use Symfony\Component\Yaml\Yaml;
  */
 class sfBasicSecurityFilter extends sfFilter
 {
+    protected function getUnsecuredActions()
+    {
+        return array_map(fn ($a) => implode('/', array_map(fn ($b) => sfConfig::get($b), $a)), [
+            ['sf_login_module', 'sf_login_action'],
+            ['sf_secure_module', 'sf_secure_action'],
+            ['sf_error_404_module', 'sf_error_404_action'],
+        ]);
+    }
+
     /**
      * Executes this filter.
      *
@@ -28,11 +37,8 @@ class sfBasicSecurityFilter extends sfFilter
      */
     public function execute($filterChain)
     {
-        // disable security on login and secure actions
-        if (
-            (sfConfig::get('sf_login_module') == $this->context->getModuleName()) && (sfConfig::get('sf_login_action') == $this->context->getActionName())
-            || (sfConfig::get('sf_secure_module') == $this->context->getModuleName()) && (sfConfig::get('sf_secure_action') == $this->context->getActionName())
-        ) {
+        // disable security on login, secure, and 404 actions
+        if (in_array(implode('/', [$this->context->getModuleName(), $this->context->getActionName()]), $this->getUnsecuredActions())) {
             $filterChain->execute();
 
             return;
