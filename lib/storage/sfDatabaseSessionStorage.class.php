@@ -217,37 +217,37 @@ class sfDatabaseSessionHandler implements SessionHandlerInterface
         $this->storage = $storage;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function open($path, $name)
     {
         return $this->storage->sessionOpen($path, $name);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function close()
     {
         return $this->storage->sessionClose();
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function read($id)
     {
         return $this->storage->sessionRead($id);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function write($id, $data)
     {
         return $this->storage->sessionWrite($id, $data);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function destroy($id)
     {
         return $this->storage->sessionDestroy($id);
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function gc($max_lifetime)
     {
         return $this->storage->sessionGC($max_lifetime);

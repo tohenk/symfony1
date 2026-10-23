@@ -28,13 +28,13 @@ class sfForm implements ArrayAccess, Iterator, Countable
     protected static $CSRFFieldName = '_csrf_token';
     protected static $toStringException;
 
-    /** @var sfWidget[]|sfWidgetFormSchema|sfWidgetFormSchemaDecorator[] */
+    /** @var sfWidgetFormSchema|array<string, sfWidgetFormSchemaDecorator>|array<string, sfWidget> */
     protected $widgetSchema;
 
-    /** @var sfValidatorBase[]|sfValidatorSchema */
+    /** @var sfValidatorSchema|array<string, sfValidatorBase> */
     protected $validatorSchema;
 
-    /** @var sfValidatorError[]|sfValidatorErrorSchema */
+    /** @var sfValidatorErrorSchema|array<string, sfValidatorError> */
     protected $errorSchema;
 
     /** @var sfFormFieldSchema|null */
